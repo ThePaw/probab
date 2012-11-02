@@ -1,0 +1,56 @@
+theta <- rnorm(100000)
+q <- quantile(theta)
+write(theta, file = "t", ncolumns = 1000, append = FALSE, sep = ",")
+write(q, file = "q", ncolumns = 5, append = FALSE, sep = ",")
+pnorm(0.685864)
+
+## generate a sample of 20 observations from a N(-0.5,1) population
+x = rnorm(20,-0.5,1)
+write(x, file = "x", ncolumns = 20, append = FALSE, sep = ",")
+## find the posterior density with a N(0,1) prior on mu
+normnp(x,sigma=1)
+## find the posterior density with N(0.5,3) prior on mu
+normnp(x,0.5,3,1)
+
+
+x = rnorm(20,0.634298887,1.75223)
+mean(x)
+normnp(x,0.512,3.05,1.33)
+
+awk '{print $2}' < foo | 9 tr '\x0a' ',' > vals
+
+## generate a ssingle observation from a N(0.634298887,1.75223) population
+y = rnorm(1,0.634298887,1.75223)
+mean(y)
+normnp(y,0.512,3.05,1.33)
+
+## Let mu have the discrete distribution with 5 possible
+## values, 2, 2.5, 3, 3.5 and 4, and associated prior probability of
+## 0.1, 0.2, 0.4, 0.2, 0.1 respectively. Find the posterior
+## distribution after a drawing random sample of n = 5 observations
+## from a N(mu,1) distribution y = [1.52, 0.02, 3.35, 3.49, 1.82]
+mu = seq(2,4,by=0.5)
+mu.prior = c(0.1,0.2,0.4,0.2,0.1)
+y = c(1.52,0.02,3.35,3.49,1.82)
+post <- normdp(y,1,mu,mu.prior)
+
+
+
+# Bolstad:210
+alpha = c(0.005, 0.01, 0.025, 0.05, 0.5, 0.95, 0.975, 0.99, 0.995)
+q = qnorm(alpha, 32, 0.5774)
+write(q, file = "q", ncolumns = 9, append = FALSE, sep = ",")
+
+# Michelson data, diff. of means : 242
+y1 = c(299850,299900,299930,299950,299980,300000,299930,299760,300000,299960,299740,300070,299850,299980,299880,299980,299650,299810,300000,299960)
+y2 = c(299883,299778,299682,299611,300051,299578,299774,299772,299573,299748,299851,299723,299816,299796,299711,299599,299781,299796,299820,299696,299748,299797,299809)
+m1 = normnp(y1, m.x = 300000, s.x = 500, sigma.x = 100)
+# 299909.1816367, 22.3383526
+m2 = normnp(y2, m.x = 300000, s.x = 500, sigma.x = 100)
+# 299756.640625, 20.8333333
+md = 299909.1816367 - 299756.640625
+sd = sqrt(22.3383526^2 + 20.8333333^2)
+x = c(100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200)
+p = dnorm(x, md, sd)
+write(p, file = "p", ncolumns = 11, append = FALSE, sep = ",")
+

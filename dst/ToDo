@@ -1,0 +1,3 @@
+f.go  		df1, df2 should be int64
+gamma.go	K should be int64
+		rename all to k, θ (for consistency)

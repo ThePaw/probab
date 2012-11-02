@@ -1,0 +1,4 @@
+GOFILES=\
+     cov.go\
+     var.go\
+     vector.go\
