@@ -1,20 +1,23 @@
-// Summary of posterior of binomial parameter
+// Summary of posterior of Poisson parameter.
+
 package main
 
 import (
 	"fmt"
-//	"math"
 	"code.google.com/p/probab/bayes"
 )
 
 
+// Summary of posterior of Poisson parameter.
 func main() {
-	var x, n int64
+	var (
+		x, n int64
+		r, v float64
+)
+
+	fmt.Scanf("%d %d %f %f", x, n, r, v, )
+
 	pr := []float64{0.005,0.01,0.025,0.05,0.5,0.95,0.975,0.99,0.995}
-	r :=25.0
-	v :=4.5
-	x = 19 
-	n = 5
 
 	if r<0 || v<0 {
 		panic("Shape parameter r and rate parameter v must be greater than or equal to zero")

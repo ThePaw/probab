@@ -1,6 +1,8 @@
-// Beta distribution
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
 
 package dst
+
+// Beta distribution. 
 
 import (
 	"fmt"
@@ -84,6 +86,7 @@ func betaContinuedFraction(α, β, x float64) float64 {
 	return -1.00
 }
 
+// Beta_PDF returns the PDF of the Beta distribution. 
 func Beta_PDF(α float64, β float64) func(x float64) float64 {
 	dα := []float64{α, β}
 	dirPDF := Dirichlet_PDF(dα)
@@ -95,6 +98,8 @@ func Beta_PDF(α float64, β float64) func(x float64) float64 {
 		return dirPDF(dx)
 	}
 }
+
+// Beta_LnPDF returns the natural logarithm of the PDF of the Beta distribution. 
 func Beta_LnPDF(α float64, β float64) func(x float64) float64 {
 	dα := []float64{α, β}
 	dirLnPDF := Dirichlet_LnPDF(dα)
@@ -106,24 +111,27 @@ func Beta_LnPDF(α float64, β float64) func(x float64) float64 {
 		return dirLnPDF(dx)
 	}
 }
+
+// NextBeta returns random number drawn from the  Beta distribution. 
 func NextBeta(α float64, β float64) float64 {
 	dα := []float64{α, β}
 	return NextDirichlet(dα)[0]
 }
+
+// Beta returns the random number generator with  Beta distribution. 
 func Beta(α float64, β float64) func() float64 {
 	return func() float64 { return NextBeta(α, β) }
 }
 
-// Value of PDF of Beta distribution(α, β) at x
+// Beta_PDF_At returns the value of PDF of Beta distribution(μ, σ) at x. 
 func Beta_PDF_At(α, β, x float64) float64 {
 	pdf := Beta_PDF(α, β)
 	return pdf(x)
 }
 
-// CDF of Beta-distribution
+// Beta_CDF returns the CDF of the Beta distribution. 
 func Beta_CDF(α float64, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		//func Beta_CDF(α , β , x float64) float64 {
 		var y, res float64
 		y = math.Exp(LnΓ(α+β) - LnΓ(α) - LnΓ(β) + α*math.Log(x) + β*math.Log(1.0-x))
 		switch {
@@ -141,18 +149,16 @@ func Beta_CDF(α float64, β float64) func(x float64) float64 {
 	}
 }
 
-// Value of CDF of Beta distribution(α, β) at x
+// Beta_CDF_At returns the value of CDF of the Beta distribution, at x. 
 func Beta_CDF_At(α, β, x float64) float64 {
 	cdf := Beta_CDF(α, β)
 	res := cdf(x)
 	return res
 }
 
-// Inverse of the cumulative beta probability density function (quantile).
-// p: Probability associated with the beta distribution
-// α: Parameter of the distribution
-// β: Parameter of the distribution
+// Beta_Qtl returns the inverse of the CDF (quantile) of the Beta distribution. 
 func Beta_Qtl(α, β float64) func(p float64) float64 {
+	// p: probability for which the quantile is evaluated
 	return func(p float64) float64 {
 		var x float64 = 0
 		var a float64 = 0
@@ -184,16 +190,14 @@ func Beta_Qtl(α, β float64) func(p float64) float64 {
 	}
 }
 
-// Inverse of the cumulative beta probability density function (quantile) for a given probability.
-// p: Probability associated with the beta distribution
-// α: Parameter of the distribution
-// β: Parameter of the distribution
+// Beta_Qtl_For returns the inverse of the CDF (quantile) of the Beta distribution, for a given probability.
 func Beta_Qtl_For(α, β, p float64) float64 {
 	cdf := Beta_Qtl(α, β)
 	return cdf(p)
 }
 
 
+/*
 // Beta_Qtl_For() evaluates inverse CDF of Beta distribution(α, β) for probability p
 // 
 // References:
@@ -206,7 +210,6 @@ func Beta_Qtl_For(α, β, p float64) float64 {
 // G.W. Hill and A.W. Davis. "Generalized asymptotic expansions of a
 // Cornish-Fisher type," Annals of Mathematical Statistics, volume 39,
 // number 8, August 1968, pages 1264-1273.
-/*
 func Beta_Qtl_For(α float64, β float64, p float64) float64 {
 	var res float64
 	switch {
