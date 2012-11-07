@@ -1,4 +1,4 @@
-package prob
+package dst
 
 import (
 	. "github.com/skelterjohn/go.matrix"

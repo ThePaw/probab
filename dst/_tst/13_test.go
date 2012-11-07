@@ -1,5 +1,5 @@
 // test of Planck distribution
-package prob
+package dst
 
 import (
 	"fmt"

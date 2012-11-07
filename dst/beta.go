@@ -3,19 +3,21 @@
 package dst
 
 // Beta distribution. 
+// Parameters:
+// α > 0: shape
+// β > 0: shape. 
+// Support: x ∈ [0; 1].
+
 
 import (
-	"fmt"
 	. "code.google.com/p/go-fn/fn"
+	"fmt"
 	"math"
 )
 
 func bisect(x, p, a, b, xtol, ptol float64) float64 {
-
 	var x0, x1, px float64
-
 	cdf := Beta_PDF(a, b)
-
 	for math.Abs(x1-x0) > xtol {
 		px = cdf(x)
 		switch {
@@ -32,7 +34,6 @@ func bisect(x, p, a, b, xtol, ptol float64) float64 {
 }
 
 func betaContinuedFraction(α, β, x float64) float64 {
-
 	var aa, del, res, qab, qap, qam, c, d, m2, m, acc float64
 	var i int64
 	const eps = 2.2204460492503131e-16
@@ -87,7 +88,10 @@ func betaContinuedFraction(α, β, x float64) float64 {
 }
 
 // Beta_PDF returns the PDF of the Beta distribution. 
-func Beta_PDF(α float64, β float64) func(x float64) float64 {
+func Beta_PDF(α, β float64) func(x float64) float64 {
+	if α == 1 && β == 1{	// uniform case
+		return Uniform_PDF(0, 1)
+	}
 	dα := []float64{α, β}
 	dirPDF := Dirichlet_PDF(dα)
 	return func(x float64) float64 {
@@ -100,7 +104,7 @@ func Beta_PDF(α float64, β float64) func(x float64) float64 {
 }
 
 // Beta_LnPDF returns the natural logarithm of the PDF of the Beta distribution. 
-func Beta_LnPDF(α float64, β float64) func(x float64) float64 {
+func Beta_LnPDF(α, β float64) func(x float64) float64 {
 	dα := []float64{α, β}
 	dirLnPDF := Dirichlet_LnPDF(dα)
 	return func(x float64) float64 {
@@ -112,25 +116,17 @@ func Beta_LnPDF(α float64, β float64) func(x float64) float64 {
 	}
 }
 
-// NextBeta returns random number drawn from the  Beta distribution. 
-func NextBeta(α float64, β float64) float64 {
-	dα := []float64{α, β}
-	return NextDirichlet(dα)[0]
-}
-
-// Beta returns the random number generator with  Beta distribution. 
-func Beta(α float64, β float64) func() float64 {
-	return func() float64 { return NextBeta(α, β) }
-}
-
-// Beta_PDF_At returns the value of PDF of Beta distribution(μ, σ) at x. 
+// Beta_PDF_At returns the value of PDF of Beta distribution at x. 
 func Beta_PDF_At(α, β, x float64) float64 {
 	pdf := Beta_PDF(α, β)
 	return pdf(x)
 }
 
 // Beta_CDF returns the CDF of the Beta distribution. 
-func Beta_CDF(α float64, β float64) func(x float64) float64 {
+func Beta_CDF(α, β float64) func(x float64) float64 {
+	if α == 1 && β == 1{	// uniform case
+		return Uniform_CDF(0, 1)
+	}
 	return func(x float64) float64 {
 		var y, res float64
 		y = math.Exp(LnΓ(α+β) - LnΓ(α) - LnΓ(β) + α*math.Log(x) + β*math.Log(1.0-x))
@@ -152,8 +148,7 @@ func Beta_CDF(α float64, β float64) func(x float64) float64 {
 // Beta_CDF_At returns the value of CDF of the Beta distribution, at x. 
 func Beta_CDF_At(α, β, x float64) float64 {
 	cdf := Beta_CDF(α, β)
-	res := cdf(x)
-	return res
+	return cdf(x)
 }
 
 // Beta_Qtl returns the inverse of the CDF (quantile) of the Beta distribution. 
@@ -190,121 +185,104 @@ func Beta_Qtl(α, β float64) func(p float64) float64 {
 	}
 }
 
-// Beta_Qtl_For returns the inverse of the CDF (quantile) of the Beta distribution, for a given probability.
+// Beta_Qtl_For returns the inverse of the CDF (quantile) of the Beta distribution, for given probability.
 func Beta_Qtl_For(α, β, p float64) float64 {
 	cdf := Beta_Qtl(α, β)
 	return cdf(p)
 }
 
-
-/*
-// Beta_Qtl_For() evaluates inverse CDF of Beta distribution(α, β) for probability p
-// 
-// References:
-//
-// Roger W. Abernathy and Robert P. Smith. "Applying Series Expansion
-// to the Inverse Beta Distribution to Find Percentiles of the
-// F-Distribution," ACM Transactions on Mathematical Software, volume
-// 19, number 4, December 1993, pages 474-480.
-//
-// G.W. Hill and A.W. Davis. "Generalized asymptotic expansions of a
-// Cornish-Fisher type," Annals of Mathematical Statistics, volume 39,
-// number 8, August 1968, pages 1264-1273.
-func Beta_Qtl_For(α float64, β float64, p float64) float64 {
-	var res float64
-	switch {
-	case (p < 0.0 || p > 1.0):
-		panic(fmt.Sprintf("p must be in range 0 < p < 1"))
-		res = -1.00
-	case α < 0.0:
-		panic(fmt.Sprintf("α < 0"))
-		res = -1.00
-	case β < 0.0:
-		panic(fmt.Sprintf("β < 0"))
-		res = -1.00
-	case p == 0.0:
-		res = 0.0
-	case p == 1.0:
-		res = 1.0
-	case p > 0.5:
-		res = 1 - cdf_beta_Pinv(1-p, β, α)
-	default:
-		res = cdf_beta_Pinv(α, β, p)
+// NextBeta returns random number drawn from the Beta distribution. 
+func NextBeta(α, β float64) float64 {
+	if α == 1 && β == 1{	// uniform case
+		return NextUniform(0, 1)
 	}
-	return res
-
+	dα := []float64{α, β}
+	return NextDirichlet(dα)[0]
 }
 
-func cdf_beta_Pinv(α float64, β float64, p float64) float64 {
-	var x, mean, lg_ab, lg_a, lg_b, lx, lambda, dP, phi, step, step0, step1 float64
-	var n int64 = 0
-//	const tol = 1.4901161193847656e-08
-	const tol = 5
+// Beta returns the random number generator with  Beta distribution. 
+func Beta(α, β float64) func() float64 {
+	if α == 1 && β == 1{	// uniform case
+		return Uniform(0, 1)
+	}
+	return func() float64 { return NextBeta(α, β) }
+}
 
-	mean = α / (α + β)
-	if p < 0.1 {
-		 // small x 
-
-		lg_ab = LnΓ(α + β)
-		lg_a = LnΓ(α)
-		lg_b = LnΓ(β)
-		lx = (math.Log(α) + lg_a + lg_b - lg_ab + math.Log(p)) / α
-		if lx <= 0 {
-			x = math.Exp(lx)              // first approximation 
-			x *= math.Pow(1-x, -(β-1)/α)  // second approximation 
-		} else {
-			x = mean
-		}
-
-		if x > mean {
-			x = mean
-		}
+// BetaMean returns the mean of the Beta distribution. 
+func BetaMean(α, β float64) (μ float64) {
+	if α == β  {		// symmetric case
+		μ = 0.5
 	} else {
-		 // Use expected value as first guess 
-		x = mean
+		μ = α / (α + β)
 	}
-
-	 // Do bisection to get closer 
-	x = bisect(x, p, α, β, 0.01, 0.01)
-
-	step0 = 999999
-
-end:
-
-	for math.Abs(step0) > 1e-11*x {
-		dP = p - Beta_CDF_At(α, β, x)
-		phi = Beta_PDF_At(α, β, x)
-
-		if dP == 0.0 || n > 64 {
-			break end
-		}
-
-		n++
-		lambda = dP / math.Max(2*math.Abs(dP/x), phi)
-		step0 = lambda
-		step1 = -((α-1)/x - (β-1)/(1-x)) * lambda * lambda / 2
-		step = step0
-
-		if math.Abs(step1) < math.Abs(step0) {
-			step += step1
-		} else {
-			// scale back step to a reasonable size when too large
-			step *= 2 * math.Abs(step0/step1)
-		}
-		if x+step > 0 && x+step < 1 {
-			x += step
-		} else {
-			x = math.Sqrt(x) * math.Sqrt(mean) // try a new starting point
-		}
-
-		if math.Abs(dP) > tol*p {
-//			fmt.Println("failed at: α =",α , "  β =", β, "  p =", p) // just for testing purposes; delete this line and uncomment next one
-//			panic(fmt.Sprintf("cdf_beta_Pinv() failed to converge"))
-			 x=999.00; break end
-		}
-	}
-	return x
+	return 
 }
-*/
 
+// BetaMedian returns the median of the Beta distribution. 
+func BetaMedian(α, β float64) (med float64) {
+	switch {
+	case α == β: 	// symmetric case
+		med = 0.5
+	case α == 1 && β >0: 
+		med = 1.0 - math.Pow(0.5, 1/β)
+	case β == 1 && α >0: 
+		med = math.Pow(0.5, 1/α)
+	case α == 3 && β == 2: 
+		med = 0.6142724318676105
+	case α == 2 && β == 3: 
+		med = 0.38572756813238945
+	case α <= 1 || β <= 1: 
+		med = (α - 1/3) / (α + β - 2/3)		// approximation
+	default:
+		panic("no closed form for median, sorry")
+	}
+	return
+}
+
+// BetaMedianApprox returns the approximate median of the Beta distribution. 
+func BetaMedianApprox(α, β float64) float64 {
+	if α <= 1 || β <= 1 {
+		panic("α<=1 || β<=1")
+	}
+	return (α - 1/3) / (α + β - 2/3)
+}
+
+// BetaMode returns the mode of the Beta distribution. 
+func BetaMode(α, β float64) float64 {
+	if α <= 1 || β <= 1 {
+		panic("α<=1 || β<=1")
+	}
+	return (α - 1) / (α + β - 2) // if α < 1 and β < 1, this is the anti-mode
+}
+
+// BetaVar returns the variance of the Beta distribution. 
+func BetaVar(α, β float64) float64 {
+	return (α * β) / ((α + β) * (α + β) * (α + β + 1))
+}
+
+// BetaStd returns the standard deviation of the Beta distribution. 
+func BetaStd(α, β float64) float64 {
+	v := (α * β) / ((α + β) * (α + β) * (α + β + 1))
+	return math.Pow(v, 0.5)
+}
+
+// BetaSkew returns the skewness of the Beta distribution. 
+func BetaSkew(α, β float64) (s float64) {
+
+	if α == β {	// symmetric case
+		s = 0.0
+	} else {
+		num := 2 * (β - α) * math.Pow((α + β + 1), 0.5)
+		den := (α + β + 2) * math.Pow((α * β), 0.5)
+		s = num / den
+	}
+	return
+}
+
+// BetaExKurt returns the excess kurtosis of the Beta distribution. 
+func BetaExKurt(α, β float64) float64 {
+	num := 6*((α - β)*(α - β)*(α + β + 1) - α * β * (α + β + 2))
+	den := α * β * (α + β + 2) * (α + β + 2) 
+	return num / den
+}
 

@@ -1,7 +1,7 @@
 // test of Quantile functions
 // uses CDF and back using Qtl
 
-package pdf
+package dst
 
 import (
 	"fmt"

@@ -1,5 +1,5 @@
 // test of Zipf-Mandelbrot distribution
-package prob
+package dst
 
 import (
 	"fmt"

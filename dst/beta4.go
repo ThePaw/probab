@@ -52,7 +52,7 @@ func Beta4(α, β, a, c float64) func() float64 {
 }
 
 
-// Beta4_PDF_At returns the value of PDF of four-parameter Beta distribution(μ, ν) at x. 
+// Beta4_PDF_At returns the value of PDF of four-parameter Beta distribution at x. 
 func Beta4_PDF_At(α, β, a, c, x float64) float64 {
 	pdf := Beta4_PDF(α, β, a, c)
 	return pdf(x)

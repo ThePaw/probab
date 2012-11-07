@@ -1,5 +1,5 @@
 // test of Beta_Qtl_For(α, β, p)
-package pdf
+package dst
 
 import (
 	"testing"

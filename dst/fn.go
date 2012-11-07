@@ -18,44 +18,6 @@ var pow func(float64, float64) float64 = math.Pow
 
 const π = float64(math.Pi)
 
-func RejectionSample(targetDensity func(float64) float64, sourceDensity func(float64) float64, source func() float64, K float64) float64 {
-	x := source()
-	for ; NextUniform() >= targetDensity(x)/(K*sourceDensity(x)); x = source() {
-
-	}
-	return x
-}
-
-func ShuffleInt64(x []int64) {
-	n := int64(len(x))
-	for i := iZero; i < n; i++ {
-		j := i + NextRange(n-i)
-		t := x[i]
-		x[i] = x[j]
-		x[j] = t
-	}
-}
-
-func ShuffleFloat64(x []float64) {
-	n := int64(len(x))
-	for i := iZero; i < n; i++ {
-		j := i + NextRange(n-i)
-		t := x[i]
-		x[i] = x[j]
-		x[j] = t
-	}
-}
-
-func Shuffle(x []interface{}) {
-	n := int64(len(x))
-	for i := iZero; i < n; i++ {
-		j := i + NextRange(n-i)
-		t := x[i]
-		x[i] = x[j]
-		x[j] = t
-	}
-}
-
 func maxFloat64(x []float64) float64 {
 	first := x[0]
 	if len(x) > 1 {
@@ -113,4 +75,42 @@ func expm1(x float64 ) float64 {
 	return y
 }
 
+
+func RejectionSample(targetDensity func(float64) float64, sourceDensity func(float64) float64, source func() float64, K float64) float64 {
+	x := source()
+	for ; NextUniform(0, 1) >= targetDensity(x)/(K*sourceDensity(x)); x = source() {
+
+	}
+	return x
+}
+
+func ShuffleInt64(x []int64) {
+	n := int64(len(x))
+	for i := iZero; i < n; i++ {
+		j := i + NextRange(n-i)
+		t := x[i]
+		x[i] = x[j]
+		x[j] = t
+	}
+}
+
+func ShuffleFloat64(x []float64) {
+	n := int64(len(x))
+	for i := iZero; i < n; i++ {
+		j := i + NextRange(n-i)
+		t := x[i]
+		x[i] = x[j]
+		x[j] = t
+	}
+}
+
+func Shuffle(x []interface{}) {
+	n := int64(len(x))
+	for i := iZero; i < n; i++ {
+		j := i + NextRange(n-i)
+		t := x[i]
+		x[i] = x[j]
+		x[j] = t
+	}
+}
 

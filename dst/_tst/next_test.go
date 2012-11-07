@@ -1,7 +1,7 @@
 // test of Next functions
 // uses mean and variance of a big sample against computed values
 
-package pdf
+package dst
 
 import (
 	"fmt"

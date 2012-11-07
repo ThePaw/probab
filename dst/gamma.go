@@ -69,7 +69,7 @@ func NextGamma(α float64, λ float64) float64 {
 	p := 1.0 / (2 - exp(-s))
 	var x, y float64
 	for i := 1; ; i++ {
-		u := NextUniform()
+		u := NextUniform(0, 1)
 		if u > p {
 			var e float64
 			for e = -log((1 - u) / (1 - p)); e > s; e = e - a/b {
@@ -80,7 +80,7 @@ func NextGamma(α float64, λ float64) float64 {
 			x = a - b*log(u/p)
 			y = x - a
 		}
-		u2 := NextUniform()
+		u2 := NextUniform(0, 1)
 		if log(u2) <= a*log(d*x)-x+y/b+c {
 			break
 		}

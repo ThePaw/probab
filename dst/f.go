@@ -19,7 +19,7 @@ func F_LnPDF(d1 float64, d2 float64) func(x float64) float64 {
 	}
 }
 func NextF(d1 int64, d2 int64) float64 {
-	return (NextXsquare(d1) * float64(d2)) / (NextXsquare(d2) * float64(d1))
+	return (NextChiSquare(d1) * float64(d2)) / (NextChiSquare(d2) * float64(d1))
 }
 func F(d1 int64, d2 int64) func() float64 {
 	return func() float64 {

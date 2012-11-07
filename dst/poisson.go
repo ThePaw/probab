@@ -64,7 +64,7 @@ func NextPoisson(λ float64) int64 {
 	i := iZero
 	t := exp(-λ)
 	p := fOne
-	for ; p > t; p *= NextUniform() {
+	for ; p > t; p *= NextUniform(0, 1) {
 		i++
 	}
 	return i

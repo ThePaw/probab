@@ -1,5 +1,5 @@
 // test of Zeta distribution
-package prob
+package dst
 
 import (
 	"fmt"

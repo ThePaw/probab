@@ -1,5 +1,5 @@
 // test of Pareto-II distribution
-package prob
+package dst
 
 import (
 	"fmt"

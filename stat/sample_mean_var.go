@@ -1,6 +1,6 @@
 // Sample mean and variance (unbiased estimator)
 
-package dst
+package stat
 
 import (
 	"math"

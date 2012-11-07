@@ -15,7 +15,7 @@ func Choice_LnPMF(θ []float64) func(i int64) float64 {
 	}
 }
 func NextChoice(θ []float64) int64 {
-	u := NextUniform()
+	u := NextUniform(0, 1)
 	i := 0
 	sum := θ[0]
 	for ; sum < u && i < len(θ)-1; i++ {

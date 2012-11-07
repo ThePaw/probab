@@ -45,7 +45,7 @@ func Betaμν(μ, ν float64) func() float64 {
 	return func() float64 { return NextBeta(α, β) }
 }
 
-// Betaμν_PDF_At returns the value of PDF of Beta distribution(μ, ν) at x. 
+// Betaμν_PDF_At returns the value of PDF of Beta distribution at x. 
 func Betaμν_PDF_At(μ, ν, x float64) float64 {
 	pdf := Betaμν_PDF(μ, ν)
 	return pdf(x)

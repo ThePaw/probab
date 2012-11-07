@@ -1,9 +1,8 @@
 // Variance vector for data matrix 
 
-package aux
+package stat
 import (
 	. "github.com/skelterjohn/go.matrix"
-//	"math"
 )
 
 // Population variance vector of columns of data matrix, one-pass algorithm

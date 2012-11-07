@@ -1,9 +1,8 @@
 // Covariance matrix 
 
-package aux
+package stat
 import (
 	. "github.com/skelterjohn/go.matrix"
-//	"math"
 )
 
 

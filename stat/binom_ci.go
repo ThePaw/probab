@@ -1,4 +1,6 @@
-package dst
+package stat
+
+import . "code.google.com/p/probab/dst"
 
 // One-sided (frequentist) Confidence Intervals for Observed "Nonconforming" Units in a Random Sample
 // Source: Hahn, G. J., and W. Q. Meeker, "Statistical Intervals / A Guide for Practitioners," J. Wiley & Sons, New York.  1991.

@@ -1,5 +1,5 @@
 // test of F_Qtl_For
-package pdf
+package dst
 
 import (
 	"testing"
