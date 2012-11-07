@@ -1,4 +1,4 @@
-// Summary of posterior of Poisson parameter.
+// Summary of the posterior distribution of the Poisson parameter. 
 
 package main
 
@@ -7,8 +7,7 @@ import (
 	"code.google.com/p/probab/bayes"
 )
 
-
-// Summary of posterior of Poisson parameter.
+// Summary of the posterior distribution of the Poisson parameter. 
 func main() {
 	var (
 		x, n int64

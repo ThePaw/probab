@@ -220,6 +220,10 @@ func BetaMean(α, β float64) (μ float64) {
 
 // BetaMedian returns the median of the Beta distribution. 
 func BetaMedian(α, β float64) (med float64) {
+	//The median of the beta distribution is the unique real number 
+	// for which the regularized incomplete beta function  = 0.5 . 
+	// There is no general closed-form expression for the median of the beta distribution 
+	// for arbitrary values of α and β. 
 	switch {
 	case α == β: 	// symmetric case
 		med = 0.5
@@ -263,7 +267,7 @@ func BetaVar(α, β float64) float64 {
 // BetaStd returns the standard deviation of the Beta distribution. 
 func BetaStd(α, β float64) float64 {
 	v := (α * β) / ((α + β) * (α + β) * (α + β + 1))
-	return math.Pow(v, 0.5)
+	return math.Sqrt(v)
 }
 
 // BetaSkew returns the skewness of the Beta distribution. 
@@ -272,8 +276,8 @@ func BetaSkew(α, β float64) (s float64) {
 	if α == β {	// symmetric case
 		s = 0.0
 	} else {
-		num := 2 * (β - α) * math.Pow((α + β + 1), 0.5)
-		den := (α + β + 2) * math.Pow((α * β), 0.5)
+		num := 2 * (β - α) * math.Sqrt(α + β + 1)
+		den := (α + β + 2) * math.Sqrt(α * β)
 		s = num / den
 	}
 	return

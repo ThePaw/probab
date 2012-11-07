@@ -1,5 +1,7 @@
 // Empirical quantile from a sample from a PDF | PMF.
+
 package bayes
+
 import "sort"
 
 // Empirical quantile from a sample from a PDF | PMF.

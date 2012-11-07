@@ -1,7 +1,9 @@
-// Bayesian inference about the parameter p of binomial distribution.
-// Bolstad 2007 (2e): Chapter 8, p. 141 and further.
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
 
 package bayes
+
+// Bayesian inference about the parameter p of binomial distribution.
+// Bolstad 2007 (2e): Chapter 8, p. 141 and further.
 
 import (
 	"fmt"

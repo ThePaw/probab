@@ -99,12 +99,12 @@ func ChiSquareVar(n int64) float64 {
 
 // ChiSquareStd returns the standard deviation of the ChiSquare distribution. 
 func ChiSquareStd(n int64) float64 {
-	return math.Pow(float64(2*n), 0.5)
+	return math.Sqrt(float64(2*n))
 }
 
 // ChiSquareSkew returns the skewness of the ChiSquare distribution. 
 func ChiSquareSkew(n int64) float64 {
-	return math.Pow(float64(8/n), 0.5)
+	return math.Sqrt(float64(8/n))
 }
 
 // ChiSquareExKurt returns the excess kurtosis of the ChiSquare distribution. 

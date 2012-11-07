@@ -102,12 +102,12 @@ func BinomialVar(n int64, p float64) float64 {
 
 // BinomialStd returns the standard deviation of the Binomial distribution. 
 func BinomialStd(n int64, p float64) float64 {
-	return math.Pow(float64(n)*p *(1-p), 0.5)
+	return math.Sqrt(float64(n)*p *(1-p))
 }
 
 // BinomialSkew returns the skewness of the Binomial distribution. 
 func BinomialSkew(n int64, p float64) float64 {
-	return 1-2*p / math.Pow(float64(n)*p *(1-p), 0.5)
+	return 1-2*p / math.Sqrt(float64(n)*p *(1-p))
 }
 
 // BinomialExKurt returns the excess kurtosis of the Binomial distribution. 

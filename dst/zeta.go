@@ -1,5 +1,6 @@
 // Zeta distribution
 // s > 1.0 && k > 0
+
 package dst
 
 import (

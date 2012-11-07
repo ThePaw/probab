@@ -1,30 +1,23 @@
-// Gamma distribution
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
+
+package dst
+
+// Gamma distribution. 
+// Parameters: 
 // k > 0.0		shape parameter, 
 // θ (Theta) > 0.0	scale parameter. 
 // Alternatively, shape parameter α = k and an inverse scale parameter β = 1⁄θ, is called a rate parameter.
 // If k is an integer, then the distribution represents an Erlang distribution; i.e., the sum of k  independent exponentially-distributed random variables, each of which has a mean of θ (which is equivalent to a rate parameter of 1/θ). Equivalently, if α is an integer, then the distribution again represents an Erlang distribution, i.e. the sum of α independent exponentially-distributed random variables, each of which has a mean of 1/β (which is equivalent to a rate parameter of β).
+// Support: 
+// x ∈ (0, ∞)
 
-package dst
 import (
 	"fmt"
 	"math"
 	. "code.google.com/p/go-fn/fn"
 )
 
-/* did not pass test, so commented out
-// Probability density function
-func Gamma_PDF(α float64, λ float64) func(x float64) float64 {
-	expPart := Exp_PDF(λ)
-	return func(x float64) float64 {
-		if x < 0 {
-			return 0
-		}
-		return expPart(x) * pow(λ*x, α-1) / Γ(α)
-	}
-}
-*/
-
-// Probability density function
+// Gamma_PDF returns the PDF of the Gamma distribution. 
 func Gamma_PDF(k float64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if x < 0 {
@@ -34,7 +27,7 @@ func Gamma_PDF(k float64, θ float64) func(x float64) float64 {
 	}
 }
 
-// Natural logarithm of the probability density function
+// Gamma_LnPDF returns the natural logarithm of the PDF of the Gamma distribution. 
 func Gamma_LnPDF(α float64, λ float64) func(x float64) float64 {
 	expPart := Exp_LnPDF(λ)
 	return func(x float64) float64 {
@@ -45,7 +38,62 @@ func Gamma_LnPDF(α float64, λ float64) func(x float64) float64 {
 	}
 }
 
-// Random value drawn from the distribution
+// Gamma_PDF_At returns the value of PDF of Gamma distribution at x. 
+func Gamma_PDF_At(k, θ, x float64)  float64 {
+	pdf := Gamma_PDF(k , θ)
+	return pdf(x)
+}
+
+// Gamma_CDF returns the CDF of the Gamma distribution. 
+// Analytic solution, did not pass some tests!
+func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
+	return func(x float64) float64 {
+		if k < 0 || θ < 0 {
+			panic(fmt.Sprintf("k < 0 || θ < 0"))
+		}
+		if x < 0 {
+			return 0
+		}
+		return Iγ(k, x/θ) / Γ(k)
+	}
+}
+
+// Gamma_CDFint returns the CDF of the Gamma distribution, for integer k only. 
+// Cumulative distribution function, for integer k only
+func Gamma_CDFint(k int64, θ float64) func(x float64) float64 {
+	return func(x float64) float64 {
+		if k < 0 || θ < 0 {
+			panic(fmt.Sprintf("k < 0 || θ < 0"))
+		}
+		if x < 0 {
+			return 0
+		}
+		return Iγint(k, x/θ) / Γ(float64(k))
+	}
+}
+
+/*
+// Cumulative distribution function, using gamma incomplete integral  DOES NOT WORK !!!
+func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
+	return func(x float64) float64 {
+		if k < 0 || θ < 0 {
+			panic(fmt.Sprintf("k < 0 || θ < 0"))
+		}
+		if x < 0 {
+			return 0
+		}
+		return IGam(θ, k*x)
+	}
+}
+*/
+
+// Gamma_CDF_At returns the value of CDF of the Gamma distribution, at x. 
+func Gamma_CDF_At(k, θ, x float64)  float64 {
+	cdf := Gamma_CDFint(int64(math.Ceil(k)) , θ)
+	return cdf(x)
+}
+
+// NextGamma returns random number drawn from the Gamma distribution. 
 func NextGamma(α float64, λ float64) float64 {
 	//if α is a small integer, this way is faster on my laptop
 	if α == float64(int64(α)) && α <= 15 {
@@ -88,69 +136,12 @@ func NextGamma(α float64, λ float64) float64 {
 	return x / λ
 }
 
+// Gamma returns the random number generator with  Gamma distribution. 
 func Gamma(α float64, λ float64) func() float64 {
 	return func() float64 { return NextGamma(α, λ) }
 }
 
-// Cumulative distribution function, analytic solution, did not pass some tests!
-func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
-	return func(x float64) float64 {
-		if k < 0 || θ < 0 {
-			panic(fmt.Sprintf("k < 0 || θ < 0"))
-		}
-		if x < 0 {
-			return 0
-		}
-		return Iγ(k, x/θ) / Γ(k)
-	}
-}
-
-// Cumulative distribution function, for integer k only
-func Gamma_CDFint(k int64, θ float64) func(x float64) float64 {
-	return func(x float64) float64 {
-		if k < 0 || θ < 0 {
-			panic(fmt.Sprintf("k < 0 || θ < 0"))
-		}
-		if x < 0 {
-			return 0
-		}
-		return Iγint(k, x/θ) / Γ(float64(k))
-	}
-}
-
-/*
-// Cumulative distribution function, using gamma incomplete integral  DOES NOT WORK !!!
-func Gamma_CDF(k float64, θ float64) func(x float64) float64 {
-	return func(x float64) float64 {
-		if k < 0 || θ < 0 {
-			panic(fmt.Sprintf("k < 0 || θ < 0"))
-		}
-		if x < 0 {
-			return 0
-		}
-		return IGam(θ, k*x)
-	}
-}
-*/
-
-
-
-
-
-
-// Value of the probability density function at x
-func Gamma_PDF_At(k, θ, x float64)  float64 {
-	pdf := Gamma_PDF(k , θ)
-	return pdf(x)
-}
-
-// Value of the cumulative distribution function at x
-func Gamma_CDF_At(k, θ, x float64)  float64 {
-	cdf := Gamma_CDFint(int64(math.Ceil(k)) , θ)
-	return cdf(x)
-}
-
-// Inverse CDF (Quantile) function
+// Gamma_Qtl returns the inverse of the CDF (quantile) of the Gamma distribution. 
 func Gamma_Qtl(k, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		var eps, y_new, h float64
@@ -174,24 +165,37 @@ func Gamma_Qtl(k, θ float64) func(x float64) float64 {
 	}
 }
 
-// Value of the inverse CDF for probability p
+// Gamma_Qtl_For returns the inverse of the CDF (quantile) of the Gamma distribution, for given probability.
 func Gamma_Qtl_For(k, θ, p float64)  float64 {
 	cdf:=Gamma_Qtl(k, θ)
 	return cdf(p)
 }
 
-// Mean
+// GammaMean returns the mean of the Gamma distribution. 
 func GammaMean(k, θ float64) float64 {
 	return k*θ
 }
 
-// Variance
+// GammaMode returns the mode of the Gamma distribution. 
+func GammaMode(k, θ float64) float64 {
+	if k <=1 {
+		panic("mode not defined for k <=1")
+	} 
+	return (k-1)*θ
+}
+
+// GammaVar returns the variance of the Gamma distribution. 
 func GammaVar(k, θ float64) float64 {
 	return k*θ*θ
 }
 
-// Standard deviation
+// GammaStd returns the standard deviation of the Gamma distribution. 
 func GammaStd(k, θ float64) float64 {
-	return math.Sqrt(k*θ*θ)
+	return math.Sqrt(k)*θ
+}
+
+// GammaSkew returns the skewness of the Gamma distribution. 
+func GammaSkew(k, θ float64) float64 {
+	return 2/math.Sqrt(k)
 }
 

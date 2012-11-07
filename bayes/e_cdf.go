@@ -1,5 +1,7 @@
 // Empirical CDF
+
 package bayes
+
 import "sort"
 
 // Empirical CDF, x is an array of observed values, y is a value where CDF is evaluated

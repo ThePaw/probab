@@ -8,7 +8,9 @@ package dst
 // p ∈ [0, 1]	probability of success in each trial
 // Support: 
 // k ∈ {0, ... , n}
+// x ∈ (0, ∞)
 
+Σ∈ℕε
 // ZZZZZZZZZZZZZ_PDF returns the PDF of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZ_LnPDF returns the natural logarithm of the PDF of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZ_PDF_At returns the value of PDF of ZZZZZZZZZZZZZ distribution at x. 
@@ -27,6 +29,7 @@ package dst
 // ZZZZZZZZZZZZZ returns the random number generator with  ZZZZZZZZZZZZZ distribution. 
 
 // ZZZZZZZZZZZZZMean returns the mean of the ZZZZZZZZZZZZZ distribution. 
+// ZZZZZZZZZZZZZMode returns the mode of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZMedian returns the median of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZVar returns the variance of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZStd returns the standard deviation of the ZZZZZZZZZZZZZ distribution. 
@@ -35,13 +38,8 @@ package dst
 
 
 // ZZZZZZZZZZZZZMean returns the mean of the ZZZZZZZZZZZZZ distribution. 
-func ZZZZZZZZZZZZZMean(α, β float64) (μ float64) {
-	if α == β  {		// symmetric case
-		μ = 0.5
-	} else {
-		μ = α / (α + β)
-	}
-	return 
+func ZZZZZZZZZZZZZMean(α, β float64) float64 {
+	return x
 }
 
 // ZZZZZZZZZZZZZMedian returns the median of the ZZZZZZZZZZZZZ distribution. 
@@ -54,7 +52,7 @@ func ZZZZZZZZZZZZZMedian(α, β float64) (med float64) {
 	case β == 1 && α >0: 
 		med = math.Pow(0.5, 1/α)
 	case α == 3 && β == 2: 
-		med = 0.6142724318676105
+		med = 0.6142724318676105Probability distributions and statistics
 	case α == 2 && β == 3: 
 		med = 0.38572756813238945
 	case α <= 1 || β <= 1: 
@@ -65,7 +63,7 @@ func ZZZZZZZZZZZZZMedian(α, β float64) (med float64) {
 	return
 }
 
-
+float64(d1) float64(d2)
 // ZZZZZZZZZZZZZMode returns the mode of the ZZZZZZZZZZZZZ distribution. 
 func ZZZZZZZZZZZZZMode(α, β float64) float64 {
 	if α <= 1 || β <= 1 {
@@ -103,5 +101,15 @@ func ZZZZZZZZZZZZZExKurt(α, β float64) float64 {
 	num := 6*((α - β)*(α - β)*(α + β + 1) - α * β * (α + β + 2))
 	den := α * β * (α + β + 2) * (α + β + 2) 
 	return num / den
+}
+
+// ZZZZZZZZZZZZZMGF returns the moment-generating function of the ZZZZZZZZZZZZZ distribution. 
+func ZZZZZZZZZZZZZMGF(n int64, p, t float64) float64 {
+	return math.Pow((1- p + p* math.Exp(t)), float64(n))
+}
+
+// ZZZZZZZZZZZZZPGF returns the probability-generating function of the ZZZZZZZZZZZZZ distribution. 
+func ZZZZZZZZZZZZZPGF(n int64, p, z float64) float64 {
+	return math.Pow((1- p + p* z), float64(n))
 }
 
