@@ -25,8 +25,8 @@ func Betaμν_LnPDF(μ, ν float64) func(x float64) float64 {
 	return Beta_LnPDF(α, β)
 }
 
-// NextBetaμν_ returns random number drawn from the  Beta distribution reparametrized using mean and sample size. 
-func NextBetaμν_(μ, ν float64) float64 {
+// NextBetaμν returns random number drawn from the  Beta distribution reparametrized using mean and sample size. 
+func NextBetaμν(μ, ν float64) float64 {
 	α := μ*ν
 	β := (1-μ)*ν
 	if ν <= 0 {

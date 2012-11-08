@@ -11,13 +11,18 @@ package dst
 // x ∈ (0, ∞)
 
 Σ∈ℕε
+
+
+Edit s/ZZZZZZZZZZZZZ/ZZZZZZZZZZZZZ/g   :; :XX
+
+
 // ZZZZZZZZZZZZZ_PDF returns the PDF of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZ_LnPDF returns the natural logarithm of the PDF of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZ_PDF_At returns the value of PDF of ZZZZZZZZZZZZZ distribution at x. 
 
 // ZZZZZZZZZZZZZ_PMF returns the PMF of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZ_LnPMF returns the natural logarithm of the PMF of the ZZZZZZZZZZZZZ distribution. 
-// ZZZZZZZZZZZZZ_PMF_At returns the value of PMF of ZZZZZZZZZZZZZ distribution(μ, σ) at x. 
+// ZZZZZZZZZZZZZ_PMF_At returns the value of PMF of ZZZZZZZZZZZZZ distribution(μ, σ) at k. 
 
 // ZZZZZZZZZZZZZ_CDF returns the CDF of the ZZZZZZZZZZZZZ distribution. 
 // ZZZZZZZZZZZZZ_CDF_At returns the value of CDF of the ZZZZZZZZZZZZZ distribution, at x. 
