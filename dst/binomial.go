@@ -24,7 +24,7 @@ func Binomial_PMF(n int64, p float64) func(k int64) float64 {
 }
 
 // Binomial_LnPMF returns the natural logarithm of the PMF of the Binomial distribution. 
-func Binomial_LnPMF(n int64, p float64) func(i int64) float64 {
+func Binomial_LnPMF(n int64, p float64) func(k int64) float64 {
 	return func(k int64) (x float64) {
 		x = log(p)*float64(k) + log(1-p)*float64(n-k)
 		x += LnΓ(float64(n+1)) - LnΓ(float64(k+1)) - LnΓ(float64(n-k+1))

@@ -1,9 +1,22 @@
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
+
 package dst
+
+// Multivariate normal distribution. 
+// The multivariate normal distribution or multivariate Gaussian distribution, is a generalization of the one-dimensional (univariate) normal distribution to higher dimensions. One possible definition is that a random vector is said to be k-variate normally distributed if every linear combination of its k components has a univariate normal distribution. However, its importance derives mainly from the multivariate central limit theorem. The multivariate normal distribution is often used to describe, at least approximately, any set of (possibly) correlated real-valued random variables each of which clusters around a mean value.
+//
+// Parameters: 
+// μ ∈ ℝk		(Rk)	location
+// Σ ∈ ℝk✕k	(Rkxk)	covariance (nonnegative-definite matrix)
+//
+// Support: 
+// x ∈ μ+span(Σ) ⊆ ℝk
 
 import (
 	. "github.com/skelterjohn/go.matrix"
 )
 
+// MVNormal_PDF returns the PDF of the MVNormal distribution. 
 func MVNormal_PDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64 {
 	p := μ.Rows()
 	backμ := μ.DenseMatrix()
@@ -25,6 +38,7 @@ func MVNormal_PDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64
 	}
 }
 
+// NextMVNormal returns random number drawn from the MVNormal distribution. 
 func NextMVNormal(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	n := μ.Rows()
 	x := Zeros(n, 1)
@@ -40,6 +54,7 @@ func NextMVNormal(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	return μCx
 }
 
+// MVNormal returns the random number generator with  MVNormal distribution. 
 func MVNormal(μ *DenseMatrix, Σ *DenseMatrix) func() *DenseMatrix {
 	C, _ := Σ.Cholesky()
 	n := μ.Rows()
@@ -52,5 +67,20 @@ func MVNormal(μ *DenseMatrix, Σ *DenseMatrix) func() *DenseMatrix {
 		MCx, _ := μ.PlusDense(Cx)
 		return MCx
 	}
+}
+
+// MVNormalMean returns the mean of the MVNormal distribution. 
+func MVNormalMean(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
+	return μ
+}
+
+// MVNormalMode returns the mode of the MVNormal distribution. 
+func MVNormalMode(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
+	return μ
+}
+
+// MVNormalVar returns the variance of the MVNormal distribution. 
+func MVNormalVar(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
+	return Σ
 }
 

@@ -1,4 +1,16 @@
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
+
 package dst
+
+// Normal  (or Gaussian, or Gauss-Laplace) distribution. 
+// A continuous probability distribution, defined on the entire real line, that has a bell-shaped probability density function, known as the Gaussian function. 
+//
+// Parameters: 
+// μ ∈ R		(location)
+// σ2 > 0		variance (squared scale)
+//
+// Support: 
+// x ∈ R
 
 import (
 	"math"
@@ -58,7 +70,6 @@ func intermediate(r float64) float64 {
 }
 
 func tail(r float64) float64 {
-
 	var (
 		a = []float64{6.6579046435011037772, 5.4637849111641143699, 1.7848265399172913358, 0.29656057182850489123,
 			0.026532189526576123093, 0.0012426609473880784386, 2.71155556874348757815e-5, 2.01033439929228813265e-7}
@@ -71,113 +82,88 @@ func tail(r float64) float64 {
 	return x
 }
 
-func Normal_PDF(μ float64, σ float64) func(x float64) float64 {
+// Normal_PDF returns the PDF of the Normal distribution. 
+func Normal_PDF(μ, σ float64) func(x float64) float64 {
 	normal_normalizer := 0.3989422804014327 / σ
 	return func(x float64) float64 { return normal_normalizer * exp(-1*(x-μ)*(x-μ)/(2*σ*σ)) }
 }
 
-func Normal_LnPDF(μ float64, σ float64) func(x float64) float64 {
+// Normal_LnPDF returns the natural logarithm of the PDF of the Normal distribution. 
+func Normal_LnPDF(μ, σ float64) func(x float64) float64 {
 	ln_normal_normalizer := -0.91893853320467267 - log(σ)
 	return func(x float64) float64 { return ln_normal_normalizer - (x-μ)*(x-μ)/(2*σ*σ) }
 }
 
-func NextNormal(μ float64, σ float64) float64 { return rand.NormFloat64()*σ + μ }
+// Normal_PDF_At returns the value of PDF of Normal distribution at x. 
 
-func Normal(μ, σ float64) func() float64 {
-	return func() float64 { return NextNormal(μ, σ) }
-}
-
-// Cumulative Distribution Function for the Normal distribution
+// Normal_CDF returns the CDF of the Normal distribution. 
 func Normal_CDF(μ, σ float64) func(x float64) float64 {
 	return func(x float64) float64 { return ((1.0 / 2.0) * (1 + math.Erf((x-μ)/(σ*math.Sqrt2)))) }
 }
 
-// Cumulative Probability of the Normal distribution at x
+// Normal_CDF_At returns the value of CDF of the Normal distribution, at x. 
 func Normal_CDF_At(μ, σ, x float64) float64 {
 	cdf := Normal_CDF(μ, σ)
 	return cdf(x)
 }
 
-// Inverse CDF (= quantile) of Normal distribution
+// Normal_Qtl returns the inverse of the CDF (quantile) of the Normal distribution. 
 func Normal_Qtl(μ, σ float64) func(p float64)  float64 {
 	return func(p float64)  float64 {
 		return σ * Z_Qtl_For(p) + μ
 	}
 }
 
-// Inverse CDF (= quantile) of Normal distribution for probability p //// Test it!!!
+// Normal_Qtl_For returns the inverse of the CDF (quantile) of the Normal distribution, for given probability.
 func Normal_Qtl_For(μ, σ, p float64)float64 {
 	qtl := Normal_Qtl(μ, σ)
 	return qtl(p)
 }
 
-// Probability Density Function for the Standard Normal distribution
-func Z_PDF() func(float64) float64 {
-	return Normal_PDF(0, 1)
+// NextNormal returns random number drawn from the Normal distribution. 
+func NextNormal(μ, σ float64) float64 { return rand.NormFloat64()*σ + μ }
+
+// Normal returns the random number generator with  Normal distribution. 
+func Normal(μ, σ float64) func() float64 {
+	return func() float64 { return NextNormal(μ, σ) }
 }
 
-// Cumulative Distribution Function for the Standard Normal distribution
-func Z_CDF() func(float64) float64 {
-	return Normal_CDF(0, 1)
-}
-
-// Probability Density of the Standard Normal distribution at x
-func Z_PDF_At(x float64) float64 {
-	pdf := Normal_PDF(0, 1)
-	return pdf(x)
-}
-
-// Cumulative Probability of the Standard Normal distribution at x
-func Z_CDF_At(x float64) float64 {
-	cdf := Normal_CDF(0, 1)
-	return cdf(x)
-}
-
-// Inverse CDF of Standard Normal distribution for probability p
-func Z_Qtl_For(p float64) float64 {
-
-	var r, x, pp, dp float64
-
-	dp = p - 0.5
-	switch {
-	case p == 1.0:
-		return math.MaxFloat64
-	case p == 0.0:
-		return -math.MaxFloat64
-	}
-	if math.Abs(dp) <= 0.425 {
-		x = small(dp)
-		return x
-	}
-	if p < 0.5 {
-		pp = p
-	} else {
-		pp = 1.0 - p
-	}
-	r = math.Sqrt(-math.Log(pp))
-	if r <= 5.0 {
-		x = intermediate(r)
-	} else {
-		x = tail(r)
-	}
-	if p < 0.5 {
-		return -x
-	}
-	return x
-}
-
-// Mean
-func NormalMean(μ float64) float64 {
+// NormalMean returns the mean of the Normal distribution. 
+func NormalMean(μ, σ float64) float64 {
 	return μ
 }
 
-// Variance
-func NormalVar(σ float64) float64 {
+// NormalMode returns the mode of the Normal distribution. 
+func NormalMode(μ, σ float64) float64 {
+	return μ
+}
+
+// NormalMedian returns the median of the Normal distribution. 
+func NormalMedian(μ, σ float64) float64 {
+	return μ
+}
+
+// NormalVar returns the variance of the Normal distribution. 
+func NormalVar(μ, σ float64) float64 {
 	return σ*σ
 }
 
-// Standard deviation
-func NormalStd(σ float64) float64 {
+// NormalStd returns the standard deviation of the Normal distribution. 
+func NormalStd(μ, σ float64) float64 {
 	return σ
+}
+// NormalSkew returns the skewness of the Normal distribution. 
+func NormalSkew(μ, σ float64) float64 {
+	return 0
+}
+
+// NormalExKurt returns the excess kurtosis of the Normal distribution. 
+func NormalExKurt(μ, σ float64) float64 {
+	return 0
+}
+
+// NormalMGF returns the moment-generating function of the Normal distribution. 
+func NormalMGF(μ, σ, t float64) float64 {
+	return math.Exp(μ*t + σ*σ*t*t/2)
 }
 

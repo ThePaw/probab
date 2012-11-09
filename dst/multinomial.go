@@ -18,6 +18,7 @@ package dst
 // Σxi = n
 
 import (
+	"math"
 	. "code.google.com/p/go-fn/fn"
 )
 
@@ -87,3 +88,52 @@ func Multinomial(θ []float64, n int64) func() []int64 {
 }
 
 
+// MultinomialMean returns the mean of the Multinomial distribution. 
+func MultinomialMean(θ []float64, n int64) []float64 {
+	k := len(θ)
+	x := make([]float64, k)
+	for i := 0; i < k; i++ {
+		x[i] = float64(n)*θ[i]
+	}
+	return x
+}
+
+// MultinomialVar returns the variance of the Multinomial distribution. 
+func MultinomialVar(θ []float64, n int64) []float64 {
+	k := len(θ)
+	x := make([]float64, k)
+	for i := 0; i < k; i++ {
+		x[i] = float64(n)*θ[i]*(1-θ[i])
+	}
+	return x
+}
+
+// MultinomialStd returns the standard deviation of the Multinomial distribution. 
+func MultinomialStd(θ []float64, n int64) []float64 {
+	k := len(θ)
+	x := make([]float64, k)
+	for i := 0; i < k; i++ {
+		x[i] = math.Sqrt(float64(n)*θ[i]*(1-θ[i]))
+	}
+	return x
+}
+
+// MultinomialMGF returns the moment-generating function of the Multinomial distribution. 
+func MultinomialMGF(θ []float64, n int64, t []float64) float64 {
+	k := len(θ)
+	sum := 0.0
+	for i := 0; i < k; i++ {
+		sum += θ[i]*math.Exp(t[i])
+	}
+	return math.Pow(sum, float64(n))
+}
+
+// MultinomialPGF returns the probability-generating function of the Multinomial distribution. 
+func MultinomialPGF(θ []float64, n int64, z []float64) float64 {
+	k := len(θ)
+	sum := 0.0
+	for i := 0; i < k; i++ {
+		sum += θ[i]*z[i]
+	}
+	return math.Pow(sum, float64(n))
+}
