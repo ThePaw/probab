@@ -1,4 +1,4 @@
-package dst
+package stat
 
 import (
 	"fmt"

@@ -4,9 +4,9 @@ package dst
 
 // Beta distribution. 
 // Parameters:
-// α > 0: shape
-// β > 0: shape. 
-// Support: x ∈ [0; 1].
+// α > 0:		shape
+// β > 0:		shape
+// Support:	x ∈ [0; 1]
 
 
 import (

@@ -1,9 +1,27 @@
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
+
 package dst
+
+// Multinomial distribution 
+// is a generalization of the binomial distribution.
+// The binomial distribution is the probability distribution of the number of "successes" in n independent Bernoulli trials, with the same probability of "success" on each trial. 
+// In a multinomial distribution, the analog of the Bernoulli distribution is the categorical distribution, 
+// where each trial results in exactly one of some fixed finite number k of possible outcomes, 
+// with probabilities p1, ..., pk (so that pi ≥ 0 for i = 1, ..., k and \sum_{i=1}^k p_i = 1), and there are n independent trials. 
+//
+// Parameters: 
+// n ∈ {1, 2 ... }	 	number of trials
+// θ1, ..., θk  ∈ [0, 1]	event probabilities (must sum to1)
+//
+// Support: 
+// xi ∈ {0, ... , n}
+// Σxi = n
 
 import (
 	. "code.google.com/p/go-fn/fn"
 )
 
+// Multinomial_PMF returns the PMF of the Multinomial distribution. 
 func Multinomial_PMF(θ []float64, n int64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		if len(x) != len(θ) {
@@ -24,6 +42,7 @@ func Multinomial_PMF(θ []float64, n int64) func(x []int64) float64 {
 	}
 }
 
+// Multinomial_LnPMF returns the natural logarithm of the PMF of the Multinomial distribution. 
 func Multinomial_LnPMF(θ []float64, n int64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		if len(x) != len(θ) {
@@ -44,11 +63,13 @@ func Multinomial_LnPMF(θ []float64, n int64) func(x []int64) float64 {
 	}
 }
 
+// Multinomial_PMF_At returns the value of PMF of Multinomial distribution(μ, σ) at k. 
 func Multinomial_PMF_At(θ []float64, n int64, x []int64) float64 {
 	pmf := Multinomial_PMF(θ , n)
 	return pmf(x)
 }
 
+// NextMultinomial returns random number drawn from the Multinomial distribution. 
 func NextMultinomial(θ []float64, n int64) []int64 {
 	x := make([]int64, len(θ))
 	chooser := Choice(θ)
@@ -58,6 +79,7 @@ func NextMultinomial(θ []float64, n int64) []int64 {
 	return x
 }
 
+// Multinomial returns the random number generator with  Multinomial distribution. 
 func Multinomial(θ []float64, n int64) func() []int64 {
 	return func() []int64 {
 		return NextMultinomial(θ, n)
