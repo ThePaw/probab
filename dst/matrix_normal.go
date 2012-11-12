@@ -1,4 +1,4 @@
-package stat
+package dst
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func checkMatrixNormal(M, Omega, Sigma *mx.DenseMatrix) {
 /*
  M is the mean, Omega is the row covariance, Sigma is the column covariance.
 */
-func MatrixNormal_PDF(M, Omega, Sigma *mx.DenseMatrix) func(A *mx.DenseMatrix) float64 {
+func MatrixNormalPDF(M, Omega, Sigma *mx.DenseMatrix) func(A *mx.DenseMatrix) float64 {
 	checkMatrixNormal(M, Omega, Sigma)
 	pf := float64(M.Rows())
 	mf := float64(M.Cols())
@@ -68,7 +68,7 @@ func MatrixNormal_PDF(M, Omega, Sigma *mx.DenseMatrix) func(A *mx.DenseMatrix) f
 		return
 	}
 }
-func MatrixNormal_LnPDF(M, Omega, Sigma *mx.DenseMatrix) func(A *mx.DenseMatrix) float64 {
+func MatrixNormalLnPDF(M, Omega, Sigma *mx.DenseMatrix) func(A *mx.DenseMatrix) float64 {
 	checkMatrixNormal(M, Omega, Sigma)
 
 	pf := float64(M.Rows())
@@ -123,6 +123,6 @@ func MatrixNormal(M, Omega, Sigma *mx.DenseMatrix) func() (X *mx.DenseMatrix) {
 		return
 	}
 }
-func NextMatrixNormal(M, Omega, Sigma *mx.DenseMatrix) (X *mx.DenseMatrix) {
+func MatrixNormalNext(M, Omega, Sigma *mx.DenseMatrix) (X *mx.DenseMatrix) {
 	return MatrixNormal(M, Omega, Sigma)()
 }

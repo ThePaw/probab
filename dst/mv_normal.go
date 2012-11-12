@@ -16,20 +16,20 @@ import (
 	. "github.com/skelterjohn/go.matrix"
 )
 
-// MVNormal_PDF returns the PDF of the MVNormal distribution. 
-func MVNormal_PDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64 {
+// MVNormalPDF returns the PDF of the MVNormal distribution. 
+func MVNormalPDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64 {
 	p := μ.Rows()
 	backμ := μ.DenseMatrix()
 	backμ.Scale(-1)
 
 	Σdet := Σ.Det()
 	ΣdetRt := sqrt(Σdet)
-	Σinv, _ := Σ.Inverse()
+	Σinv,  _ := Σ.Inverse()
 
 	normalization := pow(2*π, -float64(p)/2) / ΣdetRt
 
 	return func(x *DenseMatrix) float64 {
-		δ, _ := x.PlusDense(backμ)
+		δ,  _:= x.PlusDense(backμ)
 		tmp := δ.Transpose()
 		tmp, _ = tmp.TimesDense(Σinv)
 		tmp, _ = tmp.TimesDense(δ)
@@ -38,12 +38,12 @@ func MVNormal_PDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64
 	}
 }
 
-// NextMVNormal returns random number drawn from the MVNormal distribution. 
-func NextMVNormal(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
+// MVNormalNext returns random number drawn from the MVNormal distribution. 
+func MVNormalNext(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	n := μ.Rows()
 	x := Zeros(n, 1)
 	for i := 0; i < n; i++ {
-		x.Set(i, 0, NextNormal(0, 1))
+		x.Set(i, 0, NormalNext(0, 1))
 	}
 	C, err := Σ.Cholesky()
 	Cx, err := C.TimesDense(x)
@@ -61,7 +61,7 @@ func MVNormal(μ *DenseMatrix, Σ *DenseMatrix) func() *DenseMatrix {
 	return func() *DenseMatrix {
 		x := Zeros(n, 1)
 		for i := 0; i < n; i++ {
-			x.Set(i, 0, NextNormal(0, 1))
+			x.Set(i, 0, NormalNext(0, 1))
 		}
 		Cx, _ := C.TimesDense(x)
 		MCx, _ := μ.PlusDense(Cx)

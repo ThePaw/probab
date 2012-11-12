@@ -12,8 +12,8 @@ import (
 	. "code.google.com/p/go-fn/fn"
 )
 
-// Dirichlet_PDF returns the PDF of the Dirichlet distribution. 
-func Dirichlet_PDF(α []float64) func(θ []float64) float64 {
+// DirichletPDF returns the PDF of the Dirichlet distribution. 
+func DirichletPDF(α []float64) func(θ []float64) float64 {
 	return func(θ []float64) float64 {
 		k := len(α)
 		if len(θ) != k {
@@ -34,8 +34,8 @@ func Dirichlet_PDF(α []float64) func(θ []float64) float64 {
 	}
 }
 
-// Dirichlet_LnPDF returns the natural logarithm of the PDF of the Dirichlet distribution. 
-func Dirichlet_LnPDF(α []float64) func(x []float64) float64 {
+// DirichletLnPDF returns the natural logarithm of the PDF of the Dirichlet distribution. 
+func DirichletLnPDF(α []float64) func(x []float64) float64 {
 	return func(x []float64) float64 {
 		k := len(α)
 		if len(x) != k {
@@ -55,19 +55,19 @@ func Dirichlet_LnPDF(α []float64) func(x []float64) float64 {
 		return l
 	}
 }
-// Dirichlet_PDF_At returns the value of PDF of Dirichlet distribution at x. 
-func Dirichlet_PDF_At(α, θ []float64)  float64 {
-	pdf := Dirichlet_PDF(α)
+// DirichletPDFAt returns the value of PDF of Dirichlet distribution at x. 
+func DirichletPDFAt(α, θ []float64)  float64 {
+	pdf := DirichletPDF(α)
 	return pdf(θ)
 }
 
-// NextDirichlet returns random number drawn from the Dirichlet distribution. 
-func NextDirichlet(α []float64) []float64 {
+// DirichletNext returns random number drawn from the Dirichlet distribution. 
+func DirichletNext(α []float64) []float64 {
 	k := len(α)
 	x := make([]float64, k)
 	sum := fZero
 	for i := 0; i < len(α); i++ {
-		x[i] = NextGamma(α[i], 1.0)
+		x[i] = GammaNext(α[i], 1.0)
 		sum += x[i]
 	}
 	for i := 0; i < len(α); i++ {
@@ -78,7 +78,7 @@ func NextDirichlet(α []float64) []float64 {
 
 // Dirichlet returns the random number generator with  Dirichlet distribution. 
 func Dirichlet(α []float64) func() []float64 {
-	return func() []float64 { return NextDirichlet(α) }
+	return func() []float64 { return DirichletNext(α) }
 }
 
 // DirichletMean returns the mean of the Dirichlet distribution. 

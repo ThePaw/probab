@@ -17,31 +17,31 @@ import (
 	. "code.google.com/p/go-fn/fn"
 )
 
-// Polya_PMF returns the PMF of the Polya distribution. 
-func Polya_PMF(ρ, r float64) func(k int64) float64 {
+// PolyaPMF returns the PMF of the Polya distribution. 
+func PolyaPMF(ρ, r float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		kk := float64(k)
 		return (Γ(kk+r)/ (float64(Fact(k)) * Γ(r))) * math.Pow(1-ρ, r) * math.Pow(ρ, float64(k))
 	}
 }
 
-// Polya_PMF_At returns the value of PMF of Polya distribution(μ, σ) at k. 
-func Polya_PMF_At(ρ, r float64, k int64)  float64 {
-	pmf := Polya_PMF(ρ, r) 
+// PolyaPMFAt returns the value of PMF of Polya distribution(μ, σ) at k. 
+func PolyaPMFAt(ρ, r float64, k int64)  float64 {
+	pmf := PolyaPMF(ρ, r) 
 	return pmf(k)
 }
 
-// Polya_CDF returns the CDF of the Polya distribution. 
-func Polya_CDF(ρ, r float64) func(k int64) float64 {
+// PolyaCDF returns the CDF of the Polya distribution. 
+func PolyaCDF(ρ, r float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		Ip:=Beta_CDF_At(float64(k+1), r, ρ)
+		Ip:=BetaCDFAt(float64(k+1), r, ρ)
 		return 1-Ip
 	}
 }
 
-// Polya_CDF_At returns the value of CDF of the Polya distribution, at x. 
-func Polya_CDF_At(ρ, r float64, k int64)  float64 {
-	cdf := Polya_CDF(ρ, r) 
+// PolyaCDFAt returns the value of CDF of the Polya distribution, at x. 
+func PolyaCDFAt(ρ, r float64, k int64)  float64 {
+	cdf := PolyaCDF(ρ, r) 
 	return cdf(k)
 }
 

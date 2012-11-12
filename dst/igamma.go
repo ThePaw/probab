@@ -23,37 +23,37 @@ import (
 	. "code.google.com/p/go-fn/fn"
 )
 
-// InvGamma_PDF returns the PDF of the InvGamma distribution. 
-func InvGamma_PDF(α, β float64) func(x float64) float64 {
+// InvGammaPDF returns the PDF of the InvGamma distribution. 
+func InvGammaPDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		return math.Exp(α*math.Log(β) - LnΓ(α) - (α+1)*math.Log(x) - β*1.0/x)
 	}
 }
 
-// InvGamma_LnPDF returns the natural logarithm of the PDF of the InvGamma distribution. 
-func InvGamma_LnPDF(α, β float64) func(x float64) float64 {
+// InvGammaLnPDF returns the natural logarithm of the PDF of the InvGamma distribution. 
+func InvGammaLnPDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		return α*math.Log(β) - LnΓ(α) - (α+1)*math.Log(x) - β*1.0/x
 	}
 }
 
-// InvGamma_PDF_At returns the value of PDF of InvGamma distribution at x. 
-func InvGamma_PDF_At(α, β float64) func(x float64) float64 {
+// InvGammaPDFAt returns the value of PDF of InvGamma distribution at x. 
+func InvGammaPDFAt(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		return math.Exp(α*math.Log(β) - LnΓ(α) - (α+1)*math.Log(x) - β/x)
 	}
 }
 
-// InvGamma_CDF returns the CDF of the InvGamma distribution. 
-func InvGamma_CDF(α, β float64) func(x float64) float64 {
+// InvGammaCDF returns the CDF of the InvGamma distribution. 
+func InvGammaCDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		return 1 - IΓ(α, β/x)
 	}
 }
 
-// InvGamma_CDF_At returns the value of CDF of the InvGamma distribution, at x. 
-func InvGamma_CDF_At(α, β, x float64) float64 {
-	cdf:=InvGamma_CDF(α, β)
+// InvGammaCDFAt returns the value of CDF of the InvGamma distribution, at x. 
+func InvGammaCDFAt(α, β, x float64) float64 {
+	cdf:=InvGammaCDF(α, β)
 	return cdf(x)
 }
 

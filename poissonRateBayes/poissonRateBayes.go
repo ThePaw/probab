@@ -23,7 +23,7 @@ func main() {
 	}
 	fmt.Println("\nProb.\t\tQuantile \n")
 	for i:=0; i< 9; i++ {
-			qf := bayes.PoissonLambda_Qtl_GPri(x, n, r, v)
+			qf := bayes.PoissonLambdaQtlGPri(x, n, r, v)
 			qtl := qf(pr[i])
 			fmt.Println(pr[i],"\t\t", qtl)
 	}

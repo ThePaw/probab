@@ -11,7 +11,7 @@ import (
 
 // PMF of the posterior distribution of unknown Normal μ, with KNOWN σ, and discrete prior, for single observation. 
 // Bolstad 2007 (2e): 200-201.
-func NormMuSingle_PMF_DPri(y, σ float64, μ []float64, μPri []float64) (post []float64) {
+func NormMuSinglePMFDPri(y, σ float64, μ []float64, μPri []float64) (post []float64) {
 // y	single observation taken from Normal distribution
 // σ	standard deviation of population, assumed to be known
 // μ	array of possible discrete values of μ
@@ -24,7 +24,7 @@ func NormMuSingle_PMF_DPri(y, σ float64, μ []float64, μPri []float64) (post [
 	sum := 0.0
 	for i := 0; i< nPoss; i++ {
 		z := (y-μ[i])/σ
-		like := Z_PDF_At(z)
+		like := ZPDFAt(z)
 		post[i] = μPri[i] * like
 		sum += post[i]
 	}
@@ -36,7 +36,7 @@ func NormMuSingle_PMF_DPri(y, σ float64, μ []float64, μPri []float64) (post [
 
 // PMF of the posterior distribution of unknown Normal μ, with KNOWN σ, and discrete prior, for sample
 // Bolstad 2007 (2e): 203, eq. 11.2
-func NormMu_PMF_DPri(nObs int, ȳ, σ float64, μ []float64, μPri []float64) (post []float64) {
+func NormMuPMFDPri(nObs int, ȳ, σ float64, μ []float64, μPri []float64) (post []float64) {
 // nObs		number of observations in the sample (= length of the samle array)
 // ȳ		sample mean of the observed values
 // σ		standard deviation of population, assumed to be known
@@ -93,20 +93,20 @@ func NormMuPostStd(nObs int, σ, μPri, σPri float64) float64 {
 
 // Quantile for posterior distribution of unknown Normal μ, with KNOWN σ, and flat prior (Jeffrey's prior), for single observation
 // Bolstad 2007 (2e): 206
-func NormMuSingle_Qtl_FPri(y, σ, p float64) float64 {
+func NormMuSingleQtlFPri(y, σ, p float64) float64 {
 // y		single observation taken from Normal distribution
 // σ		standard deviation of population, assumed to be known
 // p		probability for which the quantile will be returned
 // untested ...
 	μPost := y
 	σPost := σ
-	qtl := Normal_Qtl_For(μPost, σPost, p)
+	qtl := NormalQtlFor(μPost, σPost, p)
 	return (qtl)
 }
 
 // Quantile for posterior distribution of unknown Normal μ, with KNOWN σ, and flat prior (Jeffrey's prior), for sample
 // Bolstad 2007 (2e): 207
-func NormMu_Qtl_FPri(nObs int, ȳ, σ, p float64) float64 {
+func NormMuQtlFPri(nObs int, ȳ, σ, p float64) float64 {
 // ȳ		sample mean of observations taken from Normal distribution
 // σ		standard deviation of population, assumed to be known
 // nObs		number of observations
@@ -121,12 +121,12 @@ func NormMu_Qtl_FPri(nObs int, ȳ, σ, p float64) float64 {
 	μPost := ȳ
 	σ2Post := σ2 / n
 	σPost := math.Sqrt(σ2Post)
-	return Normal_Qtl_For(μPost, σPost, p)
+	return NormalQtlFor(μPost, σPost, p)
 }
 
 // Quantile for posterior distribution of unknown Normal μ, with KNOWN σ, and Normal prior, for single observation
 // Bolstad 2007 (2e): 208, eq. 11.4
-func NormMuSingle_Qtl_NPri(y, σ, μPri, σPri, p float64) float64 {
+func NormMuSingleQtlNPri(y, σ, μPri, σPri, p float64) float64 {
 // y		single observation taken from Normal distribution
 // σ	standard deviation of population, assumed to be known
 // μPri	Normal prior mean
@@ -142,12 +142,12 @@ func NormMuSingle_Qtl_NPri(y, σ, μPri, σPri, p float64) float64 {
 	μPost := (σ2*μPri + σ2Pri*y) / (σ2 + σ2Pri)
 	σ2Post := (σ2 * σ2Pri) / (σ2 + σ2Pri)
 	σPost := math.Sqrt(σ2Post)
-	return Normal_Qtl_For(μPost, σPost, p)
+	return NormalQtlFor(μPost, σPost, p)
 }
 
 // Quantile for posterior distribution of unknown Normal μ, with KNOWN σ, and Normal prior, for sample
 // Bolstad 2007 (2e): 209, eq. 11.5, 11.6
-func NormMu_Qtl_NPri(nObs int, ȳ, σ, μPri, σPri, p float64) float64 {
+func NormMuQtlNPri(nObs int, ȳ, σ, μPri, σPri, p float64) float64 {
 // ȳ		sample mean of observations taken from Normal dist
 // σ		standard deviation of population, assumed to be known
 // nObs			number of observations
@@ -160,12 +160,12 @@ func NormMu_Qtl_NPri(nObs int, ȳ, σ, μPri, σPri, p float64) float64 {
 	σ2Post := (σ2 * σ2Pri) / (σ2 + n*σ2Pri)
 	μPost := (μPri/σ2Pri)/(n/σ2+1/σ2Pri) + ȳ*(n/σ2)/(n/σ2+1/σ2Pri)
 	σPost := math.Sqrt(σ2Post)
-	return Normal_Qtl_For(μPost, σPost, p)
+	return NormalQtlFor(μPost, σPost, p)
 }
 
 // Credible interval for unknown Normal μ, with KNOWN σ, and Normal prior
 // Bolstad 2007 (2e): 212, eq. 11.7
-func NormMu_CrI_NPriKnown(nObs int, ȳ, σ, μPri, σPri, α float64) (lo, hi float64) {
+func NormMuCrINPriKnown(nObs int, ȳ, σ, μPri, σPri, α float64) (lo, hi float64) {
 	// ȳ		sample mean of observations taken from Normal distribution
 	// σ		standard deviation of population, assumed to be known
 	// nObs			number of observations
@@ -179,30 +179,30 @@ func NormMu_CrI_NPriKnown(nObs int, ȳ, σ, μPri, σPri, α float64) (lo, hi fl
 	μPost := (μPri/σ2Pri)/(n/σ2+1/σ2Pri) + ȳ*(n/σ2)/(n/σ2+1/σ2Pri)
 //	μPost := (μPri/σ2Pri)/(n*ȳ/σ2+1/σ2Pri) + ((n / σ2) / (n/σ2 + 1/σ2Pri))
 	σPost := math.Sqrt(σ2Post)
-	lo = Normal_Qtl_For(μPost, σPost, α/2)
-	hi = Normal_Qtl_For(μPost, σPost, 1-α/2)
+	lo = NormalQtlFor(μPost, σPost, α/2)
+	hi = NormalQtlFor(μPost, σPost, 1-α/2)
 	return lo, hi
 }
 
-/* waiting for StudentsT_Qtl_For() to be implemented
+/* waiting for StudentsTQtlFor() to be implemented
 // Credible interval for unknown Normal μ, with UNKNOWN σ, and Normal prior, equal tail area
 // Bolstad 2007 (2e): 212, eq. 11.8
-func NormMu_CrI_NPriUnkn(nObs int, ȳ, samp_σ, μPri, σPri, α float64) (lo, hi float64) {
+func NormMuCrINPriUnkn(nObs int, ȳ, sampσ, μPri, σPri, α float64) (lo, hi float64) {
 // nObs			number of observations
 // ȳ		sample mean of observations taken from Normal distribution
-// samp_σ	standard deviation of the sample
+// sampσ	standard deviation of the sample
 // μPri		Normal prior mean
 // σPri		Normal prior standard deviation
 // α		posterior probability that the true μ lies outside the credible interval
 // untested ...
 	n := float64(nObs)
 	nu := float64(nObs - 1)
-	samp_var := samp_σ * samp_σ
+	sampvar := sampσ * sampσ
 	σ2Pri := σPri * σPri
-	σ2Post := (samp_var * σ2Pri) / (samp_var + n*σ2Pri)
-	μPost := (μPri/σ2Pri)/(n*ȳ/samp_var+1/σ2Pri) + ((n / samp_var) / (n/samp_var + 1/σ2Pri))
+	σ2Post := (sampvar * σ2Pri) / (sampvar + n*σ2Pri)
+	μPost := (μPri/σ2Pri)/(n*ȳ/sampvar+1/σ2Pri) + ((n / sampvar) / (n/sampvar + 1/σ2Pri))
 	σPost := math.Sqrt(σ2Post)
-	t := StudentsT_Qtl_For(α/2, nu)
+	t := StudentsTQtlFor(α/2, nu)
 	lo = μPost - t*σPost
 	hi = μPost + t*σPost
 	return lo, hi
@@ -211,7 +211,7 @@ func NormMu_CrI_NPriUnkn(nObs int, ȳ, samp_σ, μPri, σPri, α float64) (lo, h
 
 // Credible interval for unknown Normal μ, with KNOWN σ, and flat prior
 // Bolstad 2007 (2e): 212, eq. 11.7
-func NormMu_CrI_FPriKnown(nObs int, ȳ, σ, α float64) (lo, hi float64) {
+func NormMuCrIFPriKnown(nObs int, ȳ, σ, α float64) (lo, hi float64) {
 // untested ...
 // ȳ		sample mean of observations taken from Normal distribution
 // σ		standard deviation of population, assumed to be known
@@ -221,15 +221,15 @@ func NormMu_CrI_FPriKnown(nObs int, ȳ, σ, α float64) (lo, hi float64) {
 	μPost := ȳ
 	σ2Post := (σ * σ / n)
 	σPost := math.Sqrt(σ2Post)
-	lo = Normal_Qtl_For(μPost, σPost, α/2)
-	hi = Normal_Qtl_For(μPost, σPost, 1-α/2)
+	lo = NormalQtlFor(μPost, σPost, α/2)
+	hi = NormalQtlFor(μPost, σPost, 1-α/2)
 	return lo, hi
 }
 
-/* waiting for StudentsT_Qtl_For() to be implemented
+/* waiting for StudentsTQtlFor() to be implemented
 // Credible interval for unknown Normal μ, with UNKNOWN σ, and flat prior
 // Bolstad 2007 (2e): 212, eq. 11.8
-func NormMu_CrI_FPriUnkn(nObs int, ȳ, σ, α float64) (lo, hi float64) {
+func NormMuCrIFPriUnkn(nObs int, ȳ, σ, α float64) (lo, hi float64) {
 // ȳ		sample mean of observations taken from Normal distribution
 // σ		standard deviation of population, unknown
 // nObs		number of observations
@@ -240,7 +240,7 @@ func NormMu_CrI_FPriUnkn(nObs int, ȳ, σ, α float64) (lo, hi float64) {
 	μPost := ȳ
 	σ2Post := (σ * σ / n)
 	σPost := math.Sqrt(σ2Post)
-	t := StudentsT_Qtl_For(α/2, nu)
+	t := StudentsTQtlFor(α/2, nu)
 	lo = μPost - t*σPost
 	hi = μPost + t*σPost
 	return lo, hi

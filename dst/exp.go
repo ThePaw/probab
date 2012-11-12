@@ -13,8 +13,8 @@ import (
 	"math/rand"
 )
 
-// Exponential_PDF returns the PDF of the Exponential distribution. 
-func Exp_PDF(λ float64) func(x float64) float64 {
+// ExponentialPDF returns the PDF of the Exponential distribution. 
+func ExponentialPDF(λ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if x < 0 {
 			return 0
@@ -24,8 +24,8 @@ func Exp_PDF(λ float64) func(x float64) float64 {
 }
 
 
-// Exponential_LnPDF returns the natural logarithm of the PDF of the Exponential distribution. 
-func Exp_LnPDF(λ float64) func(x float64) float64 {
+// ExponentialLnPDF returns the natural logarithm of the PDF of the Exponential distribution. 
+func ExponentialLnPDF(λ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if x < 0 {
 			return negInf
@@ -34,14 +34,14 @@ func Exp_LnPDF(λ float64) func(x float64) float64 {
 	}
 }
 
-// Exponential_PDF_At returns the value of PDF of Exponential distribution at x. 
-func Exponential_PDF_At(λ, x float64) float64 {
-	pdf := Exp_PDF(λ)
+// ExponentialPDFAt returns the value of PDF of Exponential distribution at x. 
+func ExponentialPDFAt(λ, x float64) float64 {
+	pdf := ExponentialPDF(λ)
 	return pdf(x)
 }
 
-// Exponential_CDF returns the CDF of the Exponential distribution. 
-func Exponential_CDF(λ float64) func(x float64) float64 {
+// ExponentialCDF returns the CDF of the Exponential distribution. 
+func ExponentialCDF(λ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if x < 0 {
 			return 0
@@ -50,38 +50,38 @@ func Exponential_CDF(λ float64) func(x float64) float64 {
 	}
 }
 
-// Exponential_CDF_At returns the value of CDF of the Exponential distribution, at x. 
-func Exponential_CDF_At(λ, x float64) float64 {
-	cdf := Exponential_CDF(λ)
+// ExponentialCDFAt returns the value of CDF of the Exponential distribution, at x. 
+func ExponentialCDFAt(λ, x float64) float64 {
+	cdf := ExponentialCDF(λ)
 	return cdf(x)
 }
 
-// Exponential_Qtl returns the inverse of the CDF (quantile) of the Exponential distribution. 
-func Exponential_Qtl(λ float64) func(p float64) float64 {
+// ExponentialQtl returns the inverse of the CDF (quantile) of the Exponential distribution. 
+func ExponentialQtl(λ float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
 	return func(p float64) float64 {
 		return -math.Log(1-p)/λ
 	}
 }
 
-// Exponential_Qtl_For returns the inverse of the CDF (quantile) of the Exponential distribution, for given probability.
-func Exponential_Qtl_For(λ, p float64) float64 {
-	cdf := Exponential_Qtl(λ)
+// ExponentialQtlFor returns the inverse of the CDF (quantile) of the Exponential distribution, for given probability.
+func ExponentialQtlFor(λ, p float64) float64 {
+	cdf := ExponentialQtl(λ)
 	return cdf(p)
 }
 
-// NextExponential returns random number drawn from the Exponential distribution. 
-func NextExp(λ float64) float64    { return rand.ExpFloat64() / λ }
+// ExponentialNext returns random number drawn from the Exponential distribution. 
+func ExponentialNext(λ float64) float64    { return rand.ExpFloat64() / λ }
 
 // Exponential returns the random number generator with  Exponential distribution. 
-func Exp(λ float64) func() float64 { return func() float64 { return NextExp(λ) } }
+func Exponential(λ float64) func() float64 { return func() float64 { return ExponentialNext(λ) } }
 
 // ExponentialMean returns the mean of the Exponential distribution. 
 func ExponentialMean(λ float64) float64 {
 	return 1/λ
 }
 
-// ExponentialMedian returns the median of the Exponential distribution. 
+// Exponential returns the median of the Exponential distribution. 
 func ExponentialMedian(λ float64) (med float64) {
 	return (1/λ)*math.Log(2)
 }

@@ -1,26 +1,25 @@
-// Zeta distribution
-// s > 1.0 && k > 0
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
 
 package dst
+
+// Zeta distribution. 
+// The zeta distribution is equivalent to the Zipf distribution for infinite N. 
+//
+// Parameters: 
+// s > 1.0	 	(real)
+//
+// Support: 
+// k > 0		(integer)
 
 import (
 	"math"
 	"math/rand"
 	. "code.google.com/p/go-fn/fn"
 )
-// The generalized harmonic number of order n of m is given by
-func H(n int64, m float64) float64 {
-	var i int64
-	h := 0.0
-	for i = 1; i <= n; i++ {
-		h += math.Pow(float64(i), m)
-	}
-	return h
-}
 
 
-// Probability Mass Function for the Zeta distribution
-func Zeta_PMF(s float64) func(k int64) float64 {
+// ZetaPMF returns the PMF of the Zeta distribution. 
+func ZetaPMF(s float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		t1 := 1/math.Pow(float64(k), s)
 		t2 := RiemannZeta(s)
@@ -29,12 +28,14 @@ func Zeta_PMF(s float64) func(k int64) float64 {
 	}
 }
 
-func Zeta_PMF_At(s float64, k int64) float64 {
-	pmf := Zeta_PMF(s)
+// ZetaPMFAt returns the value of PMF of Zeta distribution at k. 
+func ZetaPMFAt(s float64, k int64) float64 {
+	pmf := ZetaPMF(s)
 	return pmf(k)
 }
 
-func Zeta_CDF(s float64) func(k int64) float64 {
+// ZetaCDF returns the CDF of the Zeta distribution. 
+func ZetaCDF(s float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		t1 := H(k, s)
 		t2 := RiemannZeta(s)
@@ -43,15 +44,16 @@ func Zeta_CDF(s float64) func(k int64) float64 {
 	}
 }
 
-func Zeta_CDF_At(s float64, k int64) float64 {
-	pmf := Zeta_CDF(s)
+// ZetaCDFAt returns the value of CDF of the Zeta distribution, at x. 
+func ZetaCDFAt(s float64, k int64) float64 {
+	pmf := ZetaCDF(s)
 	return pmf(k)
 }
 
-// Zeta distributed random variate
-// Devroye 1986: 550. Called "Zipf distribution" there.
-// Devroye, L. 1986: Non-Uniform Random Variate Generation. Springer-Verlag, New York. ISBN 0-387-96305-7.
-func NextZeta(s float64) (k int64) {
+// ZetaNext returns random number drawn from the Zeta distribution. 
+func ZetaNext(s float64) (k int64) {
+	// Devroye 1986: 550. Called "Zipf distribution" there.
+	// Devroye, L. 1986: Non-Uniform Random Variate Generation. Springer-Verlag, New York. ISBN 0-387-96305-7.
 	var x float64
 	b := math.Pow(2.0, s - 1.0)
         for   {
@@ -69,10 +71,12 @@ func NextZeta(s float64) (k int64) {
 }
 
 
+// Zeta returns the random number generator with  Zeta distribution. 
 func Zeta(s float64) func() int64 {
-	return func() int64 { return NextZeta(s) }
+	return func() int64 { return ZetaNext(s) }
 }
 
+// ZetaMean returns the mean of the Zeta distribution. 
 func ZetaMean(s float64) float64 {
         if s <= 2 {
 		panic("not defined")
@@ -82,13 +86,15 @@ func ZetaMean(s float64) float64 {
 		return t1/t2
 }
 
+// ZetaMode returns the mode of the Zeta distribution. 
 func ZetaMode() float64 {
 		return 1
 }
 
+// ZetaVar returns the variance of the Zeta distribution. 
 func ZetaVar(s float64) float64 {
         if s <= 3 {
-		panic("not defined")
+		panic("variance not defined for s <= 3")
 	}
 		t1 := RiemannZeta(s)
 		t2 := RiemannZeta(s-2)

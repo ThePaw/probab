@@ -3,7 +3,7 @@
 package dst
 
 // The four-parameter Beta distribution. 
-// http://en.wikipedia.org/wiki/Beta_distribution#Four_parameters_2
+// http://en.wikipedia.org/wiki/Betadistribution#Fourparameters2
 // A beta distribution with the two shape parameters α and β is supported on the range [0,1]. 
 // It is possible to alter the location and scale of the distribution by introducing two further parameters representing the minimum, a, 
 // and maximum c (c > a), values of the distribution, by a linear transformation substituting the non-dimensional variable x 
@@ -19,13 +19,13 @@ import (
 	"math"
 )
 
-// Beta4_PDF returns the PDF of the four-parameter Beta distribution. 
-func Beta4_PDF(α, β, a, c float64)  func(y float64) float64 {
+// Beta4PDF returns the PDF of the four-parameter Beta distribution. 
+func Beta4PDF(α, β, a, c float64)  func(y float64) float64 {
 	if a>= c {
 		panic("a must be lower than c")
 	}
 	dα := []float64{α, β}
-	dirPDF := Dirichlet_PDF(dα)
+	dirPDF := DirichletPDF(dα)
 	return func(y float64) float64 {
 		x :=(y-a)/(c-a)
 		if 0 > x || x > 1 {
@@ -36,30 +36,30 @@ func Beta4_PDF(α, β, a, c float64)  func(y float64) float64 {
 	}
 }
 
-// NextBeta4 returns random number drawn from the  four-parameter Beta distribution. 
-func NextBeta4(α, β, a, c float64) float64 {
+// Beta4Next returns random number drawn from the  four-parameter Beta distribution. 
+func Beta4Next(α, β, a, c float64) float64 {
 	if a>= c {
 		panic("a must be lower than c")
 	}
-	x:=NextBeta(α, β)
+	x:=BetaNext(α, β)
 	y:=x*(c-a)+a
 	return y
 }
 
 // Beta4 returns the random number generator with  four-parameter Beta distribution. 
 func Beta4(α, β, a, c float64) func() float64 {
-	return func() float64 { return NextBeta4(α, β, a, c) }
+	return func() float64 { return Beta4Next(α, β, a, c) }
 }
 
 
-// Beta4_PDF_At returns the value of PDF of four-parameter Beta distribution at x. 
-func Beta4_PDF_At(α, β, a, c, x float64) float64 {
-	pdf := Beta4_PDF(α, β, a, c)
+// Beta4PDFAt returns the value of PDF of four-parameter Beta distribution at x. 
+func Beta4PDFAt(α, β, a, c, x float64) float64 {
+	pdf := Beta4PDF(α, β, a, c)
 	return pdf(x)
 }
 
-// Beta4_CDF returns the CDF of the four-parameter Beta distribution. 
-func Beta4_CDF(α, β, a, c float64) func(y float64) float64 {
+// Beta4CDF returns the CDF of the four-parameter Beta distribution. 
+func Beta4CDF(α, β, a, c float64) func(y float64) float64 {
 	if a>= c {
 		panic("a must be lower than c")
 	}
@@ -82,14 +82,14 @@ func Beta4_CDF(α, β, a, c float64) func(y float64) float64 {
 	}
 }
 
-// Beta4_CDF_At returns the value of CDF of the four-parameter Beta distribution, at x. 
-func Beta4_CDF_At(α, β, a, c, x float64) float64 {
-	cdf := Beta4_CDF(α, β, a, c)
+// Beta4CDFAt returns the value of CDF of the four-parameter Beta distribution, at x. 
+func Beta4CDFAt(α, β, a, c, x float64) float64 {
+	cdf := Beta4CDF(α, β, a, c)
 	return cdf(x)
 }
 
-// Beta4_Qtl returns the inverse of the CDF (quantile) of the four-parameter Beta distribution. 
-func Beta4_Qtl(α, β, a, c float64) func(p float64) float64 {
+// Beta4Qtl returns the inverse of the CDF (quantile) of the four-parameter Beta distribution. 
+func Beta4Qtl(α, β, a, c float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
 	return func(p float64) float64 {
 		var x float64 = 0
@@ -125,8 +125,8 @@ func Beta4_Qtl(α, β, a, c float64) func(p float64) float64 {
 	}
 }
 
-// Beta4_Qtl_For returns the inverse of the CDF (quantile) of the four-parameter Beta distribution, for a given probability.
-func Beta4_Qtl_For(α, β, a, c, p float64) float64 {
-	cdf := Beta4_Qtl(α, β, a, c)
+// Beta4QtlFor returns the inverse of the CDF (quantile) of the four-parameter Beta distribution, for a given probability.
+func Beta4QtlFor(α, β, a, c, p float64) float64 {
+	cdf := Beta4Qtl(α, β, a, c)
 	return cdf(p)
 }

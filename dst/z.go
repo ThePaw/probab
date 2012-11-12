@@ -16,30 +16,30 @@ import (
 )
 
 
-// Z_PDF returns the PDF of the Standard Normal distribution. 
-func Z_PDF() func(float64) float64 {
-	return Normal_PDF(0, 1)
+// ZPDF returns the PDF of the Standard Normal distribution. 
+func ZPDF() func(float64) float64 {
+	return NormalPDF(0, 1)
 }
 
-// Z_PDF_At returns the value of PDF of Standard Normal distribution at x. 
-func Z_PDF_At(x float64) float64 {
-	pdf := Normal_PDF(0, 1)
+// ZPDFAt returns the value of PDF of Standard Normal distribution at x. 
+func ZPDFAt(x float64) float64 {
+	pdf := NormalPDF(0, 1)
 	return pdf(x)
 }
 
-// Z_CDF returns the CDF of the Standard Normal distribution. 
-func Z_CDF() func(float64) float64 {
-	return Normal_CDF(0, 1)
+// ZCDF returns the CDF of the Standard Normal distribution. 
+func ZCDF() func(float64) float64 {
+	return NormalCDF(0, 1)
 }
 
-// Z_CDF_At returns the value of CDF of the Standard Normal distribution, at x. 
-func Z_CDF_At(x float64) float64 {
-	cdf := Normal_CDF(0, 1)
+// ZCDFAt returns the value of CDF of the Standard Normal distribution, at x. 
+func ZCDFAt(x float64) float64 {
+	cdf := NormalCDF(0, 1)
 	return cdf(x)
 }
 
-// Z_Qtl returns the inverse of the CDF (quantile) of the Standard Normal distribution. 
-func Z_Qtl() func(p float64)  float64 {
+// ZQtl returns the inverse of the CDF (quantile) of the Standard Normal distribution. 
+func ZQtl() func(p float64)  float64 {
 	return func(p float64)  float64 {
 
 	var r, x, pp, dp float64
@@ -73,9 +73,9 @@ func Z_Qtl() func(p float64)  float64 {
 	}
 }
 
-// Z_Qtl_For returns the inverse of the CDF (quantile) of the Standard Normal distribution, for given probability.
-func Z_Qtl_For(p float64) float64 {
-	qtl := Z_Qtl()
+// ZQtlFor returns the inverse of the CDF (quantile) of the Standard Normal distribution, for given probability.
+func ZQtlFor(p float64) float64 {
+	qtl := ZQtl()
 	return qtl(p)
 }
 

@@ -1,24 +1,25 @@
-// Pareto single-parameter Distribution
-// The single-parameter Pareto distribution used in these functions has cumulative distribution function:
-//
-//	Pr[X <= x] = 1 - (μ/x)^shape, x > 0.
-//
-// See Appendix A of Klugman, Panjer & Willmot, Loss Models, Second Edition, Wiley, 2004.
-//
-// params: 
-// α > 0.0 (shape) 
-// μ > 0.0 (minimum) 
-// support: x >= θ 
-// inspired by R:actuar
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
 
 package dst
+
+// Single-parameter  Pareto distribution. 
+// Appendix A of Klugman, Panjer & Willmot, Loss Models, Second Edition, Wiley, 2004.
+//
+// Parameters: 
+// α > 0.0		shape (real)
+// μ > 0.0		minimum (real)
+//
+// Support: 
+// x >= μ (real)
+// inspired by R:actuar
 
 import (
 	"math"
 	"math/rand"
 )
 
-func ParetoSing_ChkParams(α, μ float64) bool {
+// ParetoSingChkParams checks parameters of the Single-parameter Pareto distribution. 
+func ParetoSingChkParams(α, μ float64) bool {
 	ok := true
 	if α <= 0 || μ <= 0  {
 		ok = false
@@ -26,7 +27,8 @@ func ParetoSing_ChkParams(α, μ float64) bool {
 	return ok
 }
 
-func ParetoSing_ChkSupport(x, μ float64) bool {
+// ParetoSingChkSupport checks support of the Single-parameter Pareto distribution. 
+func ParetoSingChkSupport(x, μ float64) bool {
 	ok := true
 	if x < μ {
 		ok = false
@@ -34,7 +36,8 @@ func ParetoSing_ChkSupport(x, μ float64) bool {
 	return ok
 }
 
-func ParetoSing_PDF(α, μ float64) func(x float64) float64 {
+// ParetoSingPDF returns the PDF of the Single-parameter Pareto distribution. 
+func ParetoSingPDF(α, μ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		p:= 0.0
 		if x >= μ {
@@ -44,12 +47,14 @@ func ParetoSing_PDF(α, μ float64) func(x float64) float64 {
 	}
 }
 
-func ParetoSing_PDF_At(α, μ, x float64) float64 {
-	pdf := ParetoSing_PDF(α, μ)
+// ParetoSingPDFAt returns the value of PDF of Single-parameter  Pareto distribution at x. 
+func ParetoSingPDFAt(α, μ, x float64) float64 {
+	pdf := ParetoSingPDF(α, μ)
 	return pdf(x)
 }
 
-func ParetoSing_CDF(α, μ float64) func(x float64) float64 {
+// ParetoSingCDF returns the CDF of the Single-parameter  Pareto distribution. 
+func ParetoSingCDF(α, μ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		p:= 0.0
 		if x > μ {
@@ -59,31 +64,39 @@ func ParetoSing_CDF(α, μ float64) func(x float64) float64 {
 	}
 }
 
-func ParetoSing_CDF_At(α, μ, x float64) float64 {
-	cdf := ParetoSing_CDF(α, μ)
+// ParetoSingCDFAt returns the value of CDF of the Single-parameter  Pareto distribution, at x. 
+func ParetoSingCDFAt(α, μ, x float64) float64 {
+	cdf := ParetoSingCDF(α, μ)
 	return cdf(x)
 }
 
-// Inverse of the cumulative single-parameter Pareto probability density function (quantile).
-func ParetoSing_Qtl(α, μ float64) func(p float64) float64 {
+// ParetoSingQtl returns the inverse of the CDF (quantile) of the Single-parameter  Pareto distribution. 
+func ParetoSingQtl(α, μ float64) func(p float64) float64 {
 	return func(p float64) float64 {
 		return μ / math.Pow((0.5 - (p) + 0.5), 1.0 / α)
 	}
 }
 
-// Inverse of the cumulative single-parameter Pareto probability density function (quantile) for given probability.
-func ParetoSing_Qtl_For(α, μ, p float64) float64 {
-	cdf := ParetoSing_Qtl(α, μ)
+// ParetoSingQtlFor returns the inverse of the CDF (quantile) of the Single-parameter  Pareto distribution, for given probability.
+func ParetoSingQtlFor(α, μ, p float64) float64 {
+	cdf := ParetoSingQtl(α, μ)
 	return cdf(p)
 }
 
-func NextParetoSing(α, μ float64) float64 {
-	qtl := ParetoSing_Qtl(α, μ)
+// ParetoSingNext returns random number drawn from the Single-parameter  Pareto distribution. 
+func ParetoSingNext(α, μ float64) float64 {
+	qtl := ParetoSingQtl(α, μ)
 	p := rand.Float64()
 	return qtl(p)
 }
 
-func ParetoSing_Moment(α, μ float64, order int) float64 {
+// ParetoSing returns the random number generator with  Single-parameter  Pareto distribution. 
+func ParetoSing(α, μ float64) func() float64 {
+	return func() float64 { return ParetoSingNext(α, μ) }
+}
+
+// ParetoSingMoment returns the n-th moment of the Single-parameter  Pareto distribution. 
+func ParetoSingMoment(α, μ float64, order int) float64 {
 	o:=float64(order)
     if o >= α {
 	return math.Inf(+1)
@@ -92,4 +105,23 @@ func ParetoSing_Moment(α, μ float64, order int) float64 {
     return α * math.Pow(μ, o) / (α - o)
 }
 
+// ParetoSingMean returns the mean of the Single-parameter  Pareto distribution. 
+func ParetoSingMean(α, μ float64) float64 {
+	return ParetoSingMoment(α, μ, 1)
+}
+
+// ParetoSingVar returns the variance of the Single-parameter  Pareto distribution. 
+func ParetoSingVar(α, μ float64) float64 {
+	return ParetoSingMoment(α, μ, 2)
+}
+
+// ParetoSingSkew returns the skewness of the Single-parameter  Pareto distribution. 
+func ParetoSingSkew(α, μ float64) float64 {
+	return ParetoSingMoment(α, μ, 3)
+}
+
+// ParetoSingExKurt returns the excess kurtosis of the Single-parameter  Pareto distribution. 
+func ParetoSingExKurt(α, μ float64) float64 {
+	return ParetoSingMoment(α, μ, 4)
+}
 

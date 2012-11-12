@@ -10,6 +10,7 @@ var iZero int64 = int64(0)
 var iOne int64 = int64(1)
 
 var negInf float64 = math.Inf(-1)
+var posInf float64 = math.Inf(+1)
 
 var log func(float64) float64 = math.Log
 var exp func(float64) float64 = math.Exp
@@ -78,7 +79,7 @@ func expm1(x float64 ) float64 {
 
 func RejectionSample(targetDensity func(float64) float64, sourceDensity func(float64) float64, source func() float64, K float64) float64 {
 	x := source()
-	for ; NextUniform(0, 1) >= targetDensity(x)/(K*sourceDensity(x)); x = source() {
+	for ; UniformNext(0, 1) >= targetDensity(x)/(K*sourceDensity(x)); x = source() {
 
 	}
 	return x
@@ -87,7 +88,7 @@ func RejectionSample(targetDensity func(float64) float64, sourceDensity func(flo
 func ShuffleInt64(x []int64) {
 	n := int64(len(x))
 	for i := iZero; i < n; i++ {
-		j := i + NextRange(n-i)
+		j := i + RangeNext(n-i)
 		t := x[i]
 		x[i] = x[j]
 		x[j] = t
@@ -97,7 +98,7 @@ func ShuffleInt64(x []int64) {
 func ShuffleFloat64(x []float64) {
 	n := int64(len(x))
 	for i := iZero; i < n; i++ {
-		j := i + NextRange(n-i)
+		j := i + RangeNext(n-i)
 		t := x[i]
 		x[i] = x[j]
 		x[j] = t
@@ -107,7 +108,7 @@ func ShuffleFloat64(x []float64) {
 func Shuffle(x []interface{}) {
 	n := int64(len(x))
 	for i := iZero; i < n; i++ {
-		j := i + NextRange(n-i)
+		j := i + RangeNext(n-i)
 		t := x[i]
 		x[i] = x[j]
 		x[j] = t

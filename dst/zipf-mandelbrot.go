@@ -1,15 +1,28 @@
-// Zipf-Mandelbrot distribution
-// For q == 0 it reduces to Zipf distribution.
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
 
 package dst
+
+// Zipf-Mandelbrot distribution. 
+// For finite n and q == 0 it reduces to Zipf distribution.
+//
+// Parameters: 
+// n ∈ {1, 2, 3,, ...} 	 (integer)
+// q ∈ [0, ∞)	(real)
+// s ∈ (0, ∞)	(real)
+//
+// Support: 
+// k ∈ {1, 2, ... , n}
+
+// Zipf-Mandelbrot distribution
 
 import (
 	"math"
 	"math/rand"
+	. "code.google.com/p/go-fn/fn"
 )
 
-// Check of Zipf-Mandelbrot function parameters
-func ZipfMandelbrotCheckParams(n int64, q, s float64) bool {
+//  ZipfMandelbrotChkParams checks parameters of the Zipf-Mandelbrot  distribution.
+func ZipfMandelbrotChkParams(n int64, q, s float64) bool {
 	v:= false
 	if n >0 && q >= 0 && s > 0 {
 		v = true
@@ -17,40 +30,30 @@ func ZipfMandelbrotCheckParams(n int64, q, s float64) bool {
 	return v
 }
 
-// Generalized harmonic number
-func h(n int64, q, s float64) float64 {
-	var i int64
-	h := 0.0
-	for i = 1; i <= n; i++ {
-		h += math.Pow((float64(i) + q), -s)
-	}
-	return h
-}
-
-// Probability Mass Function for the Zipf-Mandelbrot distribution
+// ZipfMandelbrotPMF returns the PMF of the Zipf-Mandelbrot distribution. 
 func ZipfMandelbrotPMF(n int64, q, s float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := 1 / (math.Pow((float64(k)+q), s) * h(n, q, s))
+		p := 1 / (math.Pow((float64(k)+q), s) * H2(n, q, s))
 		return p
 	}
 }
 
-// Probability Mass Function for the Zipf-Mandelbrot distribution at k
-func ZipfMandelbrotPMF_At(n int64, q, s float64, k int64) float64 {
+// ZipfMandelbrotPMFAt returns the value of PMF of Zipf-Mandelbrot distribution at k. 
+func ZipfMandelbrotPMFAt(n int64, q, s float64, k int64) float64 {
 	pmf := ZipfMandelbrotPMF(n, q, s)
 	return pmf(k)
 }
 
-// Cumulative Distribution Function for the Zipf-Mandelbrot distribution
+// ZipfMandelbrotCDF returns the CDF of the Zipf-Mandelbrot distribution. 
 func ZipfMandelbrotCDF(n int64, q, s float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := h(k, q, s) / h(n, q, s)
+		p := H2(k, q, s) / H2(n, q, s)
 		return p
 	}
 }
 
-// Cumulative Distribution Function for the Zipf-Mandelbrot distribution at k
-func ZipfMandelbrotCDF_At(n int64, q, s float64, k int64) float64 {
+// ZipfMandelbrotCDFAt returns the value of CDF of the Zipf-Mandelbrot distribution, at x. 
+func ZipfMandelbrotCDFAt(n int64, q, s float64, k int64) float64 {
 	cdf := ZipfMandelbrotCDF(n, q, s)
 	return cdf(k)
 }
@@ -74,21 +77,21 @@ func ZipfMandelbrotQtl(n int64, q, s float64) func(p float64) int64 {
 	}
 }
 
-// Zipf-Mandelbrot distributed random variate
-func NextZipfMandelbrot(n int64, q, s float64) (k int64) {
+// ZipfMandelbrotNext returns random number drawn from the Zipf-Mandelbrot distribution. 
+func ZipfMandelbrotNext(n int64, q, s float64) (k int64) {
 	qtl := ZipfMandelbrotQtl(n, q, s)
 	p:= rand.Float64()
         return qtl(p)
 }
 
-// Zipf-Mandelbrot distribution function
+// ZipfMandelbrot returns the random number generator with  Zipf-Mandelbrot distribution. 
 func ZipfMandelbrot(n int64, q, s float64) func() int64 {
-	return func() int64 { return NextZipfMandelbrot(n, q, s) }
+	return func() int64 { return ZipfMandelbrotNext(n, q, s) }
 }
 
-// Mean of the Zipf-Mandelbrot distribution
+// ZipfMandelbrotMean returns the mean of the Zipf-Mandelbrot distribution. 
 func ZipfMandelbrotMean(n int64, q, s float64) float64 {
-	return h(n, q, s-1)/h(n, q, s) - q
+	return H2(n, q, s-1)/H2(n, q, s) - q
 }
 
 

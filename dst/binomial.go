@@ -14,8 +14,8 @@ import (
 	. "code.google.com/p/go-fn/fn"
 )
 
-// Binomial_PMF returns the PMF of the Binomial distribution. 
-func Binomial_PMF(n int64, p float64) func(k int64) float64 {
+// BinomialPMF returns the PMF of the Binomial distribution. 
+func BinomialPMF(n int64, p float64) func(k int64) float64 {
 	return func(k int64) (x float64) {
 		x = pow(p, float64(k)) * pow(1-p, float64(n-k))
 		x *= Γ(float64(n+1)) / (Γ(float64(k+1)) * Γ(float64(n-k+1)))
@@ -23,8 +23,8 @@ func Binomial_PMF(n int64, p float64) func(k int64) float64 {
 	}
 }
 
-// Binomial_LnPMF returns the natural logarithm of the PMF of the Binomial distribution. 
-func Binomial_LnPMF(n int64, p float64) func(k int64) float64 {
+// BinomialLnPMF returns the natural logarithm of the PMF of the Binomial distribution. 
+func BinomialLnPMF(n int64, p float64) func(k int64) float64 {
 	return func(k int64) (x float64) {
 		x = log(p)*float64(k) + log(1-p)*float64(n-k)
 		x += LnΓ(float64(n+1)) - LnΓ(float64(k+1)) - LnΓ(float64(n-k+1))
@@ -32,43 +32,43 @@ func Binomial_LnPMF(n int64, p float64) func(k int64) float64 {
 	}
 }
 
-// Binomial_PMF_At returns the value of PMF of Binomial distribution at k. 
-func Binomial_PMF_At(n int64, p float64, k int64) float64 {
-	pmf := Binomial_PMF(n, p)
+// BinomialPMFAt returns the value of PMF of Binomial distribution at k. 
+func BinomialPMFAt(n int64, p float64, k int64) float64 {
+	pmf := BinomialPMF(n, p)
 	return pmf(k)
 }
 
-// Binomial_CDF returns the CDF of the Binomial distribution. 
-func Binomial_CDF(n int64, p float64) func(k int64) float64 {
+// BinomialCDF returns the CDF of the Binomial distribution. 
+func BinomialCDF(n int64, p float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		return Beta_CDF_At((float64)(n-k), (float64)(k+1), 1-p)
+		return BetaCDFAt((float64)(n-k), (float64)(k+1), 1-p)
 	}
 }
 
-// Binomial_CDF_At returns the value of CDF of the Binomial distribution, at k. 
-func Binomial_CDF_At(n int64, p float64, k int64) float64 {
-	cdf := Binomial_CDF(n, p)
+// BinomialCDFAt returns the value of CDF of the Binomial distribution, at k. 
+func BinomialCDFAt(n int64, p float64, k int64) float64 {
+	cdf := BinomialCDF(n, p)
 	return cdf(k)
 }
 
-// Binomial_Qtl returns the inverse of the CDF (quantile) of the Binomial distribution. 
+// BinomialQtl returns the inverse of the CDF (quantile) of the Binomial distribution. 
 	// to be implemented ...
 
-// Binomial_Qtl_For returns the inverse of the CDF (quantile) of the Binomial distribution, for given probability.
+// BinomialQtlFor returns the inverse of the CDF (quantile) of the Binomial distribution, for given probability.
 	// to be implemented ...
 
-// NextBinomial returns random number drawn from the Binomial distribution. 
-func NextBinomial(n int64, p float64) (x int64) {
+// BinomialNext returns random number drawn from the Binomial distribution. 
+func BinomialNext(n int64, p float64) (x int64) {
 	x = 0
 	for i := int64(0); i <= n; i++ {
-		x += NextBernoulli(p)
+		x += BernoulliNext(p)
 	}
 	return
 }
 
 // Binomial returns the random number generator with  Binomial distribution. 
 func Binomial(n int64, p float64) func() int64 {
-	return func() int64 { return NextBinomial(n, p) }
+	return func() int64 { return BinomialNext(n, p) }
 }
 
 // BinomialMean returns the mean of the Binomial distribution. 

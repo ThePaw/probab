@@ -41,7 +41,7 @@ func main() {
 
 	fmt.Println("\nProb.\t\tQuantile \n")
 	for i := 0; i < 9; i++ {
-		qf := bayes.BinomPi_Qtl_BPri(k, n, a, b)
+		qf := bayes.BinomPiQtlBPri(k, n, a, b)
 		qtl := qf(pr[i])
 		fmt.Println(pr[i], "\t\t", qtl)
 	}

@@ -9,7 +9,7 @@ import (
 
 // Interval width
 func iw(α, β, credMass, lowTailPr float64) float64 {
-	return Beta_Qtl_For(α, β, credMass+lowTailPr) - Beta_Qtl_For(α, β, lowTailPr)
+	return BetaQtlFor(α, β, credMass+lowTailPr) - BetaQtlFor(α, β, lowTailPr)
 }
 
 // Interval width for fixed α, β, credMass
@@ -23,7 +23,7 @@ func HDIofBetaQtl(α, β, credMass, tol float64) (lo, hi float64) {
 	// func fmin(f func(float64) float64, ax, bx, tol float64) float64 {
 
 	min := fmin(f, 0, 1-credMass, tol)
-	lo = Beta_Qtl_For(α, β, min)
-	hi = Beta_Qtl_For(α, β, credMass+min)
+	lo = BetaQtlFor(α, β, min)
+	hi = BetaQtlFor(α, β, credMass+min)
 	return lo, hi
 }

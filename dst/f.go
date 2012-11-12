@@ -10,8 +10,8 @@ import (
 	. "code.google.com/p/go-fn/fn"
 )
 
-// F_PDF returns the PDF of the F distribution. 
-func F_PDF(d1, d2 int64) func(x float64) float64 {
+// FPDF returns the PDF of the F distribution. 
+func FPDF(d1, d2 int64) func(x float64) float64 {
 	df1 := float64(d1)
 	df2 := float64(d2)
 	normalization := 1 / B(df1/2, df2/2)
@@ -20,8 +20,8 @@ func F_PDF(d1, d2 int64) func(x float64) float64 {
 	}
 }
 
-// F_LnPDF returns the natural logarithm of the PDF of the F distribution. 
-func F_LnPDF(d1, d2 int64) func(x float64) float64 {
+// FLnPDF returns the natural logarithm of the PDF of the F distribution. 
+func FLnPDF(d1, d2 int64) func(x float64) float64 {
 	df1 := float64(d1)
 	df2 := float64(d2)
 	normalization := -LnB(df1/2, df2/2)
@@ -30,14 +30,14 @@ func F_LnPDF(d1, d2 int64) func(x float64) float64 {
 	}
 }
 
-// F_PDF_At returns the value of PDF of F distribution at x. 
-func F_PDF_At(d1, d2 int64, x float64) float64 {
-	pdf :=F_PDF(d1, d2)
+// FPDFAt returns the value of PDF of F distribution at x. 
+func FPDFAt(d1, d2 int64, x float64) float64 {
+	pdf :=FPDF(d1, d2)
 	return pdf(x)
 }
 
-// F_CDF returns the CDF of the F distribution. 
-func F_CDF(d1, d2 int64) func(x float64) float64 {
+// FCDF returns the CDF of the F distribution. 
+func FCDF(d1, d2 int64) func(x float64) float64 {
 	return func(x float64) float64 {
 		df1 := float64(d1)
 		df2 := float64(d2)
@@ -47,14 +47,14 @@ func F_CDF(d1, d2 int64) func(x float64) float64 {
 }
 
 
-// F_CDF_At returns the value of CDF of the F distribution, at x. 
-func F_CDF_At(d1, d2 int64, x float64) float64 {
-	cdf:=F_CDF(d1, d2)
+// FCDFAt returns the value of CDF of the F distribution, at x. 
+func FCDFAt(d1, d2 int64, x float64) float64 {
+	cdf:=FCDF(d1, d2)
 	return cdf(x)
 }
 
-// F_Qtl returns the inverse of the CDF (quantile) of the F distribution. 
-func F_Qtl(d1, d2 int64) func(p float64) float64 {
+// FQtl returns the inverse of the CDF (quantile) of the F distribution. 
+func FQtl(d1, d2 int64) func(p float64) float64 {
 	df1 := float64(d1)
 	df2 := float64(d2)
 	return func(p float64) float64 {
@@ -71,27 +71,27 @@ func F_Qtl(d1, d2 int64) func(p float64) float64 {
 		panic(fmt.Sprintf("df2 < 1"))
 	}
 
-	return ((1 / Beta_Qtl_For(df2 / 2, df1 / 2, 1 - p) - 1) * df2 / df1);
+	return ((1 / BetaQtlFor(df2 / 2, df1 / 2, 1 - p) - 1) * df2 / df1);
 	}
 }
 
-// F_Qtl_For returns the inverse of the CDF (quantile) of the F distribution, for given probability.
-func F_Qtl_For(d1, d2 int64, p float64) float64 {
-	cdf :=F_Qtl(d1, d2)
+// FQtlFor returns the inverse of the CDF (quantile) of the F distribution, for given probability.
+func FQtlFor(d1, d2 int64, p float64) float64 {
+	cdf :=FQtl(d1, d2)
 	return cdf(p)
 }
 
-// NextF returns random number drawn from the F distribution. 
-func NextF(d1, d2 int64) float64 {
+// FNext returns random number drawn from the F distribution. 
+func FNext(d1, d2 int64) float64 {
 	df1 := float64(d1)
 	df2 := float64(d2)
-	return NextChiSquare(d1) * df2 / (NextChiSquare(d2) * df1)
+	return ChiSquareNext(d1) * df2 / (ChiSquareNext(d2) * df1)
 }
 
 // F returns the random number generator with  F distribution. 
 func F(d1, d2 int64) func() float64 {
 	return func() float64 {
-		return NextF(d1, d2)
+		return FNext(d1, d2)
 	}
 }
 

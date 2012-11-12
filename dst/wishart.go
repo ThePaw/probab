@@ -1,11 +1,24 @@
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
+
 package dst
+
+// Wishart distribution. 
+// A generalization to multiple dimensions of the chi-squared distribution, or, in the case of non-integer degrees of freedom, of the gamma distribution. 
+// Wishart, J. (1928). "The generalised product moment distribution in samples from a normal multivariate population". Biometrika 20A (1-2): 32–52. doi:10.1093/biomet/20A.1-2.32. 
+// Parameters: 
+// n > p-1	degrees of freedom (real)
+// V > 0		pxp scale matrix	(positive definite, real)
+//
+// Support: 
+// X 	pxp positive definite, real
 
 import (
 	m "github.com/skelterjohn/go.matrix"
 	. "code.google.com/p/go-fn/fn"
 )
 
-func Wishart_PDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
+// WishartPDF returns the PDF of the Wishart distribution. 
+func WishartPDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
 	p := V.Rows()
 	Vdet := V.Det()
 	Vinv, _ := V.Inverse()
@@ -18,7 +31,9 @@ func Wishart_PDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
 			exp(-0.5*VinvW.Trace())
 	}
 }
-func Wishart_LnPDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
+
+// WishartLnPDF returns the natural logarithm of the PDF of the Wishart distribution. 
+func WishartLnPDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
 	
 	p := V.Rows()
 	Vdet := V.Det()
@@ -33,9 +48,13 @@ func Wishart_LnPDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
 			0.5*VinvW.Trace()
 	}
 }
-func NextWishart(n int, V *m.DenseMatrix) *m.DenseMatrix {
+
+// WishartNext returns random number drawn from the Wishart distribution. 
+func WishartNext(n int, V *m.DenseMatrix) *m.DenseMatrix {
 	return Wishart(n, V)()
 }
+
+// Wishart returns the random number generator with  Wishart distribution. 
 func Wishart(n int, V *m.DenseMatrix) func() *m.DenseMatrix {
 	p := V.Rows()
 	zeros := m.Zeros(p, 1)
@@ -51,51 +70,3 @@ func Wishart(n int, V *m.DenseMatrix) func() *m.DenseMatrix {
 	}
 }
 
-func InverseWishart_PDF(n int, Ψ *m.DenseMatrix) func(B *m.DenseMatrix) float64 {
-	p := Ψ.Rows()
-	Ψdet := Ψ.Det()
-	normalization := pow(Ψdet, -0.5*float64(n)) *
-		pow(2, -0.5*float64(n*p)) /
-		Γ(float64(n)/2)
-	return func(B *m.DenseMatrix) float64 {
-		Bdet := B.Det()
-		Binv, _ := B.Inverse()
-		ΨBinv, _ := Ψ.Times(Binv)
-		return normalization *
-			pow(Bdet, -.5*float64(n+p+1)) *
-			exp(-0.5*ΨBinv.Trace())
-	}
-}
-func InverseWishart_LnPDF(n int, Ψ *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
-	p := Ψ.Rows()
-	Ψdet := Ψ.Det()
-	normalization := log(Ψdet)*-0.5*float64(n) +
-		log(2)*-0.5*float64(n*p) -
-		LnΓ(float64(n)/2)
-	return func(B *m.DenseMatrix) float64 {
-		Bdet := B.Det()
-		Binv, _ := B.Inverse()
-		ΨBinv, _ := Ψ.Times(Binv)
-		return normalization +
-			log(Bdet)*-.5*float64(n+p+1) +
-			-0.5*ΨBinv.Trace()
-	}
-}
-func NextInverseWishart(n int, V *m.DenseMatrix) *m.DenseMatrix {
-	return InverseWishart(n, V)()
-}
-func InverseWishart(n int, V *m.DenseMatrix) func() *m.DenseMatrix {
-	p := V.Rows()
-	zeros := m.Zeros(p, 1)
-	rowGen := MVNormal(zeros, V)
-	return func() *m.DenseMatrix {
-		x := make([][]float64, n)
-		for i := 0; i < n; i++ {
-			x[i] = rowGen().Array()
-		}
-		X := m.MakeDenseMatrixStacked(x)
-		S, _ := X.Transpose().TimesDense(X)
-		Sinv, _ := S.Inverse()
-		return Sinv
-	}
-}

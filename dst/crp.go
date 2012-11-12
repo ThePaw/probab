@@ -4,7 +4,7 @@ import (
 	. "code.google.com/p/go-fn/fn"
 )
 
-func CRP_PMF(α float64) func(x []int64) float64 {
+func CRPPMF(α float64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		n := int64(len(x))
 		counts := make([]int64, int(α*log(float64(len(x)))))
@@ -30,7 +30,7 @@ func CRP_PMF(α float64) func(x []int64) float64 {
 	}
 }
 
-func CRP_LnPMF(α float64) func(x []int64) float64 {
+func CRPLnPMF(α float64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		counts := make([]float64, len(x))
 		total := fZero
@@ -53,7 +53,7 @@ func CRP_LnPMF(α float64) func(x []int64) float64 {
 	}
 }
 /*
-func CRP_LnPMF2(α float64) func(x []int64) float64 {
+func CRPLnPMF2(α float64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		n := int64(len(x));
 		counts := make([]int64, int(α*log(float64(len(x)))));

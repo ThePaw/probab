@@ -17,8 +17,8 @@ import (
 	. "code.google.com/p/go-fn/fn"
 )
 
-// Hypergeometric_PMF returns the PMF of the Hypergeometric distribution. 
-func Hypergeometric_PMF(nN, m, n int64) func(k int64) float64 {
+// HypergeometricPMF returns the PMF of the Hypergeometric distribution. 
+func HypergeometricPMF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if nN < 1 || m < 0 || m > nN || n < 1 || n > nN {
 			panic("bad param nN | m | n")
@@ -28,8 +28,8 @@ func Hypergeometric_PMF(nN, m, n int64) func(k int64) float64 {
 	}
 }
 
-// Hypergeometric_LnPMF returns the natural logarithm of the PMF of the Hypergeometric distribution. 
-func Hypergeometric_LnPMF(nN, m, n int64) func(k int64) float64 {
+// HypergeometricLnPMF returns the natural logarithm of the PMF of the Hypergeometric distribution. 
+func HypergeometricLnPMF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if nN < 1 || m < 0 || m > nN || n < 1 || n > nN {
 			panic("bad param nN | m | n")
@@ -38,23 +38,23 @@ func Hypergeometric_LnPMF(nN, m, n int64) func(k int64) float64 {
 	}
 }
 
-// Hypergeometric_PMF_At returns the value of PMF of Hypergeometric distribution(μ, σ) at k. 
-func Hypergeometric_PMF_At(nN, m, n, k int64) float64 {
+// HypergeometricPMFAt returns the value of PMF of Hypergeometric distribution(μ, σ) at k. 
+func HypergeometricPMFAt(nN, m, n, k int64) float64 {
 	if float64(k) < math.Max(0, float64(n+m-nN)) || float64(k) > math.Min(float64(m), float64(n)) {
 		panic("bad k")
 	} 
-	pmf := Hypergeometric_PMF(nN, m, n)
+	pmf := HypergeometricPMF(nN, m, n)
 	return pmf(k)
 }
 
-// Hypergeometric_CDF returns the CDF of the Hypergeometric distribution. 
-func Hypergeometric_CDF(nN, m, n int64) func(k int64) float64 {
+// HypergeometricCDF returns the CDF of the Hypergeometric distribution. 
+func HypergeometricCDF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		var (
 			p float64 = 0.0
 			i int64
 		)
-		pmf:=Hypergeometric_PMF(nN, m, n)
+		pmf:=HypergeometricPMF(nN, m, n)
 			for i = 0; i<=k; i++ {
 				p+=pmf(i)
 			}
@@ -62,9 +62,9 @@ func Hypergeometric_CDF(nN, m, n int64) func(k int64) float64 {
 	}
 }
 
-// Hypergeometric_CDF_At returns the value of CDF of the Hypergeometric distribution, at k.
-func Hypergeometric_CDF_At(nN, m, n, k int64) float64 {
-	cdf := Hypergeometric_CDF(nN, m, n)
+// HypergeometricCDFAt returns the value of CDF of the Hypergeometric distribution, at k.
+func HypergeometricCDFAt(nN, m, n, k int64) float64 {
+	cdf := HypergeometricCDF(nN, m, n)
 	return cdf(k)
 }
 
@@ -72,39 +72,39 @@ func Hypergeometric_CDF_At(nN, m, n, k int64) float64 {
 //		Only use iff n is large, nN and m are large compared to n 
 //		and p = m/nN is not close to 0 or 1
 
-// HypergeometricApprox_PMF returns the PMF of the Hypergeometric distribution approximated using Standard normal distribution. 
-func HypergeometricApprox_PMF(nN, m, n int64) func(k int64) float64 {
+// HypergeometricApproxPMF returns the PMF of the Hypergeometric distribution approximated using Standard normal distribution. 
+func HypergeometricApproxPMF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if nN < 1 || m < 0 || m > nN || n < 1 || n > nN {
 			panic("bad param nN | m | n")
 		} 
 		p := float64(m)/float64(nN)
 		x := float64(k-n)*p/math.Sqrt(float64(n)*p*(1-p))
-		return Z_PDF_At(x)
+		return ZPDFAt(x)
 	}
 }
 
-// HypergeometricApprox_PMF_At returns the value of PMF of Hypergeometric distribution approximated using Standard normal distribution, at k. 
-func HypergeometricApprox_PMF_At(nN, m, n, k int64) float64 {
+// HypergeometricApproxPMFAt returns the value of PMF of Hypergeometric distribution approximated using Standard normal distribution, at k. 
+func HypergeometricApproxPMFAt(nN, m, n, k int64) float64 {
 	if float64(k) < math.Max(0, float64(n+m-nN)) || float64(k) > math.Min(float64(m), float64(n)) {
 		panic("bad k")
 	} 
-	pmf := HypergeometricApprox_PMF(nN, m, n)
+	pmf := HypergeometricApproxPMF(nN, m, n)
 	return pmf(k)
 }
 
-// HypergeometricApprox_CDF returns the CDF of the Hypergeometric distribution approximated using Standard normal distribution. 
-func HypergeometricApprox_CDF(nN, m, n int64) func(k int64) float64 {
+// HypergeometricApproxCDF returns the CDF of the Hypergeometric distribution approximated using Standard normal distribution. 
+func HypergeometricApproxCDF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		p := float64(m)/float64(nN)
 		x := float64(k-n)*p/math.Sqrt(float64(n)*p*(1-p))
-		return Z_CDF_At(x)
+		return ZCDFAt(x)
 	}
 }
 
-// HypergeometricApprox_CDF_At returns the value of CDF of the Hypergeometric distribution approximated using Standard normal distribution, at k.
-func HypergeometricApprox_CDF_At(nN, m, n, k int64) float64 {
-	cdf := HypergeometricApprox_CDF(nN, m, n)
+// HypergeometricApproxCDFAt returns the value of CDF of the Hypergeometric distribution approximated using Standard normal distribution, at k.
+func HypergeometricApproxCDFAt(nN, m, n, k int64) float64 {
+	cdf := HypergeometricApproxCDF(nN, m, n)
 	return cdf(k)
 }
 

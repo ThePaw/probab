@@ -1,17 +1,24 @@
-// Pareto Type I Distribution
-// params: 
-// θ > 0.0 (scale) 
-// α > 0.0 (shape) 
-// support: x >= θ 
-// equations from en.wikipedia.org
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
 
 package dst
 
+// Pareto Type I distribution (sometimes referred to as the Bradford distribution). 
+//
+// Parameters: 
+// θ > 0.0 (scale) 
+// α > 0.0 (shape) 
+//
+// Support: 
+// k x >= θ 
+// x ∈ (0, ∞)
+
 import (
 	"math"
+	. "code.google.com/p/go-fn/fn"
 )
 
-func Pareto_ChkParams(θ, α float64) bool {
+// ParetoChkParams checks parameters of the Pareto Type I distribution. 
+func ParetoChkParams(θ, α float64) bool {
 	ok := true
 	if α <= 0 || θ <= 0  {
 		ok = false
@@ -19,7 +26,8 @@ func Pareto_ChkParams(θ, α float64) bool {
 	return ok
 }
 
-func Pareto_ChkSupport(x float64) bool {
+// ParetoChkSupport checks support of the Pareto Type I distribution. 
+func ParetoChkSupport(x float64) bool {
 	ok := true
 	if x < 0 {
 		ok = false
@@ -27,7 +35,8 @@ func Pareto_ChkSupport(x float64) bool {
 	return ok
 }
 
-func Pareto_PDF(θ, α float64) func(x float64) float64 {
+// ParetoPDF returns the PDF of the Pareto Type I distribution. 
+func ParetoPDF(θ, α float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if x < θ {
 			return 0
@@ -38,12 +47,14 @@ func Pareto_PDF(θ, α float64) func(x float64) float64 {
 	}
 }
 
-func Pareto_PDF_At(θ, α, x float64) float64 {
-	pdf := Pareto_PDF(θ, α)
+// ParetoPDFAt returns the value of PDF of Pareto Type I distribution at x. 
+func ParetoPDFAt(θ, α, x float64) float64 {
+	pdf := ParetoPDF(θ, α)
 	return pdf(x)
 }
 
-func Pareto_CDF(θ, α float64) func(x float64) float64 {
+// ParetoCDF returns the CDF of the Pareto Type I distribution. 
+func ParetoCDF(θ, α float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if x < θ {
 			return 0
@@ -52,49 +63,79 @@ func Pareto_CDF(θ, α float64) func(x float64) float64 {
 	}
 }
 
-func Pareto_CDF_At(θ, α, x float64) float64 {
-	cdf := Pareto_CDF(θ, α)
+// ParetoCDFAt returns the value of CDF of the Pareto Type I distribution, at x. 
+func ParetoCDFAt(θ, α, x float64) float64 {
+	cdf := ParetoCDF(θ, α)
 	return cdf(x)
 }
 
-// Inverse of the cumulative Pareto Type I probability density function (quantile).
-func Pareto_Qtl(θ, α float64) func(p float64) float64 {
+// ParetoQtl returns the inverse of the CDF (quantile) of the Pareto Type I distribution. 
+func ParetoQtl(θ, α float64) func(p float64) float64 {
 	return func(p float64) float64 {
 		return math.Pow(θ*(1-p),(-1/α))
 	}
 }
 
-// Inverse of the cumulative Pareto Type I probability density function (quantile) for given probability.
-func Pareto_Qtl_For(θ, α, p float64) float64 {
-	cdf := Pareto_Qtl(θ, α)
+// ParetoQtlFor returns the inverse of the CDF (quantile) of the Pareto Type I distribution, for given probability.
+func ParetoQtlFor(θ, α, p float64) float64 {
+	cdf := ParetoQtl(θ, α)
 	return cdf(p)
 }
 
-func Pareto_Mean(θ, α float64) float64 {
+// ParetoMean returns the mean of the Pareto Type I distribution. 
+func ParetoMean(θ, α float64) float64 {
 	if α <= 1 {
-		panic("not defined")
+		return posInf
 	}
 	return α*θ/(α-1)
 }
 
-func Pareto_Median(θ, α float64) float64 {
-	return θ * math.Pow(2, 1/α)
-}
-
-func Pareto_Mode(θ, α float64) float64 {
+// ParetoMode returns the mode of the Pareto Type I distribution. 
+func ParetoMode(θ, α float64) float64 {
 	return θ
 }
 
-func Pareto_Var(θ, α float64) float64 {
-	if α <= 2 {
-		panic("not defined")
-	}
-	α1:= (α-1)
-	α2:= (α-2)
-	return θ*θ*α/(α1*α1*α2)
+// ParetoMedian returns the median of the Pareto Type I distribution. 
+func ParetoMedian(θ, α float64) float64 {
+	return θ * math.Pow(2, 1/α)
 }
 
+// ParetoVar returns the variance of the Pareto Type I distribution. 
+func ParetoVar(θ, α float64) float64 {
+	if α <= 2 {
+		return posInf
+	}
+	return θ*θ*α/((α-1)*(α-1)*(α-2))
+}
 
+// ParetoStd returns the standard deviation of the Pareto Type I distribution. 
+func ParetoStd(θ, α float64) float64 {
+	if α <= 2 {
+		return posInf
+	}
+	return θ/(α-1)*math.Sqrt(α/(α-2))
+}
 
+// ParetoSkew returns the skewness of the Pareto Type I distribution. 
+func ParetoSkew(θ, α float64) float64 {
+	if α <= 3 {
+		panic("skewness not defined for α <= 3")
+	}
+	return 2*(1+α)/(α-3)*math.Sqrt((α-2)/α)
+}
 
+// ParetoExKurt returns the excess kurtosis of the Pareto Type I distribution. 
+func ParetoExKurt(θ, α float64) float64 {
+	if α <= 4 {
+		panic("skewness not defined for α <= 4")
+	}
+	return 6*(α*α*α+α*α-6*α-2) /(α*(α-3)*(α-4))
+}
 
+// ParetoMGF returns the moment-generating function of the Pareto Type I distribution. 
+func ParetoMGF(θ, α, t float64) float64 {
+	if t >= 0 {
+		panic("MGF not defined for t >= 0")
+	}
+	return α*math.Pow((-θ*t), α) * IΓ(-α, -θ*t)
+}

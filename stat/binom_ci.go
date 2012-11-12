@@ -5,32 +5,29 @@ import . "code.google.com/p/probab/dst"
 // One-sided (frequentist) Confidence Intervals for Observed "Nonconforming" Units in a Random Sample
 // Source: Hahn, G. J., and W. Q. Meeker, "Statistical Intervals / A Guide for Practitioners," J. Wiley & Sons, New York.  1991.
 
-func Binom_p_ConfI(n int64, p, alpha float64) (float64, float64) {
+func BinomPConfInt(n, k int64, alpha float64) (float64, float64) {
 
 	/*
 	Alpha	100(1-alpha) is the confidence 
 	n	Sample size	
-	p	Observed proportion
+	k	Observed number of successes (p=n/k)
 	lCL	Lower confidence limit
 	uCL	Upper confidence limit
 	*/
 
 
-	var nn, k, lCL, uCL float64
-	nn=float64(n)
-	k=nn*p
+	var lCL, uCL float64
 	if k <= 0 {
 		lCL = 0.0
 	} else {
-		lCL = 1.0 / (1.0 + (nn-k+1)*F_Qtl_For(alpha, 2*nn-2*k+2, 2*k)/k)
+		lCL = 1.0 / (1.0 + float64((n-k+1))*FQtlFor(2*n-2*k+2, 2*k, alpha)/float64(k))
 	}
 
-	if k >= nn {
+	if k >= n {
 		uCL = 1.0
 	} else {
-		uCL = 1.0 / (1.0 + (nn-k)/((k+1)*F_Qtl_For(alpha, 2*k+2, 2*nn-2*k)))
+		uCL = 1.0 / (1.0 + float64((n-k))/(float64((k+1))*FQtlFor(2*k+2, 2*n-2*k, alpha)))
 	}
 	return lCL, uCL
 }
-
 

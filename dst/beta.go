@@ -17,7 +17,7 @@ import (
 
 func bisect(x, p, a, b, xtol, ptol float64) float64 {
 	var x0, x1, px float64
-	cdf := Beta_PDF(a, b)
+	cdf := BetaPDF(a, b)
 	for math.Abs(x1-x0) > xtol {
 		px = cdf(x)
 		switch {
@@ -87,13 +87,13 @@ func betaContinuedFraction(α, β, x float64) float64 {
 	return -1.00
 }
 
-// Beta_PDF returns the PDF of the Beta distribution. 
-func Beta_PDF(α, β float64) func(x float64) float64 {
+// BetaPDF returns the PDF of the Beta distribution. 
+func BetaPDF(α, β float64) func(x float64) float64 {
 	if α == 1 && β == 1{	// uniform case
-		return Uniform_PDF(0, 1)
+		return UniformPDF(0, 1)
 	}
 	dα := []float64{α, β}
-	dirPDF := Dirichlet_PDF(dα)
+	dirPDF := DirichletPDF(dα)
 	return func(x float64) float64 {
 		if 0 > x || x > 1 {
 			return 0
@@ -103,10 +103,10 @@ func Beta_PDF(α, β float64) func(x float64) float64 {
 	}
 }
 
-// Beta_LnPDF returns the natural logarithm of the PDF of the Beta distribution. 
-func Beta_LnPDF(α, β float64) func(x float64) float64 {
+// BetaLnPDF returns the natural logarithm of the PDF of the Beta distribution. 
+func BetaLnPDF(α, β float64) func(x float64) float64 {
 	dα := []float64{α, β}
-	dirLnPDF := Dirichlet_LnPDF(dα)
+	dirLnPDF := DirichletLnPDF(dα)
 	return func(x float64) float64 {
 		if 0 > x || x > 1 {
 			return negInf
@@ -116,16 +116,16 @@ func Beta_LnPDF(α, β float64) func(x float64) float64 {
 	}
 }
 
-// Beta_PDF_At returns the value of PDF of Beta distribution at x. 
-func Beta_PDF_At(α, β, x float64) float64 {
-	pdf := Beta_PDF(α, β)
+// BetaPDFAt returns the value of PDF of Beta distribution at x. 
+func BetaPDFAt(α, β, x float64) float64 {
+	pdf := BetaPDF(α, β)
 	return pdf(x)
 }
 
-// Beta_CDF returns the CDF of the Beta distribution. 
-func Beta_CDF(α, β float64) func(x float64) float64 {
+// BetaCDF returns the CDF of the Beta distribution. 
+func BetaCDF(α, β float64) func(x float64) float64 {
 	if α == 1 && β == 1{	// uniform case
-		return Uniform_CDF(0, 1)
+		return UniformCDF(0, 1)
 	}
 	return func(x float64) float64 {
 		var y, res float64
@@ -145,14 +145,14 @@ func Beta_CDF(α, β float64) func(x float64) float64 {
 	}
 }
 
-// Beta_CDF_At returns the value of CDF of the Beta distribution, at x. 
-func Beta_CDF_At(α, β, x float64) float64 {
-	cdf := Beta_CDF(α, β)
+// BetaCDFAt returns the value of CDF of the Beta distribution, at x. 
+func BetaCDFAt(α, β, x float64) float64 {
+	cdf := BetaCDF(α, β)
 	return cdf(x)
 }
 
-// Beta_Qtl returns the inverse of the CDF (quantile) of the Beta distribution. 
-func Beta_Qtl(α, β float64) func(p float64) float64 {
+// BetaQtl returns the inverse of the CDF (quantile) of the Beta distribution. 
+func BetaQtl(α, β float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
 	return func(p float64) float64 {
 		var x float64 = 0
@@ -185,19 +185,19 @@ func Beta_Qtl(α, β float64) func(p float64) float64 {
 	}
 }
 
-// Beta_Qtl_For returns the inverse of the CDF (quantile) of the Beta distribution, for given probability.
-func Beta_Qtl_For(α, β, p float64) float64 {
-	cdf := Beta_Qtl(α, β)
+// BetaQtlFor returns the inverse of the CDF (quantile) of the Beta distribution, for given probability.
+func BetaQtlFor(α, β, p float64) float64 {
+	cdf := BetaQtl(α, β)
 	return cdf(p)
 }
 
-// NextBeta returns random number drawn from the Beta distribution. 
-func NextBeta(α, β float64) float64 {
+// BetaNext returns random number drawn from the Beta distribution. 
+func BetaNext(α, β float64) float64 {
 	if α == 1 && β == 1{	// uniform case
-		return NextUniform(0, 1)
+		return UniformNext(0, 1)
 	}
 	dα := []float64{α, β}
-	return NextDirichlet(dα)[0]
+	return DirichletNext(dα)[0]
 }
 
 // Beta returns the random number generator with  Beta distribution. 
@@ -205,7 +205,7 @@ func Beta(α, β float64) func() float64 {
 	if α == 1 && β == 1{	// uniform case
 		return Uniform(0, 1)
 	}
-	return func() float64 { return NextBeta(α, β) }
+	return func() float64 { return BetaNext(α, β) }
 }
 
 // BetaMean returns the mean of the Beta distribution. 

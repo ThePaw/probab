@@ -1,6 +1,6 @@
 // Bayesian inference about the parameter vector p of multinomial distribution.
 // Conjugate prior is Dirichlet(|α|), conjugate posterior is Dirichlet(|α+x|).
-// http://en.wikipedia.org/wiki/Dirichlet_distribution#Conjugate_to_multinomial
+// http://en.wikipedia.org/wiki/Dirichletdistribution#Conjugatetomultinomial
 
 package bayes
 
@@ -13,7 +13,7 @@ import (
 // for Haldane improper prior, use α[i] = 0
 // Ericson 1969 recommends prior with sum(α[i]) small, of the order of 1, e.g., 1/len(α)
 // Aitkin 2010: 96-107
-func MultinomPi_PDF_DirPri(α, x []float64) float64 {
+func MultinomPiPDFDirPri(α, x []float64) float64 {
 	// if α == nil, use Haldane
 	if α == nil {
 		for i := 0; i < len(x); i++ {
@@ -28,14 +28,14 @@ func MultinomPi_PDF_DirPri(α, x []float64) float64 {
 	for i := 0; i < len(x); i++ {
 		α[i] += x[i] // posterior params
 	}
-	return Dirichlet_PDF_At(α, x)
+	return DirichletPDFAt(α, x)
 }
 
 // Sampling from posterior, Dirichlet prior
 // Returns an array of sampled Multinomial Pi's
-func NextMultinomPi(α, x []float64) []float64 {
+func MultinomPiNext(α, x []float64) []float64 {
 	for i := 0; i < len(x); i++ {
 		α[i] += x[i] // posterior params
 	}
-	return NextDirichlet(α)
+	return DirichletNext(α)
 }

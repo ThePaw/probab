@@ -1,4 +1,4 @@
-package stat
+package dst
 
 import (
 	"fmt"
@@ -27,7 +27,7 @@ func checkMatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) {
 	}
 }
 
-func MatrixT_PDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix) (l float64) {
+func MatrixTPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix) (l float64) {
 	checkMatrixT(M, Omega, Sigma, n)
 
 	nf := float64(n)
@@ -64,7 +64,7 @@ func MatrixT_PDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix)
 	}
 }
 
-func MatrixT_LnPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix) (ll float64) {
+func MatrixTLnPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix) (ll float64) {
 	checkMatrixT(M, Omega, Sigma, n)
 	
 	nf := float64(n)
@@ -135,6 +135,6 @@ func MatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) func() (T *mx.DenseMatrix) 
 	}
 }
 
-func NextMatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) (T *mx.DenseMatrix) {
+func MatrixTNext(M, Omega, Sigma *mx.DenseMatrix, n int) (T *mx.DenseMatrix) {
 	return MatrixT(M, Omega, Sigma, n)()
 }

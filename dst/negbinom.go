@@ -17,46 +17,46 @@ import (
 	. "code.google.com/p/go-fn/fn"
 )
 
-// NegBinomial_PMF returns the PMF of the NegBinomial distribution. 
-func NegBinomial_PMF(ρ float64, r int64) func(k int64) float64 {
+// NegBinomialPMF returns the PMF of the NegBinomial distribution. 
+func NegBinomialPMF(ρ float64, r int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		return BinomCoeff(k + r - 1, k) * math.Pow(1-ρ, float64(r)) * math.Pow(ρ, float64(k))
 	}
 }
 
-// NegBinomial_LnPMF returns the natural logarithm of the PMF of the NegBinomial distribution. 
-func NegBinomial_LnPMF(ρ float64, r int64) func(i int64) float64 {
+// NegBinomialLnPMF returns the natural logarithm of the PMF of the NegBinomial distribution. 
+func NegBinomialLnPMF(ρ float64, r int64) func(i int64) float64 {
 	return func(k int64) float64 {
 		rr := float64(r)
 		return LnChoose(k+r-1, r-1) + log(ρ)*rr + log(1-ρ)*float64(k)
 	}
 }
 
-// NegBinomial_PMF_At returns the value of PMF of NegBinomial distribution(μ, σ) at k. 
-func NegBinomial_PMF_At(ρ float64, r, k int64)  float64 {
-	pmf := NegBinomial_PMF(ρ, r) 
+// NegBinomialPMFAt returns the value of PMF of NegBinomial distribution(μ, σ) at k. 
+func NegBinomialPMFAt(ρ float64, r, k int64)  float64 {
+	pmf := NegBinomialPMF(ρ, r) 
 	return pmf(k)
 }
 
-// NegBinomial_CDF returns the CDF of the NegBinomial distribution. 
-func NegBinomial_CDF(ρ float64, r int64) func(k int64) float64 {
+// NegBinomialCDF returns the CDF of the NegBinomial distribution. 
+func NegBinomialCDF(ρ float64, r int64) func(k int64) float64 {
 	return func(k int64) float64 {
-		Ip:=Beta_CDF_At(float64(k+1), float64(r), ρ)
+		Ip:=BetaCDFAt(float64(k+1), float64(r), ρ)
 		return 1-Ip
 	}
 }
 
-// NegBinomial_CDF_At returns the value of CDF of the NegBinomial distribution, at x. 
-func NegBinomial_CDF_At(ρ float64, r, k int64)  float64 {
-	cdf := NegBinomial_CDF(ρ, r) 
+// NegBinomialCDFAt returns the value of CDF of the NegBinomial distribution, at x. 
+func NegBinomialCDFAt(ρ float64, r, k int64)  float64 {
+	cdf := NegBinomialCDF(ρ, r) 
 	return cdf(k)
 }
 
-// NextNegBinomial returns random number drawn from the NegBinomial distribution. 
-func NextNegBinomial(ρ float64, r int64) int64 {
+// NegBinomialNext returns random number drawn from the NegBinomial distribution. 
+func NegBinomialNext(ρ float64, r int64) int64 {
 	k := iZero
 	for r >= 0 {
-		i := NextBernoulli(ρ)
+		i := BernoulliNext(ρ)
 		r -= i
 		k += (1 - i)
 	}
@@ -66,7 +66,7 @@ func NextNegBinomial(ρ float64, r int64) int64 {
 // NegBinomial returns the random number generator with  NegBinomial distribution. 
 func NegBinomial(ρ float64, r int64) func() int64 {
 	return func() int64 {
-		return NextNegBinomial(ρ, r)
+		return NegBinomialNext(ρ, r)
 	}
 }
 

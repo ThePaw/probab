@@ -11,24 +11,24 @@ package dst
 
 import "math"
 
-// Geometric_PMF returns the PMF of the Geometric distribution. 
-func Geometric_PMF(ρ float64) func(k int64) float64 {
+// GeometricPMF returns the PMF of the Geometric distribution. 
+func GeometricPMF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 { return ρ * pow(1-ρ, float64(k)) }
 }
 
-// Geometric_LnPMF returns the natural logarithm of the PMF of the Geometric distribution. 
-func Geometric_LnPMF(ρ float64) func(k int64) float64 {
+// GeometricLnPMF returns the natural logarithm of the PMF of the Geometric distribution. 
+func GeometricLnPMF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 { return log(1-ρ) + float64(k)*log(ρ) }
 }
 
-// Geometric_PMF_At returns the value of PMF of Geometric distribution at k. 
-func Geometric_PMF_At(ρ float64, k int64) float64 {
-	pmf := Geometric_PMF(ρ)
+// GeometricPMFAt returns the value of PMF of Geometric distribution at k. 
+func GeometricPMFAt(ρ float64, k int64) float64 {
+	pmf := GeometricPMF(ρ)
 	return pmf(k)
 }
 
-// Geometric_CDF returns the value of CDF of the Geometric distribution, at k. 
-func Geometric_CDF(ρ float64) func(k int64) float64 {
+// GeometricCDF returns the value of CDF of the Geometric distribution, at k. 
+func GeometricCDF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if k <  0 {
 			panic("k < 0")
@@ -37,24 +37,24 @@ func Geometric_CDF(ρ float64) func(k int64) float64 {
 	}
 }
 
-// Geometric_CDF_At returns the value of CDF of the Geometric distribution, at x. 
-func Geometric_CDF_At(ρ float64, k int64)  float64 {
-	cdf := Geometric_CDF(ρ)
+// GeometricCDFAt returns the value of CDF of the Geometric distribution, at x. 
+func GeometricCDFAt(ρ float64, k int64)  float64 {
+	cdf := GeometricCDF(ρ)
 	return cdf(k)
 }
 
 /* Not tested, looking strange, commented out, waiting for revision
-// NextGeometric returns random number drawn from the Geometric distribution. 
-//NextGeometric(ρ) => # of NextGeometric(ρ) failures before one success
-func NextGeometric(ρ float64) int64 {
-	if NextGeometric(ρ) == 1 {
-		return 1 + NextGeometric(ρ)
+// GeometricNext returns random number drawn from the Geometric distribution. 
+//GeometricNext(ρ) => # of GeometricNext(ρ) failures before one success
+func GeometricNext(ρ float64) int64 {
+	if GeometricNext(ρ) == 1 {
+		return 1 + GeometricNext(ρ)
 	}
 	return 0
 }
 
 // Geometric returns the random number generator with  Geometric distribution. 
-func Geometric(ρ float64) func() int64 { return func() int64 { return NextGeometric(ρ) } }
+func Geometric(ρ float64) func() int64 { return func() int64 { return GeometricNext(ρ) } }
 */
 
 // GeometricMean returns the mean of the Geometric distribution. 

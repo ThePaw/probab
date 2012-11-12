@@ -4,8 +4,8 @@ package dst
 
 // Bernoulli distribution.
 
-// Bernoulli_PMF returns the PMF of the Bernoulli distribution. 
-func Bernoulli_PMF(ρ float64) func(k int64) float64 {
+// BernoulliPMF returns the PMF of the Bernoulli distribution. 
+func BernoulliPMF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if k < 0 || k > 1 {
 			panic("k is not 0 or 1")
@@ -17,8 +17,8 @@ func Bernoulli_PMF(ρ float64) func(k int64) float64 {
 	}
 }
 
-// Bernoulli_LnPMF returns the natural logarithm of the PMF of the Bernoulli distribution. 
-func Bernoulli_LnPMF(ρ float64) func(k int64) float64 {
+// BernoulliLnPMF returns the natural logarithm of the PMF of the Bernoulli distribution. 
+func BernoulliLnPMF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if k == 1 {
 			return log(ρ)
@@ -27,14 +27,14 @@ func Bernoulli_LnPMF(ρ float64) func(k int64) float64 {
 	}
 }
 
-// Bernoulli_PMF_At returns the value of PMF of Bernoulli distribution at x. 
-func Bernoulli_PMF_At(ρ float64, k int64) float64 {
-	pmf := Bernoulli_PMF(ρ)
+// BernoulliPMFAt returns the value of PMF of Bernoulli distribution at x. 
+func BernoulliPMFAt(ρ float64, k int64) float64 {
+	pmf := BernoulliPMF(ρ)
 	return pmf(k)
 }
 
-// Bernoulli_CDF returns the value of CDF of the Bernoulli distribution, at x. 
-func Bernoulli_CDF(ρ float64) func(k int64) float64 {
+// BernoulliCDF returns the value of CDF of the Bernoulli distribution, at x. 
+func BernoulliCDF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if k < 0 || k > 1 {
 			panic("k is not 0 or 1")
@@ -46,20 +46,20 @@ func Bernoulli_CDF(ρ float64) func(k int64) float64 {
 	}
 }
 
-// Bernoulli_CDF_At returns the value of CDF of the Bernoulli distribution, at x. 
-func Bernoulli_CDF_At(ρ float64, k int64)  float64 {
-	cdf := Bernoulli_CDF(ρ)
+// BernoulliCDFAt returns the value of CDF of the Bernoulli distribution, at x. 
+func BernoulliCDFAt(ρ float64, k int64)  float64 {
+	cdf := BernoulliCDF(ρ)
 	return cdf(k)
 }
 
-// NextBernoulli returns random number drawn from the Bernoulli distribution. 
-func NextBernoulli(ρ float64) int64 {
-	if NextUniform(0, 1) < ρ {
+// BernoulliNext returns random number drawn from the Bernoulli distribution. 
+func BernoulliNext(ρ float64) int64 {
+	if UniformNext(0, 1) < ρ {
 		return 1
 	}
 	return 0
 }
 
 // Bernoulli returns the random number generator with  Bernoulli distribution. 
-func Bernoulli(ρ float64) func() int64 { return func() int64 { return NextBernoulli(ρ) } }
+func Bernoulli(ρ float64) func() int64 { return func() int64 { return BernoulliNext(ρ) } }
 

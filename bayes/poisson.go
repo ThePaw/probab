@@ -12,29 +12,29 @@ import (
 )
 
 // Poisson λ, posterior PDF, flat prior.
-func PoissonLambda_PDF_FPri(sumK, n int64) func(p float64) float64 {
+func PoissonLambdaPDFFPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
 	}
 	r1 := float64(sumK) + 1.0
 	v1 := float64(n)
-	return Gamma_PDF(r1, 1/v1)
+	return GammaPDF(r1, 1/v1)
 }
 // Poisson λ, posterior PDF, Jeffreys' prior.
-func PoissonLambda_PDF_JPri(sumK, n int64) func(p float64) float64 {
+func PoissonLambdaPDFJPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
 	}
 	r1 := float64(sumK) + 0.5
 	v1 := float64(n)
-	return Gamma_PDF(r1, 1/v1)
+	return GammaPDF(r1, 1/v1)
 }
 
 // Poisson λ, posterior PDF, gamma prior.
 // Use r=m^2/s^2, and v=m/s^2, if you summarize your prior belief with mean == m, and std == s.
-func PoissonLambda_PDF_GPri(sumK, n int64, r, v float64) func(p float64) float64 {
+func PoissonLambdaPDFGPri(sumK, n int64, r, v float64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
@@ -44,33 +44,33 @@ func PoissonLambda_PDF_GPri(sumK, n int64, r, v float64) func(p float64) float64
 	}
 	r1 := r + float64(sumK)
 	v1 := v + float64(n)
-	return Gamma_PDF(r1, 1/v1)
+	return GammaPDF(r1, 1/v1)
 }
 
 // Poisson λ, posterior CDF, flat prior.
-func PoissonLambda_CDF_FPri(sumK, n int64) func(p float64) float64 {
+func PoissonLambdaCDFFPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
 	}
 	r1 := float64(sumK) + 1.0
 	v1 := float64(n)
-	return Gamma_CDF(r1, 1/v1)
+	return GammaCDF(r1, 1/v1)
 }
 // Poisson λ, posterior CDF, Jeffreys' prior.
-func PoissonLambda_CDF_JPri(sumK, n int64) func(p float64) float64 {
+func PoissonLambdaCDFJPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
 	}
 	r1 := float64(sumK) + 0.5
 	v1 := float64(n)
-	return Gamma_CDF(r1, 1/v1)
+	return GammaCDF(r1, 1/v1)
 }
 
 // Poisson λ, posterior CDF, gamma prior.
 // Use r=m^2/s^2, and v=m/s^2, if you summarize your prior belief with mean == m, and std == s.
-func PoissonLambda_CDF_GPri(sumK, n int64, r, v float64) func(p float64) float64 {
+func PoissonLambdaCDFGPri(sumK, n int64, r, v float64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
@@ -80,33 +80,33 @@ func PoissonLambda_CDF_GPri(sumK, n int64, r, v float64) func(p float64) float64
 	}
 	r1 := r + float64(sumK)
 	v1 := v + float64(n)
-	return Gamma_CDF(r1, 1/v1)
+	return GammaCDF(r1, 1/v1)
 }
 
 // Poisson λ, posterior quantile function, flat prior.
-func PoissonLambda_Qtl_FPri(sumK, n int64) func(p float64) float64 {
+func PoissonLambdaQtlFPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
 	}
 	r1 := float64(sumK) + 1.0
 	v1 := float64(n)
-	return Gamma_Qtl(r1, 1/v1)
+	return GammaQtl(r1, 1/v1)
 }
 // Poisson λ, posterior quantile function, Jeffreys' prior.
-func PoissonLambda_Qtl_JPri(sumK, n int64) func(p float64) float64 {
+func PoissonLambdaQtlJPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
 	}
 	r1 := float64(sumK) + 0.5
 	v1 := float64(n)
-	return Gamma_Qtl(r1, 1/v1)
+	return GammaQtl(r1, 1/v1)
 }
 
 // Poisson λ, posterior quantile function, gamma prior.
 // Use r=m^2/s^2, and v=m/s^2, if you summarize your prior belief with mean == m, and std == s.
-func PoissonLambda_Qtl_GPri(sumK, n int64, r, v float64) func(p float64) float64 {
+func PoissonLambdaQtlGPri(sumK, n int64, r, v float64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
 	if sumK < 0 || n <= 0 {
 		panic("bad data")
@@ -116,12 +116,12 @@ func PoissonLambda_Qtl_GPri(sumK, n int64, r, v float64) func(p float64) float64
 	}
 	r1 := r + float64(sumK)
 	v1 := v + float64(n)
-	return Gamma_Qtl(r1, 1/v1)
+	return GammaQtl(r1, 1/v1)
 }
 
 // Likelihood of Poisson λ.
 // Bolstad 2007 (2e): Chapter 10, p. 184.
-func PoissonLambda_Like(sumK, n int64, λ float64) float64 {
+func PoissonLambdaLike(sumK, n int64, λ float64) float64 {
 	return λ*float64(sumK)* math.Exp(float64(-n)*λ)
 
 }
@@ -164,7 +164,7 @@ func PoissonLambdaMSE(r, v, λ float64) float64 {
 // posterior interquartile range of λ
 // Bolstad 2007 (2e): Chapter 10, p. 189.
 func PoissonLambdaIQR(sumK, n int64, r, v float64) float64 {
-	qf := PoissonLambda_Qtl_GPri(sumK, n, r, v)
+	qf := PoissonLambdaQtlGPri(sumK, n, r, v)
 	q1 := qf(0.25)
 	q3 := qf(0.75)
 	return (q3 - q1)
@@ -173,7 +173,7 @@ func PoissonLambdaIQR(sumK, n int64, r, v float64) float64 {
 // Credible interval for unknown Poisson rate λ, and gamma prior, equal tail area
 // Bolstad 2007 (2e): 192-193.
 // untested ...
-func PoissonLambda_CrI_GPri(sumK, n int64, r, v, α float64) (lo, hi float64) {
+func PoissonLambdaCrIGPri(sumK, n int64, r, v, α float64) (lo, hi float64) {
 	/*
 		sumK, n			total observed events in n equal time intervals
 		r			gamma prior r
@@ -181,7 +181,7 @@ func PoissonLambda_CrI_GPri(sumK, n int64, r, v, α float64) (lo, hi float64) {
 		α		posterior probability that the true proportion lies outside the credible interval
 	*/
 	// return value: lo is lower boundary, hi upper
-	qf := PoissonLambda_Qtl_GPri(sumK, n, r, v)
+	qf := PoissonLambdaQtlGPri(sumK, n, r, v)
 	lo = qf(α/2)
 	hi = qf(1-α/2)
 	return
@@ -190,8 +190,8 @@ func PoissonLambda_CrI_GPri(sumK, n int64, r, v, α float64) (lo, hi float64) {
 // Bolstad 2007 (2e): 193.
 // H0: λ <= λ0 vs H1: λ > λ0
 // Note: The alternative is in the direction we wish to detect.
-func PoissonLambda_OneSidedTst(sumK, n int64, r, v, α, λ0 float64) bool {
-	cdf := PoissonLambda_CDF_GPri(sumK, n, r, v)
+func PoissonLambdaOneSidedTst(sumK, n int64, r, v, α, λ0 float64) bool {
+	cdf := PoissonLambdaCDFGPri(sumK, n, r, v)
 	p0 := cdf(λ0)
 	reject := false // hypothesis NOT rejected (default)
 	if p0 < α {
@@ -204,8 +204,8 @@ func PoissonLambda_OneSidedTst(sumK, n int64, r, v, α, λ0 float64) bool {
 // Bolstad 2007 (2e): 193.
 // H0: λ <= λ0 vs H1: λ > λ0
 // Note: The alternative is in the direction we wish to detect.
-func PoissonLambda_OneSidedOdds(sumK, n int64, r, v, λ0 float64) float64 {
-	cdf := PoissonLambda_CDF_GPri(sumK, n, r, v)
+func PoissonLambdaOneSidedOdds(sumK, n int64, r, v, λ0 float64) float64 {
+	cdf := PoissonLambdaCDFGPri(sumK, n, r, v)
 	p0 := cdf(λ0)
 	return p0 / (1 - p0)
 }
@@ -213,8 +213,8 @@ func PoissonLambda_OneSidedOdds(sumK, n int64, r, v, λ0 float64) float64 {
 // Two-sided test for Poisson rate λ
 // Bolstad 2007 (2e): 194.
 // H0: λ = λ0 vs H1: λ != λ0
-func PoissonLambda_TwoSidedTst(sumK, n int64, r, v, α, λ0 float64) bool {
-	low, high := PoissonLambda_CrI_GPri(sumK, n, r, v, α)
+func PoissonLambdaTwoSidedTst(sumK, n int64, r, v, α, λ0 float64) bool {
+	low, high := PoissonLambdaCrIGPri(sumK, n, r, v, α)
 	reject := false // hypothesis NOT rejected (default)
 	if λ0 < low || λ0 > high {
 		reject = true // hypothesis rejected

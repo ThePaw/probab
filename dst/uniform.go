@@ -2,15 +2,23 @@
 
 package dst
 
-// Uniform (Flat) distribution
+// Uniform (Flat) distribution. 
+// The continuous uniform distribution or rectangular distribution is a family of probability distributions such that for each member of the family, all intervals of the same length on the distribution's support are equally probable. The support is defined by the two parameters, a and b, which are its minimum and maximum values. The distribution is often abbreviated U(a,b). It is the maximum entropy probability distribution for a random variate X under no constraint other than that it is contained in the distribution's support.
+//
+// Parameters: 
+// a ∈ (-∞, b)		lower boundary (real)
+// b ∈ (a, ∞)		upper boundary (real)
+//
+// Support: 
+// x ∈ [a, b]		(real)
 
 import (
 	"math/rand"
 	"math"
 )
 
-// Uniform_PDF returns the PDF of the Uniform distribution. 
-func Uniform_PDF(a, b float64) func(x float64) float64 {
+// UniformPDF returns the PDF of the Uniform distribution. 
+func UniformPDF(a, b float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if a <= x && x <= b {
 			return 1/(b-a)
@@ -19,8 +27,8 @@ func Uniform_PDF(a, b float64) func(x float64) float64 {
 	}
 }
 
-// Uniform_LnPDF returns the natural logarithm of the PDF of the Uniform distribution. 
-func Uniform_LnPDF(a, b float64)  func(x float64) float64 {
+// UniformLnPDF returns the natural logarithm of the PDF of the Uniform distribution. 
+func UniformLnPDF(a, b float64)  func(x float64) float64 {
 	return func(x float64) float64 {
 		if a <= x && x <= a {
 			return math.Log(1/(b-a))
@@ -29,14 +37,14 @@ func Uniform_LnPDF(a, b float64)  func(x float64) float64 {
 	}
 }
 
-// Uniform_PDF_At returns the value of PDF of Uniform distribution at x. 
-func Uniform_PDF_At(a, b, x float64) float64 {
-	pdf := Uniform_PDF(a, b)
+// UniformPDFAt returns the value of PDF of Uniform distribution at x. 
+func UniformPDFAt(a, b, x float64) float64 {
+	pdf := UniformPDF(a, b)
 	return pdf(x)
 }
 
-// Uniform_CDF returns the CDF of the Uniform distribution. 
-func Uniform_CDF(a, b float64) func(x float64) float64 {
+// UniformCDF returns the CDF of the Uniform distribution. 
+func UniformCDF(a, b float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		switch {
 		case x < a:
@@ -48,20 +56,20 @@ func Uniform_CDF(a, b float64) func(x float64) float64 {
 	}
 }
 
-// Uniform_CDF_At returns the value of CDF of the Uniform distribution, at x. 
-func Uniform_CDF_At(a, b, x float64) float64 {
-	cdf := Uniform_CDF(a, b)
+// UniformCDFAt returns the value of CDF of the Uniform distribution, at x. 
+func UniformCDFAt(a, b, x float64) float64 {
+	cdf := UniformCDF(a, b)
 	return cdf(x)
 }
 
-// NextUniform returns random number drawn from the Uniform distribution. 
-func NextUniform(a, b float64)  float64 {  
+// UniformNext returns random number drawn from the Uniform distribution. 
+func UniformNext(a, b float64)  float64 {  
 	return a + (b-a)*rand.Float64()
 }
 
 // Uniform returns the random number generator with  Uniform distribution. 
 func Uniform(a, b float64) func() float64 { 
-	return func() float64 { return NextUniform(a, b) } 
+	return func() float64 { return UniformNext(a, b) } 
 }
 
 
@@ -94,5 +102,10 @@ func UniformSkew(a, b float64) (s float64) {
 // UniformExKurt returns the excess kurtosis of the Uniform distribution. 
 func UniformExKurt(a, b float64) float64 {
 	return -6.0/5
+}
+
+// UniformMGF returns the moment-generating function of the YYYYYYYYYYYYYYYYYYY distribution. 
+func UniformMGF(a, b, t float64) float64 {
+	return (math.Exp(t*b) - math.Exp(t*a)) / (t*(b-a))
 }
 

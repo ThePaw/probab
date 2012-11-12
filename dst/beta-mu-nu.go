@@ -5,34 +5,34 @@ package dst
 // Beta distribution reparametrized using mean (μ) and sample size (ν). 
 // Kruschke, J. K. (2011). Doing Bayesian data analysis: A tutorial with R and BUGS. p. 83: Academic Press / Elsevier. ISBN 978-0123814852.
 
-// Betaμν_PDF returns the PDF of the Beta distribution reparametrized using mean and sample size. 
-func Betaμν_PDF(μ, ν float64) func(x float64) float64 {
+// BetaμνPDF returns the PDF of the Beta distribution reparametrized using mean and sample size. 
+func BetaμνPDF(μ, ν float64) func(x float64) float64 {
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
 	α := μ*ν
 	β := (1-μ)*ν
-	return Beta_PDF(α, β)
+	return BetaPDF(α, β)
 }
 
-// Betaμν_LnPDF returns the natural logarithm of the PDF of the Beta distribution reparametrized using mean and sample size. 
-func Betaμν_LnPDF(μ, ν float64) func(x float64) float64 {
+// BetaμνLnPDF returns the natural logarithm of the PDF of the Beta distribution reparametrized using mean and sample size. 
+func BetaμνLnPDF(μ, ν float64) func(x float64) float64 {
 	α := μ*ν
 	β := (1-μ)*ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
-	return Beta_LnPDF(α, β)
+	return BetaLnPDF(α, β)
 }
 
-// NextBetaμν returns random number drawn from the  Beta distribution reparametrized using mean and sample size. 
-func NextBetaμν(μ, ν float64) float64 {
+// BetaμνNext returns random number drawn from the  Beta distribution reparametrized using mean and sample size. 
+func BetaμνNext(μ, ν float64) float64 {
 	α := μ*ν
 	β := (1-μ)*ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
-	return NextBeta(α, β)
+	return BetaNext(α, β)
 }
 
 // Betaμν returns the random number generator with  Beta distribution reparametrized using mean and sample size. 
@@ -42,45 +42,45 @@ func Betaμν(μ, ν float64) func() float64 {
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
-	return func() float64 { return NextBeta(α, β) }
+	return func() float64 { return BetaNext(α, β) }
 }
 
-// Betaμν_PDF_At returns the value of PDF of Beta distribution at x. 
-func Betaμν_PDF_At(μ, ν, x float64) float64 {
-	pdf := Betaμν_PDF(μ, ν)
+// BetaμνPDFAt returns the value of PDF of Beta distribution at x. 
+func BetaμνPDFAt(μ, ν, x float64) float64 {
+	pdf := BetaμνPDF(μ, ν)
 	return pdf(x)
 }
 
-// Betaμν_CDF returns the CDF of the Beta distribution reparametrized using mean and sample size. 
-func Betaμν_CDF(μ, ν float64) func(x float64) float64 {
+// BetaμνCDF returns the CDF of the Beta distribution reparametrized using mean and sample size. 
+func BetaμνCDF(μ, ν float64) func(x float64) float64 {
 	α := μ*ν
 	β := (1-μ)*ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
-	return Beta_CDF(α , β)
+	return BetaCDF(α , β)
 }
 
-// Betaμν_CDF_At returns the value of CDF of the Beta distribution reparametrized using mean and sample size, at x. 
-func Betaμν_CDF_At(μ, ν, x float64) float64 {
-	cdf := Beta_CDF(μ, ν)
+// BetaμνCDFAt returns the value of CDF of the Beta distribution reparametrized using mean and sample size, at x. 
+func BetaμνCDFAt(μ, ν, x float64) float64 {
+	cdf := BetaCDF(μ, ν)
 	return cdf(x)
 }
 
-// Betaμν_Qtl returns the inverse of the CDF (quantile) of the Beta distribution reparametrized using mean and sample size. 
-func Betaμν_Qtl(μ, ν float64) func(p float64) float64 {
+// BetaμνQtl returns the inverse of the CDF (quantile) of the Beta distribution reparametrized using mean and sample size. 
+func BetaμνQtl(μ, ν float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
 	α := μ*ν
 	β := (1-μ)*ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
-	return Beta_Qtl(α, β)
+	return BetaQtl(α, β)
 }
 
-// Betaμν_Qtl_For returns the inverse of the CDF (quantile) of the Beta distribution reparametrized using mean and sample size, for a given probability.
-func Betaμν_Qtl_For(μ, ν, p float64) float64 {
-	cdf := Betaμν_Qtl(μ, ν)
+// BetaμνQtlFor returns the inverse of the CDF (quantile) of the Beta distribution reparametrized using mean and sample size, for a given probability.
+func BetaμνQtlFor(μ, ν, p float64) float64 {
+	cdf := BetaμνQtl(μ, ν)
 	return cdf(p)
 }
 
