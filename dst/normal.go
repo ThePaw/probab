@@ -7,7 +7,7 @@ package dst
 //
 // Parameters: 
 // μ ∈ R		(location)
-// σ2 > 0		variance (squared scale)
+// σ > 0		standard deviation  (scale)
 //
 // Support: 
 // x ∈ R
@@ -95,6 +95,10 @@ func NormalLnPDF(μ, σ float64) func(x float64) float64 {
 }
 
 // NormalPDFAt returns the value of PDF of Normal distribution at x. 
+func NormalPDFAt(μ, σ, x float64) float64 {
+	pdf := NormalPDF(μ, σ)
+	return pdf(x)
+}
 
 // NormalCDF returns the CDF of the Normal distribution. 
 func NormalCDF(μ, σ float64) func(x float64) float64 {

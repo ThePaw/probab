@@ -104,8 +104,32 @@ func UniformExKurt(a, b float64) float64 {
 	return -6.0/5
 }
 
-// UniformMGF returns the moment-generating function of the YYYYYYYYYYYYYYYYYYY distribution. 
+// UniformMGF returns the moment-generating function of the Uniform distribution. 
 func UniformMGF(a, b, t float64) float64 {
 	return (math.Exp(t*b) - math.Exp(t*a)) / (t*(b-a))
 }
 
+// UniformReparamMeanStd returns the parameters a, b of the Uniform distribution calculated from mean and standard deviation. 
+// To be used to reparametrize the Uniform distribution. 
+func UniformReparamMeanStd(mean, std float64) (a, b float64) {
+			/*
+			mean = (a+b)/2
+			std = (b-a)/3.4641016151377543
+			a= 2*mean-b
+			b= 3.4641016151377543*std+a
+			a= 2*mean-3.4641016151377543*std-a
+			2*a= 2*mean-3.4641016151377543*std
+			a= mean-(3.4641016151377543*std)/2
+			a= mean-1.7320508075688771*std
+			b= 3.4641016151377543*std+(mean-(3.4641016151377543*std)/2)
+			2*b= 2*3.4641016151377543*std+(2*mean-(2*3.4641016151377543*std)/2)
+			2*b= 2*3.4641016151377543*std+2*mean-3.4641016151377543*std
+			2*b= 2*3.4641016151377543*std-3.4641016151377543*std+2*mean
+			2*b= 3.4641016151377543*std+2*mean
+			b= 1.7320508075688771*std+mean
+			*/
+			
+	a = mean-1.7320508075688771*std
+	b = 1.7320508075688771*std+mean
+	return
+}

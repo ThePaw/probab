@@ -290,3 +290,71 @@ func BetaExKurt(α, β float64) float64 {
 	return num / den
 }
 
+// BetaReparamMeanStd returns the parameters α, β of the Beta distribution calculated from mean and standard deviation. 
+// To be used to reparametrize the Beta distribution. 
+func BetaReparamMeanStd(μ, σ float64) (α, β float64) {
+	// http://linkage.rockefeller.edu/pawe3d/help/Beta-distribution.html
+	if σ*σ >= μ*(1-μ) {
+		panic("σ too big, α, β out of range")
+	}
+	α = (μ*μ-μ*μ*μ-μ*σ*σ) / (σ*σ)
+	β = (μ-2*μ*μ+μ*μ*μ-σ*σ+μ*σ*σ)/(σ*σ)
+	return
+}
+
+// BetaReparamModStd returns the parameters α, β of the Beta distribution calculated from modus and standard deviation. 
+// To be used to reparametrize the Beta distribution. 
+// To be implemented
+/* func BetaReparamModStd(μ, σ float64) (α, β float64) {
+	if σ*σ >= μ*(1-μ) {
+		panic("σ too big, α, β out of range")
+	}
+	α = 
+	β = 
+	return
+}
+
+μ=(α - 1) / (α + β - 2)
+μ*(α+β-2)-(α-1)=0
+μ*α+μ*β-2*μ-α+1=0
+μ*α-α=-μ*β+2*μ-1
+α*(μ-1)=-μ*β+2*μ-1
+α=(-μ*β+2*μ-1)  /(μ-1)
+
+(σ*σ)=(α * β) /((α + β) * (α + β) * (α + β + 1))
+(σ*σ)*((α + β) * (α + β) * (α + β + 1))  - (α * β) =0
+	(α + β) * (α + β) =(α*α+2*α*β+β*β)
+		(α*α+2*α*β+β*β) * (α + β + 1) = (α*α*α+2*α*α*β+α*β*β+α*α*β+2*α*β*β+β*β*β+ α*α+2*α*β+β*β) =
+			(σ*σ)*... = (α*α*α*σ*σ+2*α*α*β*σ*σ+α*β*β*σ*σ+α*α*β*σ*σ+2*α*β*β*σ*σ+β*β*β*σ*σ+ α*α*σ*σ+2*α*β*σ*σ+β*β*σ*σ)
+(α*α*α*σ*σ+2*α*α*β*σ*σ+α*β*β*σ*σ+α*α*β*σ*σ+2*α*β*β*σ*σ+β*β*β*σ*σ+ α*α*σ*σ+2*α*β*σ*σ+β*β*σ*σ -α*β) 
++2*α*α*β*σ*σ  +α*β*β*σ*σ  +α*α*β*σ*σ  +2*α*β*β*σ*σ +β*β*β*σ*σ +2*α*β*σ*σ  +β*β*σ*σ -α*β)+α*α*α*σ*σ+ α*α*σ*σ=0
+
+β*β*β*σ*σ +  β*β*(α*σ*σ+2*α*σ*σ+σ*σ) +   β*(+2*α*α*σ*σ +α*α*σ*σ+2*α*σ*σ -α)+α*α*α*σ*σ+ α*α*σ*σ=0
+
+a=σ*σ
+b=(α*σ*σ+2*α*σ*σ+σ*σ)
+c=(2*α*α*σ*σ +α*α*σ*σ+2*α*σ*σ -α)
+d=(α*α*α*σ*σ+ α*α*σ*σ)
+Δ=18*a*b*c*d - 4*b*b*b*d +b*b*c*c -4*a*c*c*c - 27*a*a*d*d
+================
+mod=(α - 1) / (α + β - 2)
+mod*(α + β - 2)=(α - 1)
+
+μ = α / (α + β)
+	α := μ*(μ*(1-μ)/(σ*σ)-1)
+	β := (1-μ)*(μ*(1-μ)/(σ*σ)-1)
+
+mod=(α - 1)/(α + β - 2)
+mod=((μ*(μ*(1-μ)/(σ*σ)-1)) - 1)/((μ*(μ*(1-μ)/(σ*σ)-1)) + (1-μ)*(μ*(1-μ)/(σ*σ)-1) - 2)
+mod=((A) - 1)/((μ*(μ*(1-μ)/(σ*σ)-1)) + (1-μ)*(μ*(1-μ)/(σ*σ)-1) - 2)
+A = μ*(μ*(1-μ)/(σ*σ)-1) = (μ*μ*(1-μ)/(σ*σ)-μ) = (μ*μ-μ*μ*μ)/(σ*σ-μ) 
+B = 
+
+
+...
+*/
+
+// Beta4Transform transforms Beta Distribution with the support [0,1]  to a Beta Distribution with the support [a, b].
+func Beta4Transform(a, b, x float64) float64 {
+	return (b-a)*x + a
+}

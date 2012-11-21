@@ -53,7 +53,6 @@ func ChiSquareCDFAt(n int64, x float64) float64 {
 // ChiSquareQtl returns the inverse of the CDF (quantile) of the ChiSquare distribution. 
 func ChiSquareQtl(n int64) func(p float64) float64 {
 	return func(p float64) float64 {
-		//return GammaQtlAt(n/2, 2, p)  to be implemented
 		return GammaQtlFor(float64(n)/2, 2, p)
 	}
 }

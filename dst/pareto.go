@@ -82,6 +82,18 @@ func ParetoQtlFor(θ, α, p float64) float64 {
 	return cdf(p)
 }
 
+
+// ParetoNext returns random number drawn from the Pareto distribution. 
+func ParetoNext(θ, α float64) (x float64) {
+	p := UniformNext(0, 1)
+        return ParetoQtlFor(θ, α, p) 
+}
+
+// Pareto returns the random number generator with  Planck distribution. 
+func Pareto(θ, α float64) func() float64 {
+	return func() float64 { return ParetoNext(θ, α) }
+}
+
 // ParetoMean returns the mean of the Pareto Type I distribution. 
 func ParetoMean(θ, α float64) float64 {
 	if α <= 1 {
@@ -139,3 +151,16 @@ func ParetoMGF(θ, α, t float64) float64 {
 	}
 	return α*math.Pow((-θ*t), α) * IΓ(-α, -θ*t)
 }
+
+/*
+// ParetoReparamMeanStd returns the parameters a, b of the Pareto distribution calculated from mean and standard deviation. 
+// To be used to reparametrize the Pareto distribution. 
+func ParetoReparamMeanStd(mean, std float64) (θ, α float64) {
+	return
+}
+// ParetoReparamModeStd returns the parameters a, b of the Pareto distribution calculated from mean and standard deviation. 
+// To be used to reparametrize the Pareto distribution. 
+func ParetoReparamModeStd(mode, std float64) (θ, α float64) {
+	return
+}
+*/
