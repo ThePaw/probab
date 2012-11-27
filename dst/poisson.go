@@ -15,8 +15,8 @@ package dst
 // x ∈ (0, ∞)
 
 import (
-	"math"
 	. "code.google.com/p/go-fn/fn"
+	"math"
 )
 
 /*
@@ -74,14 +74,14 @@ func PoissonPMFAt(λ float64, k int64) float64 {
 }
 
 // PoissonCDF returns the CDF of the Poisson distribution. 
-func PoissonCDF(λ float64) func(k int64) float64 {  
+func PoissonCDF(λ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		var p float64 = 0
 		var i int64
-		pmf:=PoissonPMF(λ)
-			for i = 0; i<=k; i++ {
-				p+=pmf(i)
-			}
+		pmf := PoissonPMF(λ)
+		for i = 0; i <= k; i++ {
+			p += pmf(i)
+		}
 		return p
 	}
 }
@@ -89,7 +89,7 @@ func PoissonCDF(λ float64) func(k int64) float64 {
 // PoissonCDFAn returns the CDF of the Poisson distribution. Analytic solution, less precision.
 func PoissonCDFAn(λ float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p:=math.Exp(math.Log(IΓint(k+1, λ)) - (LnFact(k)))
+		p := math.Exp(math.Log(IΓint(k+1, λ)) - (LnFact(k)))
 		return p
 	}
 }
@@ -101,23 +101,31 @@ func PoissonCDFAt(λ float64, k int64) float64 {
 }
 
 // LnPoissonCDFAn returns the natural logarithm of the CDF of the Poisson distribution. Analytic solution, less precision.
-func LnPoissonCDFAn (λ float64) func(k int64) float64 {
+func LnPoissonCDFAn(λ float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		k1:=(float64)(k+1)
+		k1 := (float64)(k + 1)
 		return log(IΓ(k1, λ)) - LnFact(k)
 	}
 }
 
 // PoissonNext returns random number drawn from the Poisson distribution. 
 func PoissonNext(λ float64) int64 {
-	// this can be improved upon
-	i := iZero
-	t := exp(-λ)
-	p := fOne
-	for ; p > t; p *= UniformNext(0, 1) {
-		i++
+	var k int64
+	if λ < 500 { // Knuth algorithm for small λ
+		// Donald E. Knuth (1969). Seminumerical Algorithms. The Art of Computer Programming, Volume 2. Addison Wesley.
+		// this can be improved upon
+		k = iZero
+		t := exp(-λ)
+		p := fOne
+		for ; p > t; p *= UniformNext(0, 1) {
+			k++
+		}
+		k -= 1
+
+	} else { // use Normal approximation
+		k = int64(math.Floor(NormalNext(λ, λ)))
 	}
-	return i
+	return k
 }
 
 // Poisson returns the random number generator with  Poisson distribution. 
@@ -134,7 +142,7 @@ func PoissonMean(λ float64, k int64) float64 {
 
 // PoissonMode returns the mode of the Poisson distribution. 
 func PoissonMode(λ float64, k int64) float64 {
-	return math.Ceil(λ) -1
+	return math.Ceil(λ) - 1
 }
 
 // PoissonMedian returns the median of the Poisson distribution. Approximation. 
@@ -154,6 +162,5 @@ func PoissonSkew(λ float64, k int64) float64 {
 
 // PoissonExKurt returns the excess kurtosis of the Poisson distribution. 
 func PoissonExKurt(λ float64, k int64) float64 {
-	return 1/λ
+	return 1 / λ
 }
-
