@@ -199,3 +199,40 @@ func GammaSkew(k, θ float64) float64 {
 	return 2/math.Sqrt(k)
 }
 
+// GammaReparamAlphaBeta returns the parameters k, θ (shape, scale) of the Gamma distribution calculated from desired mean and standard deviation. 
+// α = shape, β = rate
+// To be used to reparametrize the Gamma distribution. 
+func GammaReparamAlphaBeta(α, β float64) (k, θ float64) {
+	k = α		
+	θ= 1/β
+	return
+}
+
+// GammaReparamModeStd returns the parameters k, θ (shape, scale) of the Gamma distribution calculated from mode and standard deviation. 
+// It is more intuitive to start with the mode and standard deviation, instead of the mean and standard deviation as used in the Kruschke (2011) book. 
+// The reason is that the gamma distribution is typically very skewed, and therefore the location of the mean is not very intuitive. 
+// This function computes the shape and rate parameters of the gamma distribution from a desired mode and standard deviation.
+// After http://doingbayesiandataanalysis.blogspot.com/2012/01/parameterizing-gamma-distribution-by.html
+func GammaReparamModeStd(mode, sd float64) (k, θ float64) {
+	β := (mode + math.Sqrt(mode*mode+4*sd*sd)) / (2 * sd * sd)
+	k = 1 + mode*β
+	θ= 1/β
+	return
+}
+
+// GammaReparamMeanStd returns the parameters k, θ (shape, scale) of the Gamma distribution calculated from mean and standard deviation. 
+func GammaReparamMeanStd(mean, sd float64) (k, θ float64) {
+/*
+mean =k*θ
+sd*sd = k*θ*θ
+k=sd*sd /(θ*θ)
+k=mean/θ
+sd*sd /(θ*θ)=mean/θ
+sd*sd *θ/(θ*θ)=mean
+θ/(θ*θ)=mean/(sd*sd )
+θ=(sd*sd )/mean
+*/
+	θ=(sd*sd )/mean
+	k=mean/θ
+	return
+}

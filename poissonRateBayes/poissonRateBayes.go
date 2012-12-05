@@ -14,7 +14,8 @@ func main() {
 		r, v float64
 )
 
-	fmt.Scanf("%d %d %f %f", x, n, r, v, )
+	fmt.Scanf("%d %d %f %f", &x, &n, &r, &v)
+	// fmt.Println("%d %d %f %f", x, n, r, v)
 
 	pr := []float64{0.005,0.01,0.025,0.05,0.5,0.95,0.975,0.99,0.995}
 
@@ -23,9 +24,8 @@ func main() {
 	}
 	fmt.Println("\nProb.\t\tQuantile \n")
 	for i:=0; i< 9; i++ {
-			qf := bayes.PoissonLambdaQtlGPri(x, n, r, v)
-			qtl := qf(pr[i])
-			fmt.Println(pr[i],"\t\t", qtl)
+			qtl := bayes.PoissonLambdaQtlGPri(x, n, r, v)
+			fmt.Println(pr[i],"\t\t", qtl(pr[i]))
 	}
 	fmt.Println("\n")
 }

@@ -290,7 +290,7 @@ func BetaExKurt(α, β float64) float64 {
 	return num / den
 }
 
-// BetaReparamMeanStd returns the parameters α, β of the Beta distribution calculated from mean and standard deviation. 
+// BetaReparamMeanStd returns the parameters α, β of the Beta distribution calculated from desired mean and standard deviation. 
 // To be used to reparametrize the Beta distribution. 
 func BetaReparamMeanStd(μ, σ float64) (α, β float64) {
 	// http://linkage.rockefeller.edu/pawe3d/help/Beta-distribution.html

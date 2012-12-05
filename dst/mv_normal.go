@@ -16,7 +16,7 @@ import (
 	. "github.com/skelterjohn/go.matrix"
 )
 
-// MVNormalPDF returns the PDF of the MVNormal distribution. 
+// MVNormalPDF returns the PDF of the Multivariate normal distribution. 
 func MVNormalPDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64 {
 	p := μ.Rows()
 	backμ := μ.DenseMatrix()
@@ -38,7 +38,7 @@ func MVNormalPDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64 
 	}
 }
 
-// MVNormalNext returns random number drawn from the MVNormal distribution. 
+// MVNormalNext returns random number drawn from the Multivariate normal distribution. 
 func MVNormalNext(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	n := μ.Rows()
 	x := Zeros(n, 1)
@@ -54,7 +54,7 @@ func MVNormalNext(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	return μCx
 }
 
-// MVNormal returns the random number generator with  MVNormal distribution. 
+// MVNormal returns the random number generator with  Multivariate normal distribution. 
 func MVNormal(μ *DenseMatrix, Σ *DenseMatrix) func() *DenseMatrix {
 	C, _ := Σ.Cholesky()
 	n := μ.Rows()
@@ -69,17 +69,17 @@ func MVNormal(μ *DenseMatrix, Σ *DenseMatrix) func() *DenseMatrix {
 	}
 }
 
-// MVNormalMean returns the mean of the MVNormal distribution. 
+// MVNormalMean returns the mean of the Multivariate normal distribution. 
 func MVNormalMean(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	return μ
 }
 
-// MVNormalMode returns the mode of the MVNormal distribution. 
+// MVNormalMode returns the mode of the Multivariate normal distribution. 
 func MVNormalMode(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	return μ
 }
 
-// MVNormalVar returns the variance of the MVNormal distribution. 
+// MVNormalVar returns the variance of the Multivariate normal distribution. 
 func MVNormalVar(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	return Σ
 }
