@@ -19,6 +19,20 @@ var pow func(float64, float64) float64 = math.Pow
 
 const π = float64(math.Pi)
 
+func imax(x, y int64) int64 {
+	if x < y {
+		return y
+	}
+	return x
+}
+
+func max(x, y float64) float64 {
+	if x < y {
+		return y
+	}
+	return x
+}
+
 func maxFloat64(x []float64) float64 {
 	first := x[0]
 	if len(x) > 1 {
@@ -113,3 +127,4 @@ func Shuffle(x []interface{}) {
 		x[j] = t
 	}
 }
+
