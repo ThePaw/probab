@@ -10,15 +10,15 @@ func BetaμνPDF(μ, ν float64) func(x float64) float64 {
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
-	α := μ*ν
-	β := (1-μ)*ν
+	α := μ * ν
+	β := (1 - μ) * ν
 	return BetaPDF(α, β)
 }
 
 // BetaμνLnPDF returns the natural logarithm of the PDF of the Beta distribution reparametrized using mean and sample size. 
 func BetaμνLnPDF(μ, ν float64) func(x float64) float64 {
-	α := μ*ν
-	β := (1-μ)*ν
+	α := μ * ν
+	β := (1 - μ) * ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
@@ -27,8 +27,8 @@ func BetaμνLnPDF(μ, ν float64) func(x float64) float64 {
 
 // BetaμνNext returns random number drawn from the  Beta distribution reparametrized using mean and sample size. 
 func BetaμνNext(μ, ν float64) float64 {
-	α := μ*ν
-	β := (1-μ)*ν
+	α := μ * ν
+	β := (1 - μ) * ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
@@ -37,8 +37,8 @@ func BetaμνNext(μ, ν float64) float64 {
 
 // Betaμν returns the random number generator with  Beta distribution reparametrized using mean and sample size. 
 func Betaμν(μ, ν float64) func() float64 {
-	α := μ*ν
-	β := (1-μ)*ν
+	α := μ * ν
+	β := (1 - μ) * ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
@@ -53,12 +53,12 @@ func BetaμνPDFAt(μ, ν, x float64) float64 {
 
 // BetaμνCDF returns the CDF of the Beta distribution reparametrized using mean and sample size. 
 func BetaμνCDF(μ, ν float64) func(x float64) float64 {
-	α := μ*ν
-	β := (1-μ)*ν
+	α := μ * ν
+	β := (1 - μ) * ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
-	return BetaCDF(α , β)
+	return BetaCDF(α, β)
 }
 
 // BetaμνCDFAt returns the value of CDF of the Beta distribution reparametrized using mean and sample size, at x. 
@@ -70,8 +70,8 @@ func BetaμνCDFAt(μ, ν, x float64) float64 {
 // BetaμνQtl returns the inverse of the CDF (quantile) of the Beta distribution reparametrized using mean and sample size. 
 func BetaμνQtl(μ, ν float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
-	α := μ*ν
-	β := (1-μ)*ν
+	α := μ * ν
+	β := (1 - μ) * ν
 	if ν <= 0 {
 		panic("ν must be greater than zero")
 	}
@@ -83,4 +83,3 @@ func BetaμνQtlFor(μ, ν, p float64) float64 {
 	cdf := BetaμνQtl(μ, ν)
 	return cdf(p)
 }
-

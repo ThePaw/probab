@@ -14,9 +14,9 @@ package dst
 // x ... to be completed
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"math"
 	"math/rand"
-	. "code.google.com/p/go-fn/fn"
 )
 
 // ParetoGPDF returns the PDF of the Generalized Pareto distribution. 
@@ -37,9 +37,9 @@ func ParetoGPDF(shape1, shape2, scale float64) func(x float64) (p float64) {
 			}
 		}
 		tmp := math.Log(x) - math.Log(scale)
-		logu := - math.Log1p(math.Exp(-tmp))
-		log1mu := - math.Log1p(math.Exp(tmp))
-		p =  math.Exp(shape2 * logu + shape1 * log1mu - math.Log(x) - LnB(shape2, shape1))
+		logu := -math.Log1p(math.Exp(-tmp))
+		log1mu := -math.Log1p(math.Exp(tmp))
+		p = math.Exp(shape2*logu + shape1*log1mu - math.Log(x) - LnB(shape2, shape1))
 		return
 	}
 }
@@ -75,7 +75,7 @@ func ParetoGQtl(shape1, shape2, scale float64) func(p float64) float64 {
 			panic("bad param")
 		}
 		qtl := BetaQtl(shape2, shape1)
-		return scale / (1.0 / qtl(p) - 1.0)
+		return scale / (1.0/qtl(p) - 1.0)
 	}
 }
 
@@ -89,10 +89,10 @@ func ParetoGNext(shape1, shape2, scale float64) float64 {
 // ParetoGMoment returns the n-th moment of the Generalized Pareto distribution. 
 func ParetoGMoment(shape1, shape2, scale float64, order int) (x float64) {
 	o := float64(order)
-	if o  <= -shape2 || o  >= shape1 {
+	if o <= -shape2 || o >= shape1 {
 		x = math.Inf(1)
 	} else {
-		x = math.Pow(scale, o) * B(shape1 - o, shape2 + o) / B(shape1, shape2)
+		x = math.Pow(scale, o) * B(shape1-o, shape2+o) / B(shape1, shape2)
 	}
 	return
 }
@@ -116,4 +116,3 @@ func ParetoGSkew(shape1, shape2, scale float64) float64 {
 func ParetoGExKurt(shape1, shape2, scale float64) float64 {
 	return ParetoGMoment(shape1, shape2, scale, 4)
 }
-

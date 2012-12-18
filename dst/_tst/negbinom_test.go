@@ -8,10 +8,9 @@ import (
 // test against known values
 func TestNegativeBinomial_PMF_CDF(t *testing.T) {
 	var (
-	ρ, prob float64
+	ρ float64
 	i, n int64
 	)
-
 
 	// edit the following values:  >>>
 	ρ=0.5
@@ -25,7 +24,7 @@ cdf:=[]float64{0.0493685733526945114136, 0.074806392192840576172, 0.107663574861
 
 	fmt.Println("test of NegativeBinomial PMF")
 	for i = 0; i < int64(len(k)); i++ {
-		prob=NegativeBinomial_PMF_At(ρ, n, k[i])
+		prob:=NegBinomialPMFAt(ρ, n, k[i])
 			if !check(prob, pmf[i]){
 				t.Error()
 				fmt.Println(k[i], prob, pmf[i])
@@ -35,7 +34,7 @@ cdf:=[]float64{0.0493685733526945114136, 0.074806392192840576172, 0.107663574861
 
 	fmt.Println("test of NegativeBinomial CDF")
 	for i = 0; i < int64(len(k)); i++ {
-		prob=NegativeBinomial_CDF_At(ρ, n, k[i])
+		prob:=NegBinomialCDFAt(ρ, n, k[i])
 			if !check(prob, cdf[i]){
 				t.Error()
 				fmt.Println(k[i], prob, cdf[i])
@@ -43,3 +42,21 @@ cdf:=[]float64{0.0493685733526945114136, 0.074806392192840576172, 0.107663574861
 	}
 }
 
+func TestNegativeBinomial_Qtl(t *testing.T) {
+	var (
+	ρ float64
+	i, n int64
+	)
+	ρ=0.5
+	n=20
+p:=[]float64{0.1, 0.3, 0.5, 0.7, 0.9}
+qtl:=[]int64{12, 16, 19, 23, 28}
+	fmt.Println("test of NegativeBinomial Qtl")
+	for i = 0; i < int64(len(p)); i++ {
+		q :=NegBinomialQtlFor(ρ, n, p[i])
+			if  q != qtl[i] {
+				t.Error()
+				fmt.Println(p[i], q, qtl[i])
+			}
+	}
+}

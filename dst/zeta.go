@@ -12,18 +12,17 @@ package dst
 // k > 0		(integer)
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"math"
 	"math/rand"
-	. "code.google.com/p/go-fn/fn"
 )
-
 
 // ZetaPMF returns the PMF of the Zeta distribution. 
 func ZetaPMF(s float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		t1 := 1/math.Pow(float64(k), s)
+		t1 := 1 / math.Pow(float64(k), s)
 		t2 := RiemannZeta(s)
-		p := t1/t2
+		p := t1 / t2
 		return p
 	}
 }
@@ -39,7 +38,7 @@ func ZetaCDF(s float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		t1 := H(k, s)
 		t2 := RiemannZeta(s)
-		p := t1/t2
+		p := t1 / t2
 		return p
 	}
 }
@@ -55,21 +54,20 @@ func ZetaNext(s float64) (k int64) {
 	// Devroye 1986: 550. Called "Zipf distribution" there.
 	// Devroye, L. 1986: Non-Uniform Random Variate Generation. Springer-Verlag, New York. ISBN 0-387-96305-7.
 	var x float64
-	b := math.Pow(2.0, s - 1.0)
-        for   {
-                u := rand.Float64()
-                v := rand.Float64()
-                x = math.Floor(math.Pow(u, -1/(s - 1)))
-                t := math.Pow(1 + 1.0/x, s - 1)
-		delta := v*x*(t - 1.0)/(b - 1.0) 
-		if delta <= (t/b) {
+	b := math.Pow(2.0, s-1.0)
+	for {
+		u := rand.Float64()
+		v := rand.Float64()
+		x = math.Floor(math.Pow(u, -1/(s-1)))
+		t := math.Pow(1+1.0/x, s-1)
+		delta := v * x * (t - 1.0) / (b - 1.0)
+		if delta <= (t / b) {
 			break
 		}
-        }
+	}
 	k = int64(x)
-        return
+	return
 }
-
 
 // Zeta returns the random number generator with  Zeta distribution. 
 func Zeta(s float64) func() int64 {
@@ -78,28 +76,27 @@ func Zeta(s float64) func() int64 {
 
 // ZetaMean returns the mean of the Zeta distribution. 
 func ZetaMean(s float64) float64 {
-        if s <= 2 {
+	if s <= 2 {
 		panic("not defined")
 	}
-		t1 := RiemannZeta(s-1)
-		t2 := RiemannZeta(s)
-		return t1/t2
+	t1 := RiemannZeta(s - 1)
+	t2 := RiemannZeta(s)
+	return t1 / t2
 }
 
 // ZetaMode returns the mode of the Zeta distribution. 
 func ZetaMode() float64 {
-		return 1
+	return 1
 }
 
 // ZetaVar returns the variance of the Zeta distribution. 
 func ZetaVar(s float64) float64 {
-        if s <= 3 {
+	if s <= 3 {
 		panic("variance not defined for s <= 3")
 	}
-		t1 := RiemannZeta(s)
-		t2 := RiemannZeta(s-2)
-		t3 := RiemannZeta((s-1)*(s-1))
-		t4 := RiemannZeta(s*s)
-		return (t1*t2-t3)/t4
+	t1 := RiemannZeta(s)
+	t2 := RiemannZeta(s - 2)
+	t3 := RiemannZeta((s - 1) * (s - 1))
+	t4 := RiemannZeta(s * s)
+	return (t1*t2 - t3) / t4
 }
-

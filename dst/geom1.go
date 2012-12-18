@@ -30,15 +30,15 @@ func Geometric1PMFAt(ρ float64, k int64) float64 {
 // Geometric1CDF returns the value of CDF of the Geometric distribution (type 1). 
 func Geometric1CDF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		if k <  0 {
+		if k < 0 {
 			panic("k < 0")
 		}
-		return 1 - pow(1-ρ, float64(k)) 
+		return 1 - pow(1-ρ, float64(k))
 	}
 }
 
 // Geometric1CDFAt returns the value of CDF of the Geometric distribution (type 1) at k. 
-func Geometric1CDFAt(ρ float64, k int64)  float64 {
+func Geometric1CDFAt(ρ float64, k int64) float64 {
 	cdf := Geometric1CDF(ρ)
 	return cdf(k)
 }
@@ -59,7 +59,7 @@ func Geometric1(ρ float64) func() int64 { return func() int64 { return Geometri
 
 // Geometric1Mean returns the mean of the Geometric distribution (type 1). 
 func Geometric1Mean(ρ float64) float64 {
-	return 1/ρ
+	return 1 / ρ
 }
 
 /*  to be implemented
@@ -76,7 +76,7 @@ func Geometric1Mode(ρ float64) float64 {
 
 // Geometric1Var returns the variance of the Geometric distribution (type 1). 
 func Geometric1Var(ρ float64) float64 {
-	return (1-ρ)/(ρ*ρ)
+	return (1 - ρ) / (ρ * ρ)
 }
 
 // Geometric1Std returns the standard deviation of the Geometric distribution (type 1). 
@@ -86,18 +86,18 @@ func Geometric1Std(ρ float64) float64 {
 
 // Geometric1Skew returns the skewness of the Geometric distribution (type 1). 
 func Geometric1Skew(ρ float64) float64 {
-	return (2-ρ) / math.Sqrt(1-ρ)
+	return (2 - ρ) / math.Sqrt(1-ρ)
 }
 
 // Geometric1ExKurt returns the excess kurtosis of the Geometric distribution (type 1). 
 func Geometric1ExKurt(ρ float64) float64 {
 	return 6 + (ρ*ρ)/(1-ρ)
-} 
+}
 
 // Geometric1MGF returns the moment-generating function of the Geometric distribution (type 1). 
 func Geometric1MGF(ρ, t float64) float64 {
 	if t >= -math.Log(1-ρ) {
 		panic("MGF not defined for t >= -math.Log(1-ρ)")
 	}
-	return ρ*math.Exp(t)/(1-(1-ρ)*math.Exp(t))
+	return ρ * math.Exp(t) / (1 - (1-ρ)*math.Exp(t))
 }

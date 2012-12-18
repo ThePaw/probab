@@ -13,14 +13,14 @@ package dst
 // k ∈ {1, 2, ... }
 
 import (
-	"math"
 	. "code.google.com/p/go-fn/fn"
+	"math"
 )
 
 // YulePMF returns the PMF of the Yule–Simon distribution. 
 func YulePMF(a float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := a*B(a+1, float64(k))
+		p := a * B(a+1, float64(k))
 		return p
 	}
 }
@@ -35,7 +35,7 @@ func YulePMFAt(a float64, k int64) float64 {
 func YuleCDF(a float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		kk := float64(k)
-		p := 1- kk*B(kk, a+1)
+		p := 1 - kk*B(kk, a+1)
 		return p
 	}
 }
@@ -52,8 +52,8 @@ func YuleNext(a float64) (k int64) {
 	// Devroye, L. 1986: Non-Uniform Random Variate Generation. Springer-Verlag, New York. ISBN 0-387-96305-7.
 	e1 := ExponentialNext(2)
 	e2 := ExponentialNext(2)
-	k = int64(math.Ceil(-e1 / (math.Log(1-math.Exp(-e2/(a-1))))))
-        return 
+	k = int64(math.Ceil(-e1 / (math.Log(1 - math.Exp(-e2/(a-1))))))
+	return
 }
 
 // Yule returns the random number generator with  Yule–Simon distribution. 
@@ -63,46 +63,45 @@ func Yule(a float64) func() int64 {
 
 // YuleMean returns the mean of the Yule–Simon distribution. 
 func YuleMean(a float64) float64 {
-        if a <=1 {
+	if a <= 1 {
 		panic("not defined")
 	}
-        return a/(a-1)
+	return a / (a - 1)
 }
 
 // YuleMode returns the mode of the Yule–Simon distribution. 
 func YuleMode(a float64) float64 {
-        return 1.00
+	return 1.00
 }
 
 // YuleVar returns the variance of the Yule–Simon distribution. 
 func YuleVar(a float64) float64 {
-        if a <=2 {
+	if a <= 2 {
 		panic("variance not defined for a <=2")
 	}
-        return a*a/((a-1)*(a-1)*(a-2))
+	return a * a / ((a - 1) * (a - 1) * (a - 2))
 }
 
 // YuleStd returns the standard deviation of the Yule–Simon distribution. 
 func YuleStd(a float64) float64 {
-        if a <=2 {
+	if a <= 2 {
 		panic("standard deviation not defined for a <= 2")
 	}
-        return a/((a-1)*math.Sqrt(a-2))
+	return a / ((a - 1) * math.Sqrt(a-2))
 }
 
 // YuleSkew returns the skewness of the Yule–Simon distribution. 
 func YuleSkew(a float64) float64 {
-        if a <=3 {
+	if a <= 3 {
 		panic("skewness not defined for a <= 3")
 	}
-        return ((a+1)*(a+1)*math.Sqrt(a-2)) / ((a-3)*a)
+	return ((a + 1) * (a + 1) * math.Sqrt(a-2)) / ((a - 3) * a)
 }
 
 // YuleExKurt returns the excess kurtosis of the Yule–Simon distribution. 
 func YuleExKurt(a float64) float64 {
-        if a <=4 {
+	if a <= 4 {
 		panic("excess kurtosis not defined for a <= 4")
 	}
-        return a+3+ (11*a*a*a - 49*a -22) / ((a-4)*(a-3)*a)
+	return a + 3 + (11*a*a*a-49*a-22)/((a-4)*(a-3)*a)
 }
-

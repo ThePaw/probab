@@ -13,8 +13,8 @@ package dst
 // k ∈ {max(0, n+m-nN), ... , min(m, n)}
 
 import (
-	"math"
 	. "code.google.com/p/go-fn/fn"
+	"math"
 )
 
 // HypergeometricPMF returns the PMF of the Hypergeometric distribution. 
@@ -22,9 +22,9 @@ func HypergeometricPMF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if nN < 1 || m < 0 || m > nN || n < 1 || n > nN {
 			panic("bad param nN | m | n")
-		} 
+		}
 		// p := BinomCoeff(m, k) * BinomCoeff(nN-m, n-k)  / BinomCoeff(nN, n) 
-		return math.Exp(LnBinomCoeff(m, k) + LnBinomCoeff(nN-m, n-k)  - LnBinomCoeff(nN, n))
+		return math.Exp(LnBinomCoeff(m, k) + LnBinomCoeff(nN-m, n-k) - LnBinomCoeff(nN, n))
 	}
 }
 
@@ -33,8 +33,8 @@ func HypergeometricLnPMF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if nN < 1 || m < 0 || m > nN || n < 1 || n > nN {
 			panic("bad param nN | m | n")
-		} 
-		return LnBinomCoeff(m, k) + LnBinomCoeff(nN-m, n-k)  - LnBinomCoeff(nN, n)
+		}
+		return LnBinomCoeff(m, k) + LnBinomCoeff(nN-m, n-k) - LnBinomCoeff(nN, n)
 	}
 }
 
@@ -42,7 +42,7 @@ func HypergeometricLnPMF(nN, m, n int64) func(k int64) float64 {
 func HypergeometricPMFAt(nN, m, n, k int64) float64 {
 	if float64(k) < math.Max(0, float64(n+m-nN)) || float64(k) > math.Min(float64(m), float64(n)) {
 		panic("bad k")
-	} 
+	}
 	pmf := HypergeometricPMF(nN, m, n)
 	return pmf(k)
 }
@@ -54,10 +54,10 @@ func HypergeometricCDF(nN, m, n int64) func(k int64) float64 {
 			p float64 = 0.0
 			i int64
 		)
-		pmf:=HypergeometricPMF(nN, m, n)
-			for i = 0; i<=k; i++ {
-				p+=pmf(i)
-			}
+		pmf := HypergeometricPMF(nN, m, n)
+		for i = 0; i <= k; i++ {
+			p += pmf(i)
+		}
 		return p
 	}
 }
@@ -77,9 +77,9 @@ func HypergeometricApproxPMF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if nN < 1 || m < 0 || m > nN || n < 1 || n > nN {
 			panic("bad param nN | m | n")
-		} 
-		p := float64(m)/float64(nN)
-		x := float64(k-n)*p/math.Sqrt(float64(n)*p*(1-p))
+		}
+		p := float64(m) / float64(nN)
+		x := float64(k-n) * p / math.Sqrt(float64(n)*p*(1-p))
 		return ZPDFAt(x)
 	}
 }
@@ -88,7 +88,7 @@ func HypergeometricApproxPMF(nN, m, n int64) func(k int64) float64 {
 func HypergeometricApproxPMFAt(nN, m, n, k int64) float64 {
 	if float64(k) < math.Max(0, float64(n+m-nN)) || float64(k) > math.Min(float64(m), float64(n)) {
 		panic("bad k")
-	} 
+	}
 	pmf := HypergeometricApproxPMF(nN, m, n)
 	return pmf(k)
 }
@@ -96,8 +96,8 @@ func HypergeometricApproxPMFAt(nN, m, n, k int64) float64 {
 // HypergeometricApproxCDF returns the CDF of the Hypergeometric distribution approximated using Standard normal distribution. 
 func HypergeometricApproxCDF(nN, m, n int64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := float64(m)/float64(nN)
-		x := float64(k-n)*p/math.Sqrt(float64(n)*p*(1-p))
+		p := float64(m) / float64(nN)
+		x := float64(k-n) * p / math.Sqrt(float64(n)*p*(1-p))
 		return ZCDFAt(x)
 	}
 }
@@ -107,7 +107,6 @@ func HypergeometricApproxCDFAt(nN, m, n, k int64) float64 {
 	cdf := HypergeometricApproxCDF(nN, m, n)
 	return cdf(k)
 }
-
 
 //		=== 
 
@@ -121,32 +120,32 @@ func HypergeometricMean(nN, m, n int64) float64 {
 
 // HypergeometricMode returns the mode of the Hypergeometric distribution. 
 func HypergeometricMode(nN, m, n int64) float64 {
-	return math.Floor(float64(n+1)*float64(m+1)/ float64(nN+2))
+	return math.Floor(float64(n+1) * float64(m+1) / float64(nN+2))
 }
 
 // HypergeometricVar returns the variance of the Hypergeometric distribution. 
 func HypergeometricVar(nN, m, n int64) float64 {
-	return float64(n) * (float64(m)/float64(nN)) * (float64(nN-m)/float64(nN)) * ((float64(nN-n))/float64(nN-1))
+	return float64(n) * (float64(m) / float64(nN)) * (float64(nN-m) / float64(nN)) * ((float64(nN - n)) / float64(nN-1))
 }
 
 // HypergeometricStd returns the standard deviation of the Hypergeometric distribution. 
 func HypergeometricStd(nN, m, n int64) float64 {
-	return math.Sqrt(float64(n) * (float64(m)/float64(nN)) * (float64(nN-m)/float64(nN)) * ((float64(nN-n))/float64(nN-1)))
+	return math.Sqrt(float64(n) * (float64(m) / float64(nN)) * (float64(nN-m) / float64(nN)) * ((float64(nN - n)) / float64(nN-1)))
 }
 
 // HypergeometricSkew returns the skewness of the Hypergeometric distribution. 
 func HypergeometricSkew(nN, m, n int64) float64 {
 	num := float64(nN-2*m) * math.Sqrt(float64(nN-1)) * float64(nN-2*n)
-	den := math.Sqrt(float64(n*m)*float64(nN-m) * float64(nN-n))  * float64(nN-2)
-	return num/den
+	den := math.Sqrt(float64(n*m)*float64(nN-m)*float64(nN-n)) * float64(nN-2)
+	return num / den
 }
 
 // HypergeometricExKurt returns the excess kurtosis of the Hypergeometric distribution. 
 func HypergeometricExKurt(nN, m, n int64) float64 {
-	num :=((nN-1) * nN*nN * (nN*(nN+1) - 6* m * (nN-m) - 6*n*(nN-n)) + 6*n*m*(nN-m)*(nN-n)*(5*nN-6))
-//	den := float64(n*m)*float64(nN-m) * float64(nN-n)* float64(nN-2)* float64(nN-3)
-	den := n*m*(nN-m) * (nN-n)* (nN-2)* (nN-3)
-	return float64(num)/float64(den)
+	num := ((nN-1)*nN*nN*(nN*(nN+1)-6*m*(nN-m)-6*n*(nN-n)) + 6*n*m*(nN-m)*(nN-n)*(5*nN-6))
+	//	den := float64(n*m)*float64(nN-m) * float64(nN-n)* float64(nN-2)* float64(nN-3)
+	den := n * m * (nN - m) * (nN - n) * (nN - 2) * (nN - 3)
+	return float64(num) / float64(den)
 }
 
 /* To be implemented ...
@@ -154,4 +153,4 @@ func HypergeometricExKurt(nN, m, n int64) float64 {
 func HypergeometricMGF(n int64, p, t float64) float64 {
 	return 
 }
- */
+*/

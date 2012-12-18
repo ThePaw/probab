@@ -18,8 +18,8 @@ package dst
 // Σxi = n
 
 import (
-	"math"
 	. "code.google.com/p/go-fn/fn"
+	"math"
 )
 
 // MultinomialPMF returns the PMF of the Multinomial distribution. 
@@ -66,7 +66,7 @@ func MultinomialLnPMF(θ []float64, n int64) func(x []int64) float64 {
 
 // MultinomialPMFAt returns the value of PMF of Multinomial distribution(μ, σ) at k. 
 func MultinomialPMFAt(θ []float64, n int64, x []int64) float64 {
-	pmf := MultinomialPMF(θ , n)
+	pmf := MultinomialPMF(θ, n)
 	return pmf(x)
 }
 
@@ -87,13 +87,12 @@ func Multinomial(θ []float64, n int64) func() []int64 {
 	}
 }
 
-
 // MultinomialMean returns the mean of the Multinomial distribution. 
 func MultinomialMean(θ []float64, n int64) []float64 {
 	k := len(θ)
 	x := make([]float64, k)
 	for i := 0; i < k; i++ {
-		x[i] = float64(n)*θ[i]
+		x[i] = float64(n) * θ[i]
 	}
 	return x
 }
@@ -103,7 +102,7 @@ func MultinomialVar(θ []float64, n int64) []float64 {
 	k := len(θ)
 	x := make([]float64, k)
 	for i := 0; i < k; i++ {
-		x[i] = float64(n)*θ[i]*(1-θ[i])
+		x[i] = float64(n) * θ[i] * (1 - θ[i])
 	}
 	return x
 }
@@ -113,7 +112,7 @@ func MultinomialStd(θ []float64, n int64) []float64 {
 	k := len(θ)
 	x := make([]float64, k)
 	for i := 0; i < k; i++ {
-		x[i] = math.Sqrt(float64(n)*θ[i]*(1-θ[i]))
+		x[i] = math.Sqrt(float64(n) * θ[i] * (1 - θ[i]))
 	}
 	return x
 }
@@ -123,7 +122,7 @@ func MultinomialMGF(θ []float64, n int64, t []float64) float64 {
 	k := len(θ)
 	sum := 0.0
 	for i := 0; i < k; i++ {
-		sum += θ[i]*math.Exp(t[i])
+		sum += θ[i] * math.Exp(t[i])
 	}
 	return math.Pow(sum, float64(n))
 }
@@ -133,7 +132,7 @@ func MultinomialPGF(θ []float64, n int64, z []float64) float64 {
 	k := len(θ)
 	sum := 0.0
 	for i := 0; i < k; i++ {
-		sum += θ[i]*z[i]
+		sum += θ[i] * z[i]
 	}
 	return math.Pow(sum, float64(n))
 }

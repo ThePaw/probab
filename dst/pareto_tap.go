@@ -52,7 +52,7 @@ func ParetoTapPDFAt(θ, α, taper, x float64) float64 {
 // ParetoTapCDF returns the CDF of the Tapered Pareto distribution. 
 func ParetoTapCDF(θ, α, taper float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		return 1 - math.Pow(θ/x, α) * math.Exp((θ-x)/taper)
+		return 1 - math.Pow(θ/x, α)*math.Exp((θ-x)/taper)
 	}
 }
 
@@ -65,14 +65,14 @@ func ParetoTapCDFAt(θ, α, taper, x float64) float64 {
 // ParetoTapQtl returns the inverse of the CDF (quantile) of the Tapered Pareto distribution. 
 func ParetoTapQtl(θ, α, taper float64) func(p float64) float64 {
 	return func(p float64) float64 {
-		tol:=1e-8
-		x := θ+1
+		tol := 1e-8
+		x := θ + 1
 
 		// solve using Newton-Raphson method
 		for {
-        		delta := (ParetoTapCDFAt(θ, α, taper, x) - p)/ ParetoTapPDFAt(θ, α, taper, x)
+			delta := (ParetoTapCDFAt(θ, α, taper, x) - p) / ParetoTapPDFAt(θ, α, taper, x)
 			x -= delta
-        		if math.Abs(delta) < tol {
+			if math.Abs(delta) < tol {
 				break
 			}
 		}
@@ -113,6 +113,3 @@ func ParetoTapVar(θ, α, taper float64) float64 {
 }
 
 */
-
-
-

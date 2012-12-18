@@ -24,12 +24,12 @@ func MVNormalPDF(μ *DenseMatrix, Σ *DenseMatrix) func(x *DenseMatrix) float64 
 
 	Σdet := Σ.Det()
 	ΣdetRt := sqrt(Σdet)
-	Σinv,  _ := Σ.Inverse()
+	Σinv, _ := Σ.Inverse()
 
 	normalization := pow(2*π, -float64(p)/2) / ΣdetRt
 
 	return func(x *DenseMatrix) float64 {
-		δ,  _:= x.PlusDense(backμ)
+		δ, _ := x.PlusDense(backμ)
 		tmp := δ.Transpose()
 		tmp, _ = tmp.TimesDense(Σinv)
 		tmp, _ = tmp.TimesDense(δ)
@@ -83,4 +83,3 @@ func MVNormalMode(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 func MVNormalVar(μ *DenseMatrix, Σ *DenseMatrix) *DenseMatrix {
 	return Σ
 }
-

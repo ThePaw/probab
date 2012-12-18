@@ -58,21 +58,21 @@ func StudentsTCDF(ν float64) func(x float64) float64 {
 				α := ν / 2
 				β := 0.5
 				pbeta := BetaCDF(α, β)
-				p = pbeta (1 / nx)
+				p = pbeta(1 / nx)
 			}
 		}
 
 		p /= 2
 		if x > 0 {
-			p = 1-p
+			p = 1 - p
 		}
 		return p
 	}
 }
 
 // StudentsTCDFAt returns the value of CDF of the Student's t distribution, at x. 
-func StudentsTCDFAt(ν , x float64) float64 {
-	cdf := StudentsTCDF(ν )
+func StudentsTCDFAt(ν, x float64) float64 {
+	cdf := StudentsTCDF(ν)
 	return cdf(x)
 }
 
@@ -89,7 +89,7 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 		neg := false
 		pok := false
 
-		if ν <= 0 || p <0 || p > 1 {
+		if ν <= 0 || p < 0 || p > 1 {
 			panic("bad params")
 		}
 
@@ -219,11 +219,10 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 }
 
 // StudentsTQtlFor returns the inverse of the CDF (quantile) of the Student's t distribution, for given probability.
-func StudentsTQtlFor(ν, p float64)float64 {
+func StudentsTQtlFor(ν, p float64) float64 {
 	qtl := StudentsTQtl(ν)
 	return qtl(p)
 }
-
 
 // StudentsTNext returns random number drawn from the Student's t distribution. 
 func StudentsTNext(ν float64) float64 {
@@ -257,22 +256,22 @@ func StudentsTMedian(ν float64) float64 {
 
 // StudentsTVar returns the variance of the StudentsT Type I distribution. 
 func StudentsTVar(ν float64) float64 {
-	if ν  >= 1 {
+	if ν >= 1 {
 		panic("variance not defined for ν <= 1")
 	}
 	if ν > 2 {
-		return ν / (ν -2)
+		return ν / (ν - 2)
 	}
 	return posInf
 }
 
 // StudentsTStd returns the standard deviation of the StudentsT Type I distribution. 
 func StudentsTStd(ν float64) float64 {
-	if ν  >= 1 {
+	if ν >= 1 {
 		panic("standard deviation not defined for ν <= 1")
 	}
 	if ν > 2 {
-		return math.Sqrt(ν / (ν -2))
+		return math.Sqrt(ν / (ν - 2))
 	}
 	return posInf
 }
@@ -293,6 +292,5 @@ func StudentsTExKurt(ν float64) float64 {
 	if ν <= 4 {
 		return posInf
 	}
-	return 6/(ν-4)
+	return 6 / (ν - 4)
 }
-

@@ -112,14 +112,14 @@ func NormalCDFAt(μ, σ, x float64) float64 {
 }
 
 // NormalQtl returns the inverse of the CDF (quantile) of the Normal distribution. 
-func NormalQtl(μ, σ float64) func(p float64)  float64 {
-	return func(p float64)  float64 {
-		return σ * ZQtlFor(p) + μ
+func NormalQtl(μ, σ float64) func(p float64) float64 {
+	return func(p float64) float64 {
+		return σ*ZQtlFor(p) + μ
 	}
 }
 
 // NormalQtlFor returns the inverse of the CDF (quantile) of the Normal distribution, for given probability.
-func NormalQtlFor(μ, σ, p float64)float64 {
+func NormalQtlFor(μ, σ, p float64) float64 {
 	qtl := NormalQtl(μ, σ)
 	return qtl(p)
 }
@@ -149,13 +149,14 @@ func NormalMedian(μ, σ float64) float64 {
 
 // NormalVar returns the variance of the Normal distribution. 
 func NormalVar(μ, σ float64) float64 {
-	return σ*σ
+	return σ * σ
 }
 
 // NormalStd returns the standard deviation of the Normal distribution. 
 func NormalStd(μ, σ float64) float64 {
 	return σ
 }
+
 // NormalSkew returns the skewness of the Normal distribution. 
 func NormalSkew(μ, σ float64) float64 {
 	return 0
@@ -170,4 +171,3 @@ func NormalExKurt(μ, σ float64) float64 {
 func NormalMGF(μ, σ, t float64) float64 {
 	return math.Exp(μ*t + σ*σ*t*t/2)
 }
-

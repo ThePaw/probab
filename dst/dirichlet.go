@@ -55,8 +55,9 @@ func DirichletLnPDF(α []float64) func(x []float64) float64 {
 		return l
 	}
 }
+
 // DirichletPDFAt returns the value of PDF of Dirichlet distribution at x. 
-func DirichletPDFAt(α, θ []float64)  float64 {
+func DirichletPDFAt(α, θ []float64) float64 {
 	pdf := DirichletPDF(α)
 	return pdf(θ)
 }
@@ -82,7 +83,7 @@ func Dirichlet(α []float64) func() []float64 {
 }
 
 // DirichletMean returns the mean of the Dirichlet distribution. 
-func DirichletMean(α []float64)  []float64 {
+func DirichletMean(α []float64) []float64 {
 	k := len(α)
 	x := make([]float64, k)
 	sum := fZero
@@ -91,31 +92,31 @@ func DirichletMean(α []float64)  []float64 {
 	}
 
 	for i := 0; i < k; i++ {
-		x[i] = α[i]/sum
+		x[i] = α[i] / sum
 	}
 	return x
 }
 
 // DirichletMode returns the mode of the Dirichlet distribution. 
-func DirichletMode(α []float64)  []float64 {
+func DirichletMode(α []float64) []float64 {
 	k := len(α)
 	x := make([]float64, k)
 	sum := fZero
 	for i := 0; i < k; i++ {
-		if α[i] <= 1 {		// REVISION and citation NEEDED!
+		if α[i] <= 1 { // REVISION and citation NEEDED!
 			panic("mode not defined")
 		}
 		sum += α[i]
 	}
 
 	for i := 0; i < k; i++ {
-			x[i] = (α[i]-1)/(sum-float64(k))
+		x[i] = (α[i] - 1) / (sum - float64(k))
 	}
 	return x
 }
 
 // DirichletVar returns the variance of the Dirichlet distribution. 
-func DirichletVar(α []float64)  []float64 {
+func DirichletVar(α []float64) []float64 {
 	k := len(α)
 	x := make([]float64, k)
 	sum := fZero
@@ -124,7 +125,7 @@ func DirichletVar(α []float64)  []float64 {
 	}
 
 	for i := 0; i < k; i++ {
-		x[i] = (α[i]*(sum-α[i])) / (sum*sum*(sum+1))
+		x[i] = (α[i] * (sum - α[i])) / (sum * sum * (sum + 1))
 
 	}
 	return x

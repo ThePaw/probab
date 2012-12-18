@@ -8,7 +8,6 @@ package dst
 // β > 0:		shape
 // Support:	x ∈ [0; 1]
 
-
 import (
 	. "code.google.com/p/go-fn/fn"
 	"fmt"
@@ -89,7 +88,7 @@ func betaContinuedFraction(α, β, x float64) float64 {
 
 // BetaPDF returns the PDF of the Beta distribution. 
 func BetaPDF(α, β float64) func(x float64) float64 {
-	if α == 1 && β == 1{	// uniform case
+	if α == 1 && β == 1 { // uniform case
 		return UniformPDF(0, 1)
 	}
 	dα := []float64{α, β}
@@ -124,7 +123,7 @@ func BetaPDFAt(α, β, x float64) float64 {
 
 // BetaCDF returns the CDF of the Beta distribution. 
 func BetaCDF(α, β float64) func(x float64) float64 {
-	if α == 1 && β == 1{	// uniform case
+	if α == 1 && β == 1 { // uniform case
 		return UniformCDF(0, 1)
 	}
 	return func(x float64) float64 {
@@ -193,7 +192,7 @@ func BetaQtlFor(α, β, p float64) float64 {
 
 // BetaNext returns random number drawn from the Beta distribution. 
 func BetaNext(α, β float64) float64 {
-	if α == 1 && β == 1{	// uniform case
+	if α == 1 && β == 1 { // uniform case
 		return UniformNext(0, 1)
 	}
 	dα := []float64{α, β}
@@ -202,7 +201,7 @@ func BetaNext(α, β float64) float64 {
 
 // Beta returns the random number generator with  Beta distribution. 
 func Beta(α, β float64) func() float64 {
-	if α == 1 && β == 1{	// uniform case
+	if α == 1 && β == 1 { // uniform case
 		return Uniform(0, 1)
 	}
 	return func() float64 { return BetaNext(α, β) }
@@ -210,12 +209,12 @@ func Beta(α, β float64) func() float64 {
 
 // BetaMean returns the mean of the Beta distribution. 
 func BetaMean(α, β float64) (μ float64) {
-	if α == β  {		// symmetric case
+	if α == β { // symmetric case
 		μ = 0.5
 	} else {
 		μ = α / (α + β)
 	}
-	return 
+	return
 }
 
 // BetaMedian returns the median of the Beta distribution. 
@@ -225,18 +224,18 @@ func BetaMedian(α, β float64) (med float64) {
 	// There is no general closed-form expression for the median of the beta distribution 
 	// for arbitrary values of α and β. 
 	switch {
-	case α == β: 	// symmetric case
+	case α == β: // symmetric case
 		med = 0.5
-	case α == 1 && β >0: 
+	case α == 1 && β > 0:
 		med = 1.0 - math.Pow(0.5, 1/β)
-	case β == 1 && α >0: 
+	case β == 1 && α > 0:
 		med = math.Pow(0.5, 1/α)
-	case α == 3 && β == 2: 
+	case α == 3 && β == 2:
 		med = 0.6142724318676105
-	case α == 2 && β == 3: 
+	case α == 2 && β == 3:
 		med = 0.38572756813238945
-	case α <= 1 || β <= 1: 
-		med = (α - 1/3) / (α + β - 2/3)		// approximation
+	case α <= 1 || β <= 1:
+		med = (α - 1/3) / (α + β - 2/3) // approximation
 	default:
 		panic("no closed form for median, sorry")
 	}
@@ -273,11 +272,11 @@ func BetaStd(α, β float64) float64 {
 // BetaSkew returns the skewness of the Beta distribution. 
 func BetaSkew(α, β float64) (s float64) {
 
-	if α == β {	// symmetric case
+	if α == β { // symmetric case
 		s = 0.0
 	} else {
-		num := 2 * (β - α) * math.Sqrt(α + β + 1)
-		den := (α + β + 2) * math.Sqrt(α * β)
+		num := 2 * (β - α) * math.Sqrt(α+β+1)
+		den := (α + β + 2) * math.Sqrt(α*β)
 		s = num / den
 	}
 	return
@@ -285,8 +284,8 @@ func BetaSkew(α, β float64) (s float64) {
 
 // BetaExKurt returns the excess kurtosis of the Beta distribution. 
 func BetaExKurt(α, β float64) float64 {
-	num := 6*((α - β)*(α - β)*(α + β + 1) - α * β * (α + β + 2))
-	den := α * β * (α + β + 2) * (α + β + 2) 
+	num := 6 * ((α-β)*(α-β)*(α+β+1) - α*β*(α+β+2))
+	den := α * β * (α + β + 2) * (α + β + 2)
 	return num / den
 }
 
@@ -297,8 +296,8 @@ func BetaReparamMeanStd(μ, σ float64) (α, β float64) {
 	if σ*σ >= μ*(1-μ) {
 		panic("σ too big, α, β out of range")
 	}
-	α = (μ*μ-μ*μ*μ-μ*σ*σ) / (σ*σ)
-	β = (μ-2*μ*μ+μ*μ*μ-σ*σ+μ*σ*σ)/(σ*σ)
+	α = (μ*μ - μ*μ*μ - μ*σ*σ) / (σ * σ)
+	β = (μ - 2*μ*μ + μ*μ*μ - σ*σ + μ*σ*σ) / (σ * σ)
 	return
 }
 

@@ -21,7 +21,7 @@ import (
 // ParetoSingChkParams checks parameters of the Single-parameter Pareto distribution. 
 func ParetoSingChkParams(α, μ float64) bool {
 	ok := true
-	if α <= 0 || μ <= 0  {
+	if α <= 0 || μ <= 0 {
 		ok = false
 	}
 	return ok
@@ -39,9 +39,9 @@ func ParetoSingChkSupport(x, μ float64) bool {
 // ParetoSingPDF returns the PDF of the Single-parameter Pareto distribution. 
 func ParetoSingPDF(α, μ float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		p:= 0.0
+		p := 0.0
 		if x >= μ {
-			p = math.Exp(math.Log(α) + α * math.Log(μ) - (α + 1.0) * math.Log(x))
+			p = math.Exp(math.Log(α) + α*math.Log(μ) - (α+1.0)*math.Log(x))
 		}
 		return p
 	}
@@ -56,9 +56,9 @@ func ParetoSingPDFAt(α, μ, x float64) float64 {
 // ParetoSingCDF returns the CDF of the Single-parameter  Pareto distribution. 
 func ParetoSingCDF(α, μ float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		p:= 0.0
+		p := 0.0
 		if x > μ {
-			p = (0.5 - (math.Pow(μ / x, α)) + 0.5)
+			p = (0.5 - (math.Pow(μ/x, α)) + 0.5)
 		}
 		return p
 	}
@@ -73,7 +73,7 @@ func ParetoSingCDFAt(α, μ, x float64) float64 {
 // ParetoSingQtl returns the inverse of the CDF (quantile) of the Single-parameter  Pareto distribution. 
 func ParetoSingQtl(α, μ float64) func(p float64) float64 {
 	return func(p float64) float64 {
-		return μ / math.Pow((0.5 - (p) + 0.5), 1.0 / α)
+		return μ / math.Pow((0.5-(p)+0.5), 1.0/α)
 	}
 }
 
@@ -97,12 +97,12 @@ func ParetoSing(α, μ float64) func() float64 {
 
 // ParetoSingMoment returns the n-th moment of the Single-parameter  Pareto distribution. 
 func ParetoSingMoment(α, μ float64, order int) float64 {
-	o:=float64(order)
-    if o >= α {
-	return math.Inf(+1)
+	o := float64(order)
+	if o >= α {
+		return math.Inf(+1)
 	}
 
-    return α * math.Pow(μ, o) / (α - o)
+	return α * math.Pow(μ, o) / (α - o)
 }
 
 // ParetoSingMean returns the mean of the Single-parameter  Pareto distribution. 
@@ -124,4 +124,3 @@ func ParetoSingSkew(α, μ float64) float64 {
 func ParetoSingExKurt(α, μ float64) float64 {
 	return ParetoSingMoment(α, μ, 4)
 }
-

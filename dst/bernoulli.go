@@ -47,7 +47,7 @@ func BernoulliCDF(ρ float64) func(k int64) float64 {
 }
 
 // BernoulliCDFAt returns the value of CDF of the Bernoulli distribution, at x. 
-func BernoulliCDFAt(ρ float64, k int64)  float64 {
+func BernoulliCDFAt(ρ float64, k int64) float64 {
 	cdf := BernoulliCDF(ρ)
 	return cdf(k)
 }
@@ -62,4 +62,3 @@ func BernoulliNext(ρ float64) int64 {
 
 // Bernoulli returns the random number generator with  Bernoulli distribution. 
 func Bernoulli(ρ float64) func() int64 { return func() int64 { return BernoulliNext(ρ) } }
-

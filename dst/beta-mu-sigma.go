@@ -6,8 +6,8 @@ package dst
 
 // BetaμσPDF returns the PDF of the Beta distribution reparametrized using mean and standard deviation. 
 func BetaμσPDF(μ, σ float64) func(x float64) float64 {
-	α := μ*(μ*(1-μ)/(σ*σ)-1)
-	β := (1-μ)*(μ*(1-μ)/(σ*σ)-1)
+	α := μ * (μ*(1-μ)/(σ*σ) - 1)
+	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
 	if σ*σ >= μ*(1-μ) {
 		panic("σ too big, α, β out of range")
 	}
@@ -16,8 +16,8 @@ func BetaμσPDF(μ, σ float64) func(x float64) float64 {
 
 // BetaμσLnPDF returns the natural logarithm of the PDF of the Beta distribution reparametrized using mean and standard deviation. 
 func BetaμσLnPDF(μ, σ float64) func(x float64) float64 {
-	α := μ*(μ*(1-μ)/(σ*σ)-1)
-	β := (1-μ)*(μ*(1-μ)/(σ*σ)-1)
+	α := μ * (μ*(1-μ)/(σ*σ) - 1)
+	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
 	if σ*σ >= μ*(1-μ) {
 		panic("σ too big, α, β out of range")
 	}
@@ -26,8 +26,8 @@ func BetaμσLnPDF(μ, σ float64) func(x float64) float64 {
 
 // BetaμσNext returns random number drawn from the  Beta distribution reparametrized using mean and standard deviation. 
 func BetaμσNext(μ, σ float64) float64 {
-	α := μ*(μ*(1-μ)/(σ*σ)-1)
-	β := (1-μ)*(μ*(1-μ)/(σ*σ)-1)
+	α := μ * (μ*(1-μ)/(σ*σ) - 1)
+	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
 	if σ*σ >= μ*(1-μ) {
 		panic("σ too big, α, β out of range")
 	}
@@ -36,8 +36,8 @@ func BetaμσNext(μ, σ float64) float64 {
 
 // Betaμσ returns the random number generator with  Beta distribution reparametrized using mean and standard deviation. 
 func Betaμσ(μ, σ float64) func() float64 {
-	α := μ*(μ*(1-μ)/(σ*σ)-1)
-	β := (1-μ)*(μ*(1-μ)/(σ*σ)-1)
+	α := μ * (μ*(1-μ)/(σ*σ) - 1)
+	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
 	if σ*σ >= μ*(1-μ) {
 		panic("σ too big, α, β out of range")
 	}
@@ -52,12 +52,12 @@ func BetaμσPDFAt(μ, σ, x float64) float64 {
 
 // BetaμσCDF returns the CDF of the Beta distribution reparametrized using mean and standard deviation. 
 func BetaμσCDF(μ, σ float64) func(x float64) float64 {
-	α := μ*(μ*(1-μ)/(σ*σ)-1)
-	β := (1-μ)*(μ*(1-μ)/(σ*σ)-1)
+	α := μ * (μ*(1-μ)/(σ*σ) - 1)
+	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
 	if σ*σ >= μ*(1-μ) {
 		panic("σ too big, α, β out of range")
 	}
-	return BetaCDF(α , β)
+	return BetaCDF(α, β)
 }
 
 // BetaμσCDFAt returns the value of CDF of the Beta distribution reparametrized using mean and standard deviation, at x. 
@@ -69,8 +69,8 @@ func BetaμσCDFAt(μ, σ, x float64) float64 {
 // BetaμσQtl returns the inverse of the CDF (quantile) of the Beta distribution reparametrized using mean and standard deviation. 
 func BetaμσQtl(μ, σ float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
-	α := μ*(μ*(1-μ)/(σ*σ)-1)
-	β := (1-μ)*(μ*(1-μ)/(σ*σ)-1)
+	α := μ * (μ*(1-μ)/(σ*σ) - 1)
+	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
 	if σ*σ >= μ*(1-μ) {
 		panic("σ too big, α, β out of range")
 	}
@@ -82,4 +82,3 @@ func BetaμσQtlFor(μ, σ, p float64) float64 {
 	cdf := BetaμσQtl(μ, σ)
 	return cdf(p)
 }
-

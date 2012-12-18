@@ -186,6 +186,7 @@ func PoissonLambdaCrIGPri(sumK, n int64, r, v, α float64) (lo, hi float64) {
 	hi = qf(1-α/2)
 	return
 }
+
 // One-sided test for Poisson rate λ
 // Bolstad 2007 (2e): 193.
 // H0: λ <= λ0 vs H1: λ > λ0

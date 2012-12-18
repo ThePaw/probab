@@ -12,9 +12,9 @@ package dst
 // x ∈ (0, ∞)
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"fmt"
 	"math"
-	. "code.google.com/p/go-fn/fn"
 )
 
 // GammaPDF returns the PDF of the Gamma distribution. 
@@ -39,8 +39,8 @@ func GammaLnPDF(α float64, λ float64) func(x float64) float64 {
 }
 
 // GammaPDFAt returns the value of PDF of Gamma distribution at x. 
-func GammaPDFAt(k, θ, x float64)  float64 {
-	pdf := GammaPDF(k , θ)
+func GammaPDFAt(k, θ, x float64) float64 {
+	pdf := GammaPDF(k, θ)
 	return pdf(x)
 }
 
@@ -88,8 +88,8 @@ func GammaCDF(k float64, θ float64) func(x float64) float64 {
 */
 
 // GammaCDFAt returns the value of CDF of the Gamma distribution, at x. 
-func GammaCDFAt(k, θ, x float64)  float64 {
-	cdf := GammaCDFint(int64(math.Ceil(k)) , θ)
+func GammaCDFAt(k, θ, x float64) float64 {
+	cdf := GammaCDFint(int64(math.Ceil(k)), θ)
 	return cdf(x)
 }
 
@@ -166,45 +166,45 @@ func GammaQtl(k, θ float64) func(x float64) float64 {
 }
 
 // GammaQtlFor returns the inverse of the CDF (quantile) of the Gamma distribution, for given probability.
-func GammaQtlFor(k, θ, p float64)  float64 {
-	cdf:=GammaQtl(k, θ)
+func GammaQtlFor(k, θ, p float64) float64 {
+	cdf := GammaQtl(k, θ)
 	return cdf(p)
 }
 
 // GammaMean returns the mean of the Gamma distribution. 
 func GammaMean(k, θ float64) float64 {
-	return k*θ
+	return k * θ
 }
 
 // GammaMode returns the mode of the Gamma distribution. 
 func GammaMode(k, θ float64) float64 {
-	if k <=1 {
+	if k <= 1 {
 		panic("mode not defined for k <=1")
-	} 
-	return (k-1)*θ
+	}
+	return (k - 1) * θ
 }
 
 // GammaVar returns the variance of the Gamma distribution. 
 func GammaVar(k, θ float64) float64 {
-	return k*θ*θ
+	return k * θ * θ
 }
 
 // GammaStd returns the standard deviation of the Gamma distribution. 
 func GammaStd(k, θ float64) float64 {
-	return math.Sqrt(k)*θ
+	return math.Sqrt(k) * θ
 }
 
 // GammaSkew returns the skewness of the Gamma distribution. 
 func GammaSkew(k, θ float64) float64 {
-	return 2/math.Sqrt(k)
+	return 2 / math.Sqrt(k)
 }
 
 // GammaReparamAlphaBeta returns the parameters k, θ (shape, scale) of the Gamma distribution calculated from desired mean and standard deviation. 
 // α = shape, β = rate
 // To be used to reparametrize the Gamma distribution. 
 func GammaReparamAlphaBeta(α, β float64) (k, θ float64) {
-	k = α		
-	θ= 1/β
+	k = α
+	θ = 1 / β
 	return
 }
 
@@ -216,23 +216,23 @@ func GammaReparamAlphaBeta(α, β float64) (k, θ float64) {
 func GammaReparamModeStd(mode, sd float64) (k, θ float64) {
 	β := (mode + math.Sqrt(mode*mode+4*sd*sd)) / (2 * sd * sd)
 	k = 1 + mode*β
-	θ= 1/β
+	θ = 1 / β
 	return
 }
 
 // GammaReparamMeanStd returns the parameters k, θ (shape, scale) of the Gamma distribution calculated from mean and standard deviation. 
 func GammaReparamMeanStd(mean, sd float64) (k, θ float64) {
-/*
-mean =k*θ
-sd*sd = k*θ*θ
-k=sd*sd /(θ*θ)
-k=mean/θ
-sd*sd /(θ*θ)=mean/θ
-sd*sd *θ/(θ*θ)=mean
-θ/(θ*θ)=mean/(sd*sd )
-θ=(sd*sd )/mean
-*/
-	θ=(sd*sd )/mean
-	k=mean/θ
+	/*
+		mean =k*θ
+		sd*sd = k*θ*θ
+		k=sd*sd /(θ*θ)
+		k=mean/θ
+		sd*sd /(θ*θ)=mean/θ
+		sd*sd *θ/(θ*θ)=mean
+		θ/(θ*θ)=mean/(sd*sd )
+		θ=(sd*sd )/mean
+	*/
+	θ = (sd * sd) / mean
+	k = mean / θ
 	return
 }

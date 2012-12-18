@@ -5,9 +5,9 @@ package dst
 // F-distribution, alias Fisher-Snedecor distribution
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"fmt"
 	"math"
-	. "code.google.com/p/go-fn/fn"
 )
 
 // FPDF returns the PDF of the F distribution. 
@@ -32,7 +32,7 @@ func FLnPDF(d1, d2 int64) func(x float64) float64 {
 
 // FPDFAt returns the value of PDF of F distribution at x. 
 func FPDFAt(d1, d2 int64, x float64) float64 {
-	pdf :=FPDF(d1, d2)
+	pdf := FPDF(d1, d2)
 	return pdf(x)
 }
 
@@ -46,10 +46,9 @@ func FCDF(d1, d2 int64) func(x float64) float64 {
 	}
 }
 
-
 // FCDFAt returns the value of CDF of the F distribution, at x. 
 func FCDFAt(d1, d2 int64, x float64) float64 {
-	cdf:=FCDF(d1, d2)
+	cdf := FCDF(d1, d2)
 	return cdf(x)
 }
 
@@ -58,26 +57,26 @@ func FQtl(d1, d2 int64) func(p float64) float64 {
 	df1 := float64(d1)
 	df2 := float64(d2)
 	return func(p float64) float64 {
-	if p < 0.0 {
-		panic(fmt.Sprintf("p < 0"))
-	}
-	if p > 1.0 {
-		panic(fmt.Sprintf("p > 1.0"))
-	}
-	if df1 < 1.0 {
-		panic(fmt.Sprintf("df1 < 1"))
-	}
-	if df2 < 1.0 {
-		panic(fmt.Sprintf("df2 < 1"))
-	}
+		if p < 0.0 {
+			panic(fmt.Sprintf("p < 0"))
+		}
+		if p > 1.0 {
+			panic(fmt.Sprintf("p > 1.0"))
+		}
+		if df1 < 1.0 {
+			panic(fmt.Sprintf("df1 < 1"))
+		}
+		if df2 < 1.0 {
+			panic(fmt.Sprintf("df2 < 1"))
+		}
 
-	return ((1 / BetaQtlFor(df2 / 2, df1 / 2, 1 - p) - 1) * df2 / df1);
+		return ((1/BetaQtlFor(df2/2, df1/2, 1-p) - 1) * df2 / df1)
 	}
 }
 
 // FQtlFor returns the inverse of the CDF (quantile) of the F distribution, for given probability.
 func FQtlFor(d1, d2 int64, p float64) float64 {
-	cdf :=FQtl(d1, d2)
+	cdf := FQtl(d1, d2)
 	return cdf(p)
 }
 
@@ -97,52 +96,52 @@ func F(d1, d2 int64) func() float64 {
 
 // FMean returns the mean of the F distribution. 
 func FMean(d1, d2 int64) float64 {
-	if d2<= 2 {
+	if d2 <= 2 {
 		panic("mean not defined for df2 <=2")
 	}
 	df2 := float64(d2)
-	return df2/(df2-2)
+	return df2 / (df2 - 2)
 }
 
 // FMode returns the mode of the F distribution. 
 func FMode(d1, d2 int64) float64 {
-	if d1<= 2 {
+	if d1 <= 2 {
 		panic("mode not defined for df1 <=2")
 	}
 	df1 := float64(d1)
 	df2 := float64(d2)
-	return ((df1-2)/df1)* (df2/(df2+2))
+	return ((df1 - 2) / df1) * (df2 / (df2 + 2))
 }
 
 // FVar returns the variance of the F distribution. 
 func FVar(d1, d2 int64) float64 {
-	if d2<= 4 {
+	if d2 <= 4 {
 		panic("variance not defined for d2 <= 4")
 	}
 	df1 := float64(d1)
 	df2 := float64(d2)
-	return 2*df2*df2*(df1+df2-2) / (df1*(df2-2)*(df2-2)*(df2-4))
+	return 2 * df2 * df2 * (df1 + df2 - 2) / (df1 * (df2 - 2) * (df2 - 2) * (df2 - 4))
 }
 
 // FStd returns the standard deviation of the F distribution. 
 func FStd(d1, d2 int64) float64 {
-	if d2<= 4 {
+	if d2 <= 4 {
 		panic("standard deviation not defined for d2 <= 4")
 	}
 	df1 := float64(d1)
 	df2 := float64(d2)
-	v := 2*df2*df2*(df1+df2-2) / (df1*(df2-2)*(df2-2)*(df2-4))
+	v := 2 * df2 * df2 * (df1 + df2 - 2) / (df1 * (df2 - 2) * (df2 - 2) * (df2 - 4))
 	return math.Sqrt(v)
 }
 
 // FSkew returns the skewness of the F distribution. 
 func FSkew(d1, d2 int64) float64 {
-	if d2<= 6 {
+	if d2 <= 6 {
 		panic("skewness not defined for d2 <= 6")
 	}
 	df1 := float64(d1)
 	df2 := float64(d2)
-	return (2*df1+df2-2) *math.Sqrt(8*(df2-4)) / (df2-6) *math.Sqrt(df1*(df1+df2-2))
+	return (2*df1 + df2 - 2) * math.Sqrt(8*(df2-4)) / (df2 - 6) * math.Sqrt(df1*(df1+df2-2))
 }
 
 // FExKurt returns the excess kurtosis of the F distribution. 
@@ -152,6 +151,5 @@ func FExKurt(d1, d2 int64) float64 {
 	}
 	df1 := float64(d1)
 	df2 := float64(d2)
-	return 12 *(df1*(5*df2-22)*(df1+df2-2)+(df2-4)*(df2-2)*(df2-2)) / (df1*(df2-6)*(df2-8)*(df1+df2-2))
+	return 12 * (df1*(5*df2-22)*(df1+df2-2) + (df2-4)*(df2-2)*(df2-2)) / (df1 * (df2 - 6) * (df2 - 8) * (df1 + df2 - 2))
 }
-

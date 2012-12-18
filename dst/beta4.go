@@ -14,35 +14,35 @@ package dst
 //
 
 import (
-	"fmt"
 	. "code.google.com/p/go-fn/fn"
+	"fmt"
 	"math"
 )
 
 // Beta4PDF returns the PDF of the four-parameter Beta distribution. 
-func Beta4PDF(α, β, a, c float64)  func(y float64) float64 {
-	if a>= c {
+func Beta4PDF(α, β, a, c float64) func(y float64) float64 {
+	if a >= c {
 		panic("a must be lower than c")
 	}
 	dα := []float64{α, β}
 	dirPDF := DirichletPDF(dα)
 	return func(y float64) float64 {
-		x :=(y-a)/(c-a)
+		x := (y - a) / (c - a)
 		if 0 > x || x > 1 {
 			return 0
 		}
 		dx := []float64{x, 1 - x}
-		return dirPDF(dx)/(c-a)
+		return dirPDF(dx) / (c - a)
 	}
 }
 
 // Beta4Next returns random number drawn from the  four-parameter Beta distribution. 
 func Beta4Next(α, β, a, c float64) float64 {
-	if a>= c {
+	if a >= c {
 		panic("a must be lower than c")
 	}
-	x:=BetaNext(α, β)
-	y:=x*(c-a)+a
+	x := BetaNext(α, β)
+	y := x*(c-a) + a
 	return y
 }
 
@@ -50,7 +50,6 @@ func Beta4Next(α, β, a, c float64) float64 {
 func Beta4(α, β, a, c float64) func() float64 {
 	return func() float64 { return Beta4Next(α, β, a, c) }
 }
-
 
 // Beta4PDFAt returns the value of PDF of four-parameter Beta distribution at x. 
 func Beta4PDFAt(α, β, a, c, x float64) float64 {
@@ -60,12 +59,12 @@ func Beta4PDFAt(α, β, a, c, x float64) float64 {
 
 // Beta4CDF returns the CDF of the four-parameter Beta distribution. 
 func Beta4CDF(α, β, a, c float64) func(y float64) float64 {
-	if a>= c {
+	if a >= c {
 		panic("a must be lower than c")
 	}
 	return func(y float64) float64 {
 		var res float64
-		x :=(y-a)/(c-a)
+		x := (y - a) / (c - a)
 		z := math.Exp(LnΓ(α+β) - LnΓ(α) - LnΓ(β) + α*math.Log(x) + β*math.Log(1.0-x))
 		switch {
 		case x == 0:
@@ -78,7 +77,7 @@ func Beta4CDF(α, β, a, c float64) func(y float64) float64 {
 			res = 1.0 - z*betaContinuedFraction(β, α, 1.0-x)/β
 
 		}
-		return res/(c-a)
+		return res / (c - a)
 	}
 }
 
@@ -96,7 +95,7 @@ func Beta4Qtl(α, β, a, c float64) func(p float64) float64 {
 		var a float64 = 0
 		var b float64 = 1
 		var precision float64 = 1e-9
-		if a>= c {
+		if a >= c {
 			panic("a must be lower than c")
 		}
 		if p < 0.0 {
@@ -121,7 +120,7 @@ func Beta4Qtl(α, β, a, c float64) func(p float64) float64 {
 			}
 		}
 
-		return x*(c-a)+a
+		return x*(c-a) + a
 	}
 }
 

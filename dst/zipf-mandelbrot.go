@@ -16,15 +16,15 @@ package dst
 // Zipf-Mandelbrot distribution
 
 import (
+	. "code.google.com/p/go-fn/fn"
 	"math"
 	"math/rand"
-	. "code.google.com/p/go-fn/fn"
 )
 
 //  ZipfMandelbrotChkParams checks parameters of the Zipf-Mandelbrot  distribution.
 func ZipfMandelbrotChkParams(n int64, q, s float64) bool {
-	v:= false
-	if n >0 && q >= 0 && s > 0 {
+	v := false
+	if n > 0 && q >= 0 && s > 0 {
 		v = true
 	}
 	return v
@@ -67,7 +67,7 @@ func ZipfMandelbrotQtl(n int64, q, s float64) func(p float64) int64 {
 		if cdf(1) >= p {
 			k = 1
 		} else {
-			for k=1; cdf(k) < p ; k++ {
+			for k = 1; cdf(k) < p; k++ {
 				if k > kMax {
 					panic("not found")
 				}
@@ -80,8 +80,8 @@ func ZipfMandelbrotQtl(n int64, q, s float64) func(p float64) int64 {
 // ZipfMandelbrotNext returns random number drawn from the Zipf-Mandelbrot distribution. 
 func ZipfMandelbrotNext(n int64, q, s float64) (k int64) {
 	qtl := ZipfMandelbrotQtl(n, q, s)
-	p:= rand.Float64()
-        return qtl(p)
+	p := rand.Float64()
+	return qtl(p)
 }
 
 // ZipfMandelbrot returns the random number generator with  Zipf-Mandelbrot distribution. 
@@ -93,5 +93,3 @@ func ZipfMandelbrot(n int64, q, s float64) func() int64 {
 func ZipfMandelbrotMean(n int64, q, s float64) float64 {
 	return H2(n, q, s-1)/H2(n, q, s) - q
 }
-
-

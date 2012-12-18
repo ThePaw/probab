@@ -13,8 +13,8 @@ package dst
 // X 	pxp positive definite, real
 
 import (
-	m "github.com/skelterjohn/go.matrix"
 	. "code.google.com/p/go-fn/fn"
+	m "github.com/skelterjohn/go.matrix"
 )
 
 // WishartPDF returns the PDF of the Wishart distribution. 
@@ -34,7 +34,7 @@ func WishartPDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
 
 // WishartLnPDF returns the natural logarithm of the PDF of the Wishart distribution. 
 func WishartLnPDF(n int, V *m.DenseMatrix) func(W *m.DenseMatrix) float64 {
-	
+
 	p := V.Rows()
 	Vdet := V.Det()
 	Vinv, _ := V.Inverse()
@@ -69,4 +69,3 @@ func Wishart(n int, V *m.DenseMatrix) func() *m.DenseMatrix {
 		return S
 	}
 }
-

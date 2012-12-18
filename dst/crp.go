@@ -52,6 +52,7 @@ func CRPLnPMF(α float64) func(x []int64) float64 {
 		return ll
 	}
 }
+
 /*
 func CRPLnPMF2(α float64) func(x []int64) float64 {
 	return func(x []int64) float64 {

@@ -12,9 +12,9 @@ package dst
 
 import (
 	"math"
+
 //	"math/rand"
 )
-
 
 // ZPDF returns the PDF of the Standard Normal distribution. 
 func ZPDF() func(float64) float64 {
@@ -39,37 +39,37 @@ func ZCDFAt(x float64) float64 {
 }
 
 // ZQtl returns the inverse of the CDF (quantile) of the Standard Normal distribution. 
-func ZQtl() func(p float64)  float64 {
-	return func(p float64)  float64 {
+func ZQtl() func(p float64) float64 {
+	return func(p float64) float64 {
 
-	var r, x, pp, dp float64
+		var r, x, pp, dp float64
 
-	dp = p - 0.5
-	switch {
-	case p == 1.0:
-		return math.MaxFloat64
-	case p == 0.0:
-		return -math.MaxFloat64
-	}
-	if math.Abs(dp) <= 0.425 {
-		x = small(dp)
+		dp = p - 0.5
+		switch {
+		case p == 1.0:
+			return math.MaxFloat64
+		case p == 0.0:
+			return -math.MaxFloat64
+		}
+		if math.Abs(dp) <= 0.425 {
+			x = small(dp)
+			return x
+		}
+		if p < 0.5 {
+			pp = p
+		} else {
+			pp = 1.0 - p
+		}
+		r = math.Sqrt(-math.Log(pp))
+		if r <= 5.0 {
+			x = intermediate(r)
+		} else {
+			x = tail(r)
+		}
+		if p < 0.5 {
+			return -x
+		}
 		return x
-	}
-	if p < 0.5 {
-		pp = p
-	} else {
-		pp = 1.0 - p
-	}
-	r = math.Sqrt(-math.Log(pp))
-	if r <= 5.0 {
-		x = intermediate(r)
-	} else {
-		x = tail(r)
-	}
-	if p < 0.5 {
-		return -x
-	}
-	return x
 	}
 }
 
@@ -78,4 +78,3 @@ func ZQtlFor(p float64) float64 {
 	qtl := ZQtl()
 	return qtl(p)
 }
-

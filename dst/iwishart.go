@@ -13,8 +13,8 @@ package dst
 // X is positive definite
 
 import (
-	m "github.com/skelterjohn/go.matrix"
 	. "code.google.com/p/go-fn/fn"
+	m "github.com/skelterjohn/go.matrix"
 )
 
 // InverseWishartPDF returns the PDF of the Inverse-Wishart distribution. 
@@ -26,8 +26,8 @@ func InverseWishartPDF(n int, Ψ *m.DenseMatrix) func(B *m.DenseMatrix) float64 
 		Γ(float64(n)/2)
 	return func(B *m.DenseMatrix) float64 {
 		Bdet := B.Det()
-		Binv,  _ := B.Inverse()
-		ΨBinv, _  := Ψ.Times(Binv)
+		Binv, _ := B.Inverse()
+		ΨBinv, _ := Ψ.Times(Binv)
 		return normalization *
 			pow(Bdet, -.5*float64(n+p+1)) *
 			exp(-0.5*ΨBinv.Trace())
@@ -72,4 +72,3 @@ func InverseWishart(n int, V *m.DenseMatrix) func() *m.DenseMatrix {
 		return Sinv
 	}
 }
-
