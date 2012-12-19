@@ -25,7 +25,7 @@ cdf:=[]float64{9.5367431640625E-007,2.00271606445312E-005,0.0002012253,0.0012884
 
 	fmt.Println("test of Binomial PMF")
 	for i = 0; i < int64(len(k)); i++ {
-		prob=Binomial_PMF_At(α, n, k[i])
+		prob=BinomialPMFAt(n, α, k[i])
 			if !check(prob, pmf[i]){
 				t.Error()
 				fmt.Println(k[i], prob, pmf[i])
@@ -34,7 +34,7 @@ cdf:=[]float64{9.5367431640625E-007,2.00271606445312E-005,0.0002012253,0.0012884
 	}
 	fmt.Println("test of Binomial CDF")
 	for i = 0; i < int64(len(k)); i++ {
-		prob=Binomial_CDF_At(α, n, k[i])
+		prob=BinomialCDFAt(n, α, k[i])
 			if !check(prob, cdf[i]){
 				t.Error()
 				fmt.Println(k[i], prob, cdf[i])
@@ -46,3 +46,21 @@ cdf:=[]float64{9.5367431640625E-007,2.00271606445312E-005,0.0002012253,0.0012884
 
 
 
+func TestBinomial_Qtl(t *testing.T) {
+	var (
+	ρ float64
+	i, n int64
+	)
+	ρ=0.5
+	n=20
+p:=[]float64{0.1, 0.3, 0.5, 0.7, 0.9}
+qtl:=[]int64{7, 9, 10, 11, 13}
+	fmt.Println("test of Binomial Qtl")
+	for i = 0; i < int64(len(p)); i++ {
+		q :=BinomialQtlFor(n, ρ, p[i])
+			if  q != qtl[i] {
+				t.Error()
+				fmt.Println(p[i], q, qtl[i])
+			}
+	}
+}

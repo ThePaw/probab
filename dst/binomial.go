@@ -51,11 +51,71 @@ func BinomialCDFAt(n int64, p float64, k int64) float64 {
 	return cdf(k)
 }
 
-// BinomialQtl returns the inverse of the CDF (quantile) of the Binomial distribution. 
-// to be implemented ...
+// BinomialQtl returns the inverse of the CDF (quantile) of the Binomial distribution.
+func BinomialQtl(n int64, ρ float64) func(p float64) int64 {
+	return func(p float64) int64 {
+		var eps, q, mu, sigma, gamma, z  float64
+		var y int64
+		eps = 2.2204460492503131e-16 // DBL_EPSILON
 
-// BinomialQtlFor returns the inverse of the CDF (quantile) of the Binomial distribution, for given probability.
-// to be implemented ...
+		if float64(n) != math.Floor(float64(n)+0.5) {
+			panic("bad n")
+		}
+		if ρ < 0 || ρ > 1 || n < 0 {
+			panic("bad params")
+		}
+
+		if ρ == 0 || n == 0 {
+			return 0
+		}
+
+		q = 1 - ρ
+		if q == 0 {
+			return n // covers the full range of the distribution 
+		}
+		mu = float64(n) * ρ
+		sigma = sqrt(float64(n) * ρ * q)
+		gamma = (q - ρ) / sigma
+
+		// temporary hack --- FIXME ---
+		if p+1.01*eps >= 1 {
+			return n
+		}
+
+		// y = apρox.value (Cornish-Fisher expansion)
+		z = NormalQtlFor(0, 1, p)
+		y = int64(math.Floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5))
+
+		if y > n { // way off  
+			y = n
+		}
+		z = BinomialCDFAt(n, ρ, y)
+		// fuzz to ensure left continuity
+		p *= 1 - 64*eps
+
+		// If the C-F value is not too large a simple search is OK
+		if y < 1e5 {
+			return searchBinomial(p, ρ, y, n, 1, &z)
+		}
+		// Otherwise be a bit cleverer in the search 
+		{
+			incr := int64(math.Floor(float64(n) / 1000))
+			oldincr := incr
+			for oldincr > 1 && incr > int64(math.Floor(float64(y)*1e-15)) {
+				y = searchBinomial(p, ρ, y, n, incr, &z)
+				incr = imax(1, incr/100)
+				oldincr = incr
+			}
+			return y
+		}
+	}
+}
+
+// BinomialQtlFor returns the inverse of the CDF (quantile) of the Negative binomial distribution, for given probability.
+func BinomialQtlFor(n int64, ρ, p float64) int64 {
+	qtl := BinomialQtl(n, ρ)
+	return qtl(p)
+}
 
 // BinomialNext returns random number drawn from the Binomial distribution. 
 func BinomialNext(n int64, p float64) (x int64) {
@@ -124,3 +184,27 @@ func BinomialMGF(n int64, p, t float64) float64 {
 func BinomialPGF(n int64, p, z float64) float64 {
 	return math.Pow((1 - p + p*z), float64(n))
 }
+
+func searchBinomial(p, pr float64, y, n, incr int64, z *float64) int64 {
+	if *z >= p {
+		// search to the left
+		for {
+			newz := BinomialCDFAt(n, pr,  y-incr)
+			if y == 0 || newz < p {
+				return y
+			}
+			y = imax(0, y-incr)
+			*z = newz
+		}
+	} else { // search to the right
+		for {
+	    		y = imin(y + incr, n)
+			*z = BinomialCDFAt(n, pr,  y)
+			if y == n || *z >= p {
+				return y
+			}
+		}
+	}
+	return y // just to make compiler happy ;-)
+}
+

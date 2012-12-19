@@ -19,8 +19,22 @@ var pow func(float64, float64) float64 = math.Pow
 
 const π = float64(math.Pi)
 
+func imin(x, y int64) int64 {
+	if x > y {
+		return y
+	}
+	return x
+}
+
 func imax(x, y int64) int64 {
 	if x < y {
+		return y
+	}
+	return x
+}
+
+func min(x, y float64) float64 {
+	if x > y {
 		return y
 	}
 	return x
@@ -127,4 +141,3 @@ func Shuffle(x []interface{}) {
 		x[j] = t
 	}
 }
-

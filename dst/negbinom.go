@@ -28,7 +28,7 @@ func do_search(p, pr float64, y, n, incr int64, z *float64) int64 {
 			}
 			y = imax(0, y-incr)
 		}
-	} else {	 // search to the right
+	} else { // search to the right
 
 	L2:
 		for {
@@ -80,49 +80,49 @@ func NegBinomialCDFAt(ρ float64, r, k int64) float64 {
 // NegBinomialQtl returns the inverse of the CDF (qquantile) of the Negative binomial distribution.
 func NegBinomialQtl(ρ float64, r int64) func(p float64) int64 {
 	return func(p float64) int64 {
-		var eps, pp, qq, mu, sigma, gamma, z  float64
+		var eps, pp, qq, mu, sigma, gamma, z float64
 		var y int64
 		fr := float64(r)
-		eps = 2.2204460492503131e-16	// DBL_EPSILON
-		if ρ <= 0 || ρ > 1 || fr <= 0 {	// FIXME: fr = 0 is well defined
+		eps = 2.2204460492503131e-16    // DBL_EPSILON
+		if ρ <= 0 || ρ > 1 || fr <= 0 { // FIXME: fr = 0 is well defined
 			panic("bad params")
 		}
-		
+
 		if ρ == 1 {
 			return 0
 		}
-	
+
 		qq = 1.0 / ρ
 		pp = (1.0 - ρ) * qq
 		mu = fr * pp
 		sigma = sqrt(fr * pp * qq)
 		gamma = (qq + pp) / sigma
-	
+
 		// temporary hack --- FIXME ---
-		if p+1.01*eps >= 1. {
+		if p+1.01*eps >= 1 {
 			panic("bad p")
 		}
-	
+
 		// y := approx.value (Cornish-Fisher expansion)
-	
+
 		z = NormalQtlFor(0, 1, p)
 		y = int64(math.Floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5))
 		z = NegBinomialCDFAt(ρ, r, y)
-	
+
 		// fuzz to ensure left continuity
 		p *= 1 - 64*eps
-	
+
 		// If the C-F value is not too large a simple search is OK
 		if y < 1e5 {
 			return do_search(p, ρ, y, r, 1, &z)
 		}
 		// Otherwise be a bit cleverer in the search
 		{
-			incr := int64(math.Floor(float64(y)/1000))
+			incr := int64(math.Floor(float64(y) / 1000))
 			oldincr := incr
 			for oldincr > 1 && incr > int64(math.Floor(float64(y)*1e-15)) {
 				//	    y = do_search(y, &z, p, r, ρ, incr)
-				y = do_search(p, ρ, y, r, 1, &z)
+				y = do_search(p, ρ, y, r, incr, &z)
 				incr = imax(1, incr/100)
 				oldincr = incr
 			}
@@ -198,4 +198,3 @@ func NegBinomialMGF(ρ float64, r int64, t float64) float64 {
 func NegBinomialPGF(ρ float64, r int64, z float64) float64 {
 	return math.Pow((1-ρ)/(1-ρ*z), float64(r))
 }
-

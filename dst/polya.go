@@ -17,7 +17,7 @@ import (
 	"math"
 )
 
-func f_search(p, pr, y, n, incr   float64, z *float64) float64 {
+func f_search(p, pr, y, n, incr float64, z *float64) float64 {
 	if *z >= p {
 		/* search to the left */
 	L1:
@@ -41,7 +41,6 @@ func f_search(p, pr, y, n, incr   float64, z *float64) float64 {
 	}
 	return y
 }
-
 
 // PolyaPMF returns the PMF of the Pólya distribution. 
 func PolyaPMF(ρ, r float64) func(k int64) float64 {
@@ -117,10 +116,10 @@ func PolyaPGF(ρ, r float64, z float64) float64 {
 // PolyaQtl returns the inverse of the CDF (quantile) of the Pólya distribution.
 func PolyaQtl(ρ, r float64) func(p float64) int64 {
 	return func(p float64) int64 {
-		var eps, pp, qq, mu, sigma, gamma, z, y  float64
+		var eps, pp, qq, mu, sigma, gamma, z, y float64
 		fr := float64(r)
-		eps = 2.2204460492503131e-16	// DBL_EPSILON
-		
+		eps = 2.2204460492503131e-16 // DBL_EPSILON
+
 		if ρ <= 0 || ρ > 1 || fr <= 0 { // FIXME: fr = 0 is well defined
 			panic("bad params")
 		}
@@ -128,26 +127,26 @@ func PolyaQtl(ρ, r float64) func(p float64) int64 {
 		if ρ == 1 {
 			return 0
 		}
-	
+
 		qq = 1.0 / ρ
 		pp = (1.0 - ρ) * qq
 		mu = fr * pp
 		sigma = sqrt(fr * pp * qq)
 		gamma = (qq + pp) / sigma
-	
+
 		// temporary hack --- FIXME ---
 		if p+1.01*eps >= 1. {
 			panic("bad p")
 		}
-	
+
 		// approximate by Cornish-Fisher expansion
 		z = NormalQtlFor(0, 1, p)
-		y =math.Floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5)
+		y = math.Floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5)
 		z = PolyaCDFAt(ρ, r, int64(y))
-	
+
 		// fuzz to ensure left continuity
 		p *= 1 - 64*eps
-	
+
 		// If the C-F value is not too large a simple search is OK
 		if y < 1e5 {
 			return int64(math.Floor(f_search(p, ρ, y, r, 1, &z)))
@@ -155,11 +154,11 @@ func PolyaQtl(ρ, r float64) func(p float64) int64 {
 
 		// Otherwise be a bit cleverer in the search
 		{
-			incr := math.Floor(y/1000)
+			incr := math.Floor(y / 1000)
 			oldincr := incr
 			for oldincr > 1 && incr > math.Floor(y*1e-15) {
 				//	    y = do_search(y, &z, p, r, ρ, incr)
-				y = f_search(p, ρ, y, r, 1, &z)
+				y = f_search(p, ρ, y, r, incr, &z)
 				incr = max(1, incr/100)
 				oldincr = incr
 			}
@@ -173,4 +172,3 @@ func PolyaQtlFor(ρ, r float64, p float64) int64 {
 	qtl := PolyaQtl(ρ, r)
 	return qtl(p)
 }
-
