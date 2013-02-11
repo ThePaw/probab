@@ -123,7 +123,7 @@ func PoissonNext(λ float64) int64 {
 		k -= 1
 
 	} else { // use Normal approximation
-		k = int64(math.Floor(NormalNext(λ, math.Sqrt(λ))))
+		k = int64(iround(NormalNext(λ, math.Sqrt(λ))))
 	}
 	return k
 }

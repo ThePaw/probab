@@ -57,6 +57,7 @@ func maxFloat64(x []float64) float64 {
 	}
 	return first
 }
+
 func maxInt64(x []int64) int64 {
 	first := x[0]
 	if len(x) > 1 {
@@ -140,4 +141,8 @@ func Shuffle(x []interface{}) {
 		x[i] = x[j]
 		x[j] = t
 	}
+}
+
+func iround(x float64) float64 {
+	return math.Floor(x + 0.5) // ?correct -- round to integer
 }

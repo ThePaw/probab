@@ -17,8 +17,15 @@ import (
 // BinomialPMF returns the PMF of the Binomial distribution. 
 func BinomialPMF(n int64, p float64) func(k int64) float64 {
 	return func(k int64) (x float64) {
-		x = pow(p, float64(k)) * pow(1-p, float64(n-k))
-		x *= Γ(float64(n+1)) / (Γ(float64(k+1)) * Γ(float64(n-k+1)))
+		// for big n use  Normal approximation when Decker and Fitzgibbon (1991) condition holds
+		if n > 100 && pow(float64(n), 0.31)*p > 0.47 {
+			pdf := NormalPDF(float64(n)*p, sqrt(float64(n)*p*(1-p)))
+			x = pdf(float64(k))
+		} else {
+			// otherwise do exact computation
+			x = pow(p, float64(k)) * pow(1-p, float64(n-k))
+			x *= Γ(float64(n+1)) / (Γ(float64(k+1)) * Γ(float64(n-k+1)))
+		}
 		return
 	}
 }
@@ -54,7 +61,7 @@ func BinomialCDFAt(n int64, p float64, k int64) float64 {
 // BinomialQtl returns the inverse of the CDF (quantile) of the Binomial distribution.
 func BinomialQtl(n int64, ρ float64) func(p float64) int64 {
 	return func(p float64) int64 {
-		var eps, q, mu, sigma, gamma, z  float64
+		var eps, q, mu, sigma, gamma, z float64
 		var y int64
 		eps = 2.2204460492503131e-16 // DBL_EPSILON
 
@@ -189,7 +196,7 @@ func searchBinomial(p, pr float64, y, n, incr int64, z *float64) int64 {
 	if *z >= p {
 		// search to the left
 		for {
-			newz := BinomialCDFAt(n, pr,  y-incr)
+			newz := BinomialCDFAt(n, pr, y-incr)
 			if y == 0 || newz < p {
 				return y
 			}
@@ -198,8 +205,8 @@ func searchBinomial(p, pr float64, y, n, incr int64, z *float64) int64 {
 		}
 	} else { // search to the right
 		for {
-	    		y = imin(y + incr, n)
-			*z = BinomialCDFAt(n, pr,  y)
+			y = imin(y+incr, n)
+			*z = BinomialCDFAt(n, pr, y)
 			if y == n || *z >= p {
 				return y
 			}
@@ -207,4 +214,3 @@ func searchBinomial(p, pr float64, y, n, incr int64, z *float64) int64 {
 	}
 	return y // just to make compiler happy ;-)
 }
-
