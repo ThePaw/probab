@@ -13,13 +13,14 @@ package dst
 
 import (
 	"math"
+
 //	"math/rand"
 )
 
 // LogNormalPDF returns the PDF of the LogNormal distribution. 
 func LogNormalPDF(μ, σ float64) func(x float64) float64 {
 	normalogormalizer := 0.3989422804014327 / σ
-	return func(x float64) float64 { return normalogormalizer * exp(-1*(log(x)-μ)*(log(x)-μ)/(2*σ*σ)) / x}
+	return func(x float64) float64 { return normalogormalizer * exp(-1*(log(x)-μ)*(log(x)-μ)/(2*σ*σ)) / x }
 }
 
 // LogNormalPDFAt returns the value of PDF of LogNormal distribution at x. 

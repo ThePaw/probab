@@ -4,6 +4,8 @@ import (
 	"math"
 )
 
+const pi = math.Pi
+
 var fZero float64 = float64(0.0)
 var fOne float64 = float64(1.0)
 var iZero int64 = int64(0)
@@ -12,10 +14,13 @@ var iOne int64 = int64(1)
 var negInf float64 = math.Inf(-1)
 var posInf float64 = math.Inf(+1)
 
+var abs func(float64) float64 = math.Abs
 var log func(float64) float64 = math.Log
+var log1p func(float64) float64 = math.Log1p
 var exp func(float64) float64 = math.Exp
 var sqrt func(float64) float64 = math.Sqrt
 var pow func(float64, float64) float64 = math.Pow
+var isNaN func(float64) bool = math.IsNaN
 
 const π = float64(math.Pi)
 
