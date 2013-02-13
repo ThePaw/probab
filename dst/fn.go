@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-const pi = math.Pi
+const π = float64(math.Pi)
 
 var fZero float64 = float64(0.0)
 var fOne float64 = float64(1.0)
@@ -20,9 +20,11 @@ var log1p func(float64) float64 = math.Log1p
 var exp func(float64) float64 = math.Exp
 var sqrt func(float64) float64 = math.Sqrt
 var pow func(float64, float64) float64 = math.Pow
-var isNaN func(float64) bool = math.IsNaN
+var atan func(float64) float64 = math.Atan
+var tan func(float64) float64 = math.Tan
 
-const π = float64(math.Pi)
+var isNaN func(float64) bool = math.IsNaN
+var isInf func(float64, int) bool = math.IsInf
 
 func imin(x, y int64) int64 {
 	if x > y {

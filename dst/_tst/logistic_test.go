@@ -3,7 +3,7 @@ package dst
 
 import (
 	"fmt"
-//	"math/rand"
+	//	"math/rand"
 	"testing"
 )
 
@@ -28,12 +28,29 @@ func TestLogistic(t *testing.T) {
 	}
 
 	fmt.Println("test of Logistic distribution: Qtl")
-	qtl:= LogisticQtl(4.2, 1.33)
+	qtl := LogisticQtl(4.2, 1.33)
 	x = qtl(0.3454505)
 	y = 3.35
 	if !check(x, y) {
 		t.Error()
 		fmt.Println(x, y)
 	}
-}
 
+	fmt.Println("test of Logistic distribution: LnPDF")
+	fn = LogisticLnPDF(4.2, 1.33)
+	x = fn(3.35)
+	y = -1.771893
+	if !check(x, y) {
+		t.Error()
+		fmt.Println(x, y)
+	}
+
+	fmt.Println("test of Logistic distribution: LnCDF")
+	fn = LogisticLnCDF(4.2, 1.33)
+	x = fn(3.35)
+	y = -1.062906
+	if !check(x, y) {
+		t.Error()
+		fmt.Println(x, y)
+	}
+}

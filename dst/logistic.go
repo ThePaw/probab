@@ -3,7 +3,7 @@
 package dst
 
 // Logistic distribution. 
-// A continuous probability distribution, 
+// A continuous probability distribution. Its cumulative distribution function is the logistic function, which appears in logistic regression and feedforward neural networks. It resembles the normal distribution in shape but has heavier tails (higher kurtosis).
 //
 // Parameters: 
 // μ ∈ R		location
@@ -160,12 +160,12 @@ func LogisticMedian(μ, σ float64) float64 {
 
 // LogisticVar returns the variance of the Logistic distribution. 
 func LogisticVar(μ, σ float64) float64 {
-	return σ * σ * pi * pi / 3
+	return σ * σ * π * π / 3
 }
 
 // LogisticStd returns the standard deviation of the Logistic distribution. 
 func LogisticStd(μ, σ float64) float64 {
-	return σ * pi / sqrt(3)
+	return σ * π / sqrt(3)
 }
 
 // LogisticSkew returns the skewness of the Logistic distribution. 
