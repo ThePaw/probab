@@ -5,6 +5,10 @@ import (
 )
 
 const π = float64(math.Pi)
+const Ln2 = math.Ln2
+const M_LN_SQRT_2PI = 0.918938533204672741780329736406 // log(sqrt(2*pi))
+
+var NaN = math.NaN()
 
 var fZero float64 = float64(0.0)
 var fOne float64 = float64(1.0)
@@ -15,6 +19,7 @@ var negInf float64 = math.Inf(-1)
 var posInf float64 = math.Inf(+1)
 
 var abs func(float64) float64 = math.Abs
+var floor func(float64) float64 = math.Floor
 var log func(float64) float64 = math.Log
 var log1p func(float64) float64 = math.Log1p
 var exp func(float64) float64 = math.Exp
@@ -22,6 +27,7 @@ var sqrt func(float64) float64 = math.Sqrt
 var pow func(float64, float64) float64 = math.Pow
 var atan func(float64) float64 = math.Atan
 var tan func(float64) float64 = math.Tan
+var trunc func(float64) float64 = math.Trunc
 
 var isNaN func(float64) bool = math.IsNaN
 var isInf func(float64, int) bool = math.IsInf
