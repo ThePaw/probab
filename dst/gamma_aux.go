@@ -18,12 +18,12 @@ const DBL_MIN = 2.225074e-308
 /* If |x| > |k| * M_cutoff,  then  log[ exp(-x) * k^x ]	 =~=  -x */
 // static const double M_cutoff = M_LN2 * DBL_MAX_EXP / DBL_EPSILON/*=3.196577e18*/
 
-/* Continued fraction for calculation of
- *    1/i + x/(i+d) + x^2/(i+2*d) + x^3/(i+3*d) + ... = sum_{k=0}^Inf x^k/(i+k*d)
- *
- * auxilary in log1pmx() and lgamma1p()
- */
-
+// Continued fraction for calculation of
+//   1/i + x/(i+d) + x^2/(i+2*d) + x^3/(i+3*d) + ... = sum_{k=0}^Inf x^k/(i+k*d)
+//
+// auxilary in log1pmx() and lgamma1p()
+//
+// TESTED: 0.001 -4.996669e-07, OK
 func logcf(x, i, d, eps float64) float64 {
 	c1 := 2 * d
 	c2 := i + d
@@ -80,8 +80,7 @@ func log1pmx(x float64) float64 {
 		r = x / (2 + x)
 		y = r * r
 		if abs(x) < 1e-2 {
-			return r * ((((two/9*y+two/7)*y+two/5)*y+
-				two/3)*y - x)
+			return r * ((((two/9*y+two/7)*y+two/5)*y+	two/3)*y - x)
 		}
 	}
 	return r * (2*y*logcf(y, 3, 2, tol_logcf) - x)
@@ -138,8 +137,8 @@ func lgamma1p(a float64) float64 {
 		0.9573630387838555763782200936508615e-13,
 		0.4664076026428374224576492565974577e-13,
 		0.2273736960065972320633279596737272e-13,
-		0.1109139947083452201658320007192334e-13, // (zeta(40+1)-1)/(40+1)
-	}
+		0.1109139947083452201658320007192334e-13,
+	} // (zeta(40+1)-1)/(40+1)
 
 	const c = 0.2273736845824652515226821577978691e-12 // zeta(N+2)-1
 	const tol_logcf = 1e-14
@@ -209,7 +208,7 @@ func pgamma_smallx(x, shape float64) float64 {
 	f1 := 1 + sum
 
 	if shape > 1 {
-		f2 = PoissonPMFAt(shape, int64(x))
+		f2 = dpois_raw(shape, x)
 		f2 = f2 * exp(x)
 	} else {
 		f2 = pow(x, shape) / exp(lgamma1p(shape))
@@ -404,25 +403,25 @@ func dpnorm(x, lp float64) float64 {
  */
 func ppois_asymp(lambda, x float64, log_p bool) float64 {
 	var coefs_a = [8]float64{
-		-1e99, /* placeholder used for 1-indexing */
-		2 / 3.,
-		-4 / 135.,
-		8 / 2835.,
-		16 / 8505.,
-		-8992 / 12629925.,
-		-334144 / 492567075.,
-		698752 / 1477701225.,
+		-1e9, /* placeholder used for 1-indexing */
+		2 / 3.0,
+		-4 / 135.0,
+		8 / 2835.0,
+		16 / 8505.0,
+		-8992 / 12629925.0,
+		-334144 / 492567075.0,
+		698752 / 1477701225.0,
 	}
 
 	var coefs_b = [8]float64{
-		-1e99, /* placeholder */
-		1 / 12.,
-		1 / 288.,
-		-139 / 51840.,
-		-571 / 2488320.,
-		163879 / 209018880.,
-		5246819 / 75246796800.,
-		-534703531 / 902961561600.,
+		-1e9, /* placeholder */
+		1 / 12.0,
+		1 / 288.0,
+		-139 / 51840.0,
+		-571 / 2488320.0,
+		163879 / 209018880.0,
+		5246819 / 75246796800.0,
+		-534703531 / 902961561600.0,
 	}
 	var (
 		elfb, elfb_term                               float64
@@ -499,6 +498,37 @@ func dpois_wrap(x_plus_1, lambda float64) float64 {
 		return d * (x_plus_1 / lambda)
 	}
 	return math.NaN() // should not happen
+}
+
+func dpois_raw(x, lambda float64) float64 {
+	// x >= 0 ; integer for dpois(), but not e.g. for pgamma()!
+	//        lambda >= 0
+
+	if lambda == 0 {
+		if x == 0 {
+			return 1
+		} else {
+			return 0
+		}
+	}
+
+	if isInf(lambda, 0) {
+		return 0
+	}
+
+	if x < 0 {
+		return 0
+	}
+
+	if x <= lambda*DBL_MIN {
+		return exp(-lambda)
+	}
+
+	if lambda < x*DBL_MIN {
+		return exp(-lambda + x*log(lambda) - lgammafn(x+1))
+	}
+
+	return exp(-stirlerr(x)-bd0(x, lambda)) / sqrt((π+π)*x)
 }
 
 func pgamma_raw(x, shape float64) float64 {

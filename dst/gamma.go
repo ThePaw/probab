@@ -101,7 +101,7 @@ func GammaLnCDF(α float64, λ float64) func(x float64) float64 {
 		if isNaN(x) { /* eg. original x = λ = +Inf */
 			return x
 		}
-		if α == 0. { /* limit case; useful e.g. in pnchisq() */
+		if α == 0 { /* limit case; useful e.g. in pnchisq() */
 			//	return (x <= 0) ? R_DT_0: R_DT_1; /* <= assert  pgamma(0,0) ==> 0 */
 			if x <= 0 {
 				return negInf

@@ -82,8 +82,7 @@ func pgamma_smallx_ln(x, shape float64) float64 {
 	f1 := log1p(sum)
 
 	if shape > 1 {
-		poisLn := PoissonLnPMF(shape)
-		f2 = poisLn(int64(x))
+		f2 = dpois_raw_ln(shape, x) /////
 		f2 = f2 + x
 	} else {
 		f2 = shape*log(x) - lgamma1p(shape)
@@ -96,47 +95,16 @@ func dpois_wrap_ln(x_plus_1, lambda float64) float64 {
 		return negInf
 	}
 	if x_plus_1 > 1 {
-		return dpois_raw(x_plus_1-1, lambda)
+		return dpois_raw_ln(x_plus_1-1, lambda)
 
 	}
 	if lambda > abs(x_plus_1-1)*M_cutoff {
 		return -lambda - lgammafn(x_plus_1)
 	} else {
-		d := dpois_raw(x_plus_1, lambda)
+		d := dpois_raw_ln(x_plus_1, lambda)
 		return d + log(x_plus_1/lambda)
 	}
 	return NaN // should not happen
-}
-
-func dpois_raw(x, lambda float64) float64 {
-	// x >= 0 ; integer for dpois(), but not e.g. for pgamma()!
-	//        lambda >= 0
-
-	if lambda == 0 {
-		if x == 0 {
-			return 1
-		} else {
-			return 0
-		}
-	}
-
-	if isInf(lambda, 0) {
-		return 0
-	}
-
-	if x < 0 {
-		return 0
-	}
-
-	if x <= lambda*DBL_MIN {
-		return exp(-lambda)
-	}
-
-	if lambda < x*DBL_MIN {
-		return exp(-lambda + x*log(lambda) - lgammafn(x+1))
-	}
-
-	return exp(-stirlerr(x)-bd0(x, lambda)) / sqrt((π+π)*x)
 }
 
 func dpois_raw_ln(x, lambda float64) float64 {
@@ -169,3 +137,4 @@ func dpois_raw_ln(x, lambda float64) float64 {
 
 	return -0.5*log((π+π)*x) + (-stirlerr(x) - bd0(x, lambda))
 }
+
