@@ -61,9 +61,8 @@ func BinomialCDFAt(n int64, p float64, k int64) float64 {
 // BinomialQtl returns the inverse of the CDF (quantile) of the Binomial distribution.
 func BinomialQtl(n int64, ρ float64) func(p float64) int64 {
 	return func(p float64) int64 {
-		var eps, q, mu, sigma, gamma, z float64
+		var q, mu, sigma, gamma, z float64
 		var y int64
-		eps = 2.2204460492503131e-16 // DBL_EPSILON
 
 		if float64(n) != math.Floor(float64(n)+0.5) {
 			panic("bad n")
@@ -85,7 +84,7 @@ func BinomialQtl(n int64, ρ float64) func(p float64) int64 {
 		gamma = (q - ρ) / sigma
 
 		// temporary hack --- FIXME ---
-		if p+1.01*eps >= 1 {
+		if p+1.01*eps64 >= 1 {
 			return n
 		}
 
@@ -98,7 +97,7 @@ func BinomialQtl(n int64, ρ float64) func(p float64) int64 {
 		}
 		z = BinomialCDFAt(n, ρ, y)
 		// fuzz to ensure left continuity
-		p *= 1 - 64*eps
+		p *= 1 - 64*eps64
 
 		// If the C-F value is not too large a simple search is OK
 		if y < 1e5 {

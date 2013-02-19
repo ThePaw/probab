@@ -11,6 +11,8 @@ package dst
 // Support: 
 // x ∈ (0, ∞)
 
+import "fmt"
+
 // GammaQtl2 returns the inverse of the CDF (quantile) of the Gamma distribution. 
 func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 	/*	This function is based on the Applied Statistics
@@ -59,13 +61,25 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 			return p + alpha + scale
 		}
 		//    R_Q_P01_boundaries(p, 0., ML_POSINF)
+		if p < 0 || p > 1 {
+			return NaN
+		}
+		if p == 0 {
+
+			return 0
+		}
+		if p == 1 {
+			return posInf
+		}
 
 		if alpha < 0 || scale <= 0 {
 			return NaN
 		}
+
 		if alpha == 0 { // all mass at 0
 			return 0
 		}
+
 		max_it_Newton = 1
 		if alpha < 1e-10 {
 			max_it_Newton = 7 // may still be increased below
@@ -148,6 +162,8 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 		 * 		    - optionally *iterate* Newton
 		 */
 		x = 0.5 * scale * ch
+
+		x0 := x
 		if max_it_Newton != 0 {
 			/* always use log scale */
 			//	if (!log_p) {
@@ -157,7 +173,7 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 			if x == 0 {
 				_1_p := 1. + 1e-7
 				//				_1_m := 1. - 1e-7
-				x = DBL_MIN
+				x = min64
 				//	    p_ = pgamma(x, alpha, scale, lower_tail, log_p)
 				p_ = GammaLnCDFAt(alpha, scale, x)
 
@@ -165,7 +181,7 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 				if lower_tail && p_ > p*_1_p {
 					return 0
 				}
-			} else { // continue, using x = DBL_MIN instead of  0
+			} else { // continue, using x = min64 instead of  0
 				//	    p_ = pgamma(x, alpha, scale, lower_tail, log_p)
 				p_ = GammaLnCDFAt(alpha, scale, x)
 			}
@@ -189,10 +205,10 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 				 * if(log_p) f(x) := log P(x) - p; f'(x) = d/dx log P(x) = P' / P
 				 * ==> f(x)/f'(x) = f*P / P' = f*exp(p_) / P' (since p_ = log P(x))
 				 */
-				//	    t = log_p ? p1*exp(p_ - g) : p1/g ;/* = "delta x" */
+				//	    t = log_p ? p1*exp(p_ - g) : p1/g ;
 
 				if log_p { // ALWAYS, 
-					t = p1 * exp(p_-g)
+					t = p1 * exp(p_-g) // = "delta x"
 				} else { // TO BE REMOVED
 					t = p1 / g
 				}
@@ -202,12 +218,12 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 
 				//	    p_ = pgamma (t, alpha, scale, lower_tail, log_p)
 				GammaLnCDFAt(alpha, scale, x)
-				if abs(p_-p) > abs(p1) || (i > 1 && abs(p_-p) == abs(p1)) /* <- against flip-flop */ {
-					/* no improvement */
+				if abs(p_-p) > abs(p1) || (i > 1 && abs(p_-p) == abs(p1)) { // <- against flip-flop
+					// no improvement
 					break
-				} /* else : */
+				} // else : 
 				/*
-					#ifdef Harmful_notably_if_max_it_Newton_is_1
+					//ifdef Harmful_notably_if_max_it_Newton_is_1
 						    // control step length: this could have started at the initial approximation 
 
 						    if t > 1.1*x {
@@ -215,11 +231,12 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 						    }else if t < 0.9*x {
 					t = 0.9*x
 					}
-					#endif
+					//endif
 				*/
 				x = t
 			}
 		}
+		fmt.Println("Newton: ", x0, x)
 		return x
 	}
 }

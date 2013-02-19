@@ -32,7 +32,6 @@ func TestInvGamma(t *testing.T) {
 	x = qtl(0.9586864)
 	y = 3.35
 
-	fmt.Println("GammaQtlFor", GammaQtlFor(2.2, 1.0, 1-0.9586864))
 	if !check(x, y) {
 		t.Error()
 		fmt.Println(x, y)

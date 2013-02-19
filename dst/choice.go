@@ -9,11 +9,13 @@ func ChoicePMF(θ []float64) func(i int64) float64 {
 		return θ[i]
 	}
 }
+
 func ChoiceLnPMF(θ []float64) func(i int64) float64 {
 	return func(i int64) float64 {
 		return log(θ[i])
 	}
 }
+
 func ChoiceNext(θ []float64) int64 {
 	u := UniformNext(0, 1)
 	i := 0
@@ -26,14 +28,17 @@ func ChoiceNext(θ []float64) int64 {
 	}
 	return int64(i)
 }
+
 func Choice(θ []float64) func() int64 {
 	return func() int64 {
 		return ChoiceNext(θ)
 	}
 }
+
 func LogChoiceNext(lws []float64) int64 {
 	return LogChoice(lws)()
 }
+
 func LogChoice(lws []float64) func() int64 {
 	max := lws[0]
 	for _, lw := range lws[1:len(lws)] {

@@ -80,10 +80,9 @@ func NegBinomialCDFAt(ρ float64, r, k int64) float64 {
 // NegBinomialQtl returns the inverse of the CDF (qquantile) of the Negative binomial distribution.
 func NegBinomialQtl(ρ float64, r int64) func(p float64) int64 {
 	return func(p float64) int64 {
-		var eps, pp, qq, mu, sigma, gamma, z float64
+		var pp, qq, mu, sigma, gamma, z float64
 		var y int64
 		fr := float64(r)
-		eps = 2.2204460492503131e-16    // DBL_EPSILON
 		if ρ <= 0 || ρ > 1 || fr <= 0 { // FIXME: fr = 0 is well defined
 			panic("bad params")
 		}
@@ -99,7 +98,7 @@ func NegBinomialQtl(ρ float64, r int64) func(p float64) int64 {
 		gamma = (qq + pp) / sigma
 
 		// temporary hack --- FIXME ---
-		if p+1.01*eps >= 1 {
+		if p+1.01*eps64 >= 1 {
 			panic("bad p")
 		}
 
@@ -110,7 +109,7 @@ func NegBinomialQtl(ρ float64, r int64) func(p float64) int64 {
 		z = NegBinomialCDFAt(ρ, r, y)
 
 		// fuzz to ensure left continuity
-		p *= 1 - 64*eps
+		p *= 1 - 64*eps64
 
 		// If the C-F value is not too large a simple search is OK
 		if y < 1e5 {

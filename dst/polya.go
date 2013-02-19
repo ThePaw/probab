@@ -118,7 +118,6 @@ func PolyaQtl(ρ, r float64) func(p float64) int64 {
 	return func(p float64) int64 {
 		var eps, pp, qq, mu, sigma, gamma, z, y float64
 		fr := float64(r)
-		eps = 2.2204460492503131e-16 // DBL_EPSILON
 
 		if ρ <= 0 || ρ > 1 || fr <= 0 { // FIXME: fr = 0 is well defined
 			panic("bad params")

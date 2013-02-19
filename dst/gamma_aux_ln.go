@@ -5,14 +5,13 @@ package dst
 // Gamma distribution, helper functions, log versions. 
 
 func pgamma_raw_ln(x, shape float64) float64 {
-	/* Here, assume that  (x,shape) are not NA  &  shape > 0 . */
-
+	// Here, assume that  (x, shape) are not NA  &  shape > 0 .
 	var res, sum float64
 
-	//    R_P_bounds_01(x, 0., ML_POSINF)
 	if x <= 0 {
 		return negInf
 	}
+
 	if x >= posInf {
 		return 0
 	}
@@ -32,7 +31,7 @@ func pgamma_raw_ln(x, shape float64) float64 {
 
 		d := dpois_wrap_ln(shape, x)
 		if shape < 1 {
-			if x*DBL_EPSILON > 1-shape {
+			if x*eps64 > 1-shape {
 				//				sum = R_D__1
 				sum = 0
 			} else {
@@ -50,7 +49,7 @@ func pgamma_raw_ln(x, shape float64) float64 {
 
 		}
 		//	    res = log_p	? R_Log1_Exp (d + sum)	: 1 - d * sum
-		res = R_Log1_Exp(d + sum)
+		res = log1Exp(d + sum)
 
 	} else { /* x >= 1 and x fairly near shape. */
 		res = ppois_asymp(shape-1, x, true)
@@ -58,21 +57,17 @@ func pgamma_raw_ln(x, shape float64) float64 {
 	return res
 }
 
-/*
- * Abramowitz and Stegun 6.5.29 [right]
- */
+// Abramowitz and Stegun 6.5.29 [right]
 func pgamma_smallx_ln(x, shape float64) float64 {
 	var term, f2 float64
 	sum := 0.0
 	c := shape
 	n := 0.0
 
-	/*
-	 * Relative to 6.5.29 all terms have been multiplied by shape
-	 * and the first, thus being 1, is omitted.
-	 */
+	// Relative to 6.5.29 all terms have been multiplied by shape
+	// and the first, thus being 1, is omitted.
 	term = 1e32 // just to enter the while loop
-	for abs(term) > DBL_EPSILON*abs(sum) {
+	for abs(term) > eps64*abs(sum) {
 		n++
 		c *= -x / n
 		term = c / (shape + n)
@@ -82,7 +77,7 @@ func pgamma_smallx_ln(x, shape float64) float64 {
 	f1 := log1p(sum)
 
 	if shape > 1 {
-		f2 = dpois_raw_ln(shape, x) /////
+		f2 = dpois_raw_ln(shape, x)
 		f2 = f2 + x
 	} else {
 		f2 = shape*log(x) - lgamma1p(shape)
@@ -94,17 +89,18 @@ func dpois_wrap_ln(x_plus_1, lambda float64) float64 {
 	if isInf(lambda, 0) {
 		return negInf
 	}
+
 	if x_plus_1 > 1 {
 		return dpois_raw_ln(x_plus_1-1, lambda)
 
 	}
+
 	if lambda > abs(x_plus_1-1)*M_cutoff {
 		return -lambda - lgammafn(x_plus_1)
-	} else {
-		d := dpois_raw_ln(x_plus_1, lambda)
-		return d + log(x_plus_1/lambda)
 	}
-	return NaN // should not happen
+
+	d := dpois_raw_ln(x_plus_1, lambda)
+	return d + log(x_plus_1/lambda)
 }
 
 func dpois_raw_ln(x, lambda float64) float64 {
@@ -127,14 +123,13 @@ func dpois_raw_ln(x, lambda float64) float64 {
 		return negInf
 	}
 
-	if x <= lambda*DBL_MIN {
+	if x <= lambda*min64 {
 		return -lambda
 	}
 
-	if lambda < x*DBL_MIN {
+	if lambda < x*min64 {
 		return -lambda + x*log(lambda) - lgammafn(x+1)
 	}
 
 	return -0.5*log((π+π)*x) + (-stirlerr(x) - bd0(x, lambda))
 }
-

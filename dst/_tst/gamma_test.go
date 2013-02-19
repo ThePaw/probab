@@ -87,7 +87,6 @@ func TestGamma(t *testing.T) {
 		}
 	}
 
-
 	// ---------------
 	α = 2.2
 	λ = 1.0
