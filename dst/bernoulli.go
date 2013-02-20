@@ -8,7 +8,7 @@ package dst
 func BernoulliPMF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if k < 0 || k > 1 {
-			panic("k is not 0 or 1")
+			return NaN
 		}
 		if k == 1 {
 			return ρ
@@ -37,7 +37,7 @@ func BernoulliPMFAt(ρ float64, k int64) float64 {
 func BernoulliCDF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if k < 0 || k > 1 {
-			panic("k is not 0 or 1")
+			return NaN
 		}
 		if k == 1 {
 			return 1

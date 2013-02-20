@@ -1,6 +1,7 @@
 package dst
 
 import (
+	fn "code.google.com/p/go-fn/fn"
 	"math"
 )
 
@@ -10,6 +11,7 @@ const M_LN_SQRT_2PI = 0.918938533204672741780329736406 // log(sqrt(2*pi))
 const min64 = math.SmallestNonzeroFloat64              //   DBL_MIN
 const eps64 = 1.1102230246251565e-16                   // DBL_EPSILON   
 const maxExp = 1024.0                                  // DBL_MAX_EXP
+const sqrt2 = math.Sqrt2
 
 var NaN = math.NaN()
 
@@ -21,8 +23,10 @@ var iOne int64 = int64(1)
 var negInf float64 = math.Inf(-1)
 var posInf float64 = math.Inf(+1)
 
+// Functions imported from "math".
 var abs func(float64) float64 = math.Abs
 var floor func(float64) float64 = math.Floor
+var ceil func(float64) float64 = math.Ceil
 var log func(float64) float64 = math.Log
 var log1p func(float64) float64 = math.Log1p
 var exp func(float64) float64 = math.Exp
@@ -31,9 +35,30 @@ var pow func(float64, float64) float64 = math.Pow
 var atan func(float64) float64 = math.Atan
 var tan func(float64) float64 = math.Tan
 var trunc func(float64) float64 = math.Trunc
-
+var erf func(float64) float64 = math.Erf
+var erfc func(float64) float64 = math.Erfc
 var isNaN func(float64) bool = math.IsNaN
 var isInf func(float64, int) bool = math.IsInf
+
+// Functions imported from "code.google.com/p/go-fn/fn".
+var Γ func(float64) float64 = fn.Γ
+var LnΓ func(float64) float64 = fn.LnΓ
+var Γr func(float64, float64) float64 = fn.Γr
+var iΓ func(float64, float64) float64 = fn.IΓ
+var B func(float64, float64) float64 = fn.B
+var logB func(float64, float64) float64 = fn.LnB
+var iBr func(float64, float64, float64) float64 = fn.BetaIncReg
+var BinomCoeff func(int64, int64) float64 = fn.BinomCoeff
+var logBinomCoeff func(int64, int64) float64 = fn.LnBinomCoeff
+var Γpr func(int, float64, float64) float64 = fn.GammaPRatio
+var logΓpr func(int, float64, float64) float64 = fn.LnGammaPRatio
+var logChoose func(int64, int64) float64 = fn.LnChoose
+var ζ func(float64) float64 = fn.RiemannZeta
+var iΓint func(int64, float64) float64 = fn.IΓint
+var fact func(int64) int64 = fn.Fact
+var logFact func(int64) float64 = fn.LnFact
+var hNum func(int64, float64) float64 = fn.H
+var hNumG func(int64, float64, float64) float64 = fn.H2
 
 func imin(x, y int64) int64 {
 	if x > y {
@@ -107,15 +132,15 @@ func expm1(x float64) float64 {
 	if a < math.SmallestNonzeroFloat64 {
 		y = x
 	} else if a > 0.697 {
-		y = exp(x) - 1 /* negligible cancellation */
+		y = exp(x) - 1 // negligible cancellation
 	} else {
 		if a > 1e-8 {
 			y = exp(x) - 1
-		} else { /* Taylor expansion, more accurate in this range */
+		} else { // Taylor expansion, more accurate in this range
 			y = (x/2 + 1) * x
 		}
-		/* Newton step for solving   log(1 + y) = x   for y : */
-		/* WARNING: does not work for y ~ -1: bug in 1.5.0 */
+		// Newton step for solving   log(1 + y) = x   for y 
+		// WARNING: does not work for y ~ -1: bug in 1.5.0
 		y -= (1 + y) * (math.Log1p(y) - x)
 	} //else
 	return y

@@ -13,7 +13,6 @@ package dst
 // x ∈ R
 
 import (
-	"math"
 	"math/rand"
 )
 
@@ -102,7 +101,7 @@ func NormalPDFAt(μ, σ, x float64) float64 {
 
 // NormalCDF returns the CDF of the Normal distribution. 
 func NormalCDF(μ, σ float64) func(x float64) float64 {
-	return func(x float64) float64 { return ((1.0 / 2.0) * (1 + math.Erf((x-μ)/(σ*math.Sqrt2)))) }
+	return func(x float64) float64 { return ((1.0 / 2.0) * (1 + erf((x-μ)/(σ*sqrt2)))) }
 }
 
 // NormalCDFAt returns the value of CDF of the Normal distribution, at x. 
@@ -169,5 +168,5 @@ func NormalExKurt(μ, σ float64) float64 {
 
 // NormalMGF returns the moment-generating function of the Normal distribution. 
 func NormalMGF(μ, σ, t float64) float64 {
-	return math.Exp(μ*t + σ*σ*t*t/2)
+	return exp(μ*t + σ*σ*t*t/2)
 }

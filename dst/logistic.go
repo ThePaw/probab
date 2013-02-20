@@ -12,11 +12,6 @@ package dst
 // Support: 
 // x ∈ R
 
-import (
-	"code.google.com/p/go-fn/fn"
-	"math"
-)
-
 func log1pexp(x float64) float64 {
 	if x <= 18 {
 		return log1p(exp(x))
@@ -34,7 +29,7 @@ func LogisticPDF(μ, σ float64) func(x float64) float64 {
 			return x + μ + σ
 		}
 		if σ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 
 		x = abs((x - μ) / σ)
@@ -51,7 +46,7 @@ func LogisticLnPDF(μ, σ float64) func(x float64) float64 {
 			return x + μ + σ
 		}
 		if σ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 
 		x = abs((x - μ) / σ)
@@ -74,11 +69,11 @@ func LogisticCDF(μ, σ float64) func(x float64) float64 {
 			return x + μ + σ
 		}
 		if σ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		x = (x - μ) / σ
 		if isNaN(x) {
-			return math.NaN()
+			return NaN
 		}
 		return 1 / (1 + exp(-x))
 	}
@@ -91,11 +86,11 @@ func LogisticLnCDF(μ, σ float64) func(x float64) float64 {
 			return x + μ + σ
 		}
 		if σ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		x = (x - μ) / σ
 		if isNaN(x) {
-			return math.NaN()
+			return NaN
 		}
 		return -log1pexp(-x)
 	}
@@ -114,7 +109,7 @@ func LogisticQtl(μ, σ float64) func(p float64) float64 {
 			return p + μ + σ
 		}
 		if σ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		if σ == 0 {
 			return μ
@@ -180,5 +175,5 @@ func LogisticExKurt(μ, σ float64) float64 {
 
 // LogisticMGF returns the moment-generating function of the Logistic distribution. 
 func LogisticMGF(μ, σ, t float64) float64 {
-	return math.Exp(μ*t) * fn.B(0, 2) // TO BE CHECKED
+	return exp(μ*t) * B(0, 2) // TO BE CHECKED
 }

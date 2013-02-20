@@ -14,8 +14,6 @@ package dst
 // x ... to be completed
 
 import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
 	"math/rand"
 )
 
@@ -29,17 +27,17 @@ func ParetoGPDF(shape1, shape2, scale float64) func(x float64) (p float64) {
 			p = 0
 		} else if x == 0 {
 			if shape2 < 1 {
-				p = math.Inf(1)
+				p = posInf
 			} else if shape2 > 1 {
 				p = 0
 			} else {
 				p = 1 / (scale * B(shape2, shape1))
 			}
 		}
-		tmp := math.Log(x) - math.Log(scale)
-		logu := -math.Log1p(math.Exp(-tmp))
-		log1mu := -math.Log1p(math.Exp(tmp))
-		p = math.Exp(shape2*logu + shape1*log1mu - math.Log(x) - LnB(shape2, shape1))
+		tmp := log(x) - log(scale)
+		logu := -log1p(exp(-tmp))
+		log1mu := -log1p(exp(tmp))
+		p = exp(shape2*logu + shape1*log1mu - log(x) - logB(shape2, shape1))
 		return
 	}
 }
@@ -56,7 +54,7 @@ func ParetoGCDF(shape1, shape2, scale float64) func(x float64) float64 {
 		if x < 0 {
 			return 0
 		}
-		u := math.Exp(-math.Log1p(math.Exp(math.Log(scale) - math.Log(x))))
+		u := exp(-log1p(exp(log(scale) - log(x))))
 		cdf := BetaCDF(shape2, shape1)
 		return cdf(u)
 	}
@@ -72,7 +70,7 @@ func ParetoGCDFAt(shape1, shape2, scale, x float64) float64 {
 func ParetoGQtl(shape1, shape2, scale float64) func(p float64) float64 {
 	return func(p float64) float64 {
 		if p < 0 || p > 1 {
-			panic("bad param")
+			return NaN
 		}
 		qtl := BetaQtl(shape2, shape1)
 		return scale / (1.0/qtl(p) - 1.0)
@@ -90,9 +88,9 @@ func ParetoGNext(shape1, shape2, scale float64) float64 {
 func ParetoGMoment(shape1, shape2, scale float64, order int) (x float64) {
 	o := float64(order)
 	if o <= -shape2 || o >= shape1 {
-		x = math.Inf(1)
+		x = posInf
 	} else {
-		x = math.Pow(scale, o) * B(shape1-o, shape2+o) / B(shape1, shape2)
+		x = pow(scale, o) * B(shape1-o, shape2+o) / B(shape1, shape2)
 	}
 	return
 }

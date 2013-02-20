@@ -12,7 +12,6 @@ package dst
 // x ∈ R
 
 import (
-	"math"
 
 //	"math/rand"
 )
@@ -31,7 +30,7 @@ func LogNormalPDFAt(μ, σ, x float64) float64 {
 
 // LogNormalCDF returns the CDF of the LogNormal distribution. 
 func LogNormalCDF(μ, σ float64) func(x float64) float64 {
-	return func(x float64) float64 { return ((1.0 / 2.0) * (1 + math.Erf((log(x)-μ)/(σ*math.Sqrt2)))) }
+	return func(x float64) float64 { return ((1.0 / 2.0) * (1 + erf((log(x)-μ)/(σ*sqrt2)))) }
 }
 
 // LogNormalCDFAt returns the value of CDF of the LogNormal distribution, at x. 

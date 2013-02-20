@@ -13,20 +13,14 @@ package dst
 //		x=(y-a)/(c-a)
 //
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"fmt"
-	"math"
-)
-
 // Beta4PDF returns the PDF of the four-parameter Beta distribution. 
 func Beta4PDF(α, β, a, c float64) func(y float64) float64 {
-	if a >= c {
-		panic("a must be lower than c")
-	}
-	dα := []float64{α, β}
-	dirPDF := DirichletPDF(dα)
 	return func(y float64) float64 {
+		if a >= c {
+			return NaN
+		}
+		dα := []float64{α, β}
+		dirPDF := DirichletPDF(dα)
 		x := (y - a) / (c - a)
 		if 0 > x || x > 1 {
 			return 0
@@ -39,7 +33,7 @@ func Beta4PDF(α, β, a, c float64) func(y float64) float64 {
 // Beta4Next returns random number drawn from the  four-parameter Beta distribution. 
 func Beta4Next(α, β, a, c float64) float64 {
 	if a >= c {
-		panic("a must be lower than c")
+		return NaN
 	}
 	x := BetaNext(α, β)
 	y := x*(c-a) + a
@@ -59,13 +53,13 @@ func Beta4PDFAt(α, β, a, c, x float64) float64 {
 
 // Beta4CDF returns the CDF of the four-parameter Beta distribution. 
 func Beta4CDF(α, β, a, c float64) func(y float64) float64 {
-	if a >= c {
-		panic("a must be lower than c")
-	}
 	return func(y float64) float64 {
 		var res float64
+		if a >= c {
+			return NaN
+		}
 		x := (y - a) / (c - a)
-		z := math.Exp(LnΓ(α+β) - LnΓ(α) - LnΓ(β) + α*math.Log(x) + β*math.Log(1.0-x))
+		z := exp(LnΓ(α+β) - LnΓ(α) - LnΓ(β) + α*log(x) + β*log(1.0-x))
 		switch {
 		case x == 0:
 			res = 0.0
@@ -96,24 +90,24 @@ func Beta4Qtl(α, β, a, c float64) func(p float64) float64 {
 		var b float64 = 1
 		var precision float64 = 1e-9
 		if a >= c {
-			panic("a must be lower than c")
+			return NaN
 		}
 		if p < 0.0 {
-			panic(fmt.Sprintf("p < 0"))
+			return NaN
 		}
 		if p > 1.0 {
-			panic(fmt.Sprintf("p > 1.0"))
+			return NaN
 		}
 		if α < 0.0 {
-			panic(fmt.Sprintf("α < 0.0"))
+			return NaN
 		}
 		if β < 0.0 {
-			panic(fmt.Sprintf("β < 0.0"))
+			return NaN
 		}
 
 		for (b - a) > precision {
 			x = (a + b) / 2
-			if BetaIncReg(α, β, x) > p {
+			if iBr(α, β, x) > p {
 				b = x
 			} else {
 				a = x

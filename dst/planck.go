@@ -12,20 +12,15 @@ package dst
 // Support: 
 // x > 0.0
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 // PlanckPDF returns the PDF of the Planck distribution. 
 func PlanckPDF(a, b float64) func(x float64) float64 {
 	// ζ() waiting for better implementation
-	ζ := RiemannZeta
+	ζ := ζ
 	return func(x float64) float64 {
-		t1 := math.Pow(b, a+1)
-		t2 := math.Pow(x, a)
+		t1 := pow(b, a+1)
+		t2 := pow(x, a)
 		t3 := Γ(a+1) * ζ(a+1)
-		t4 := math.Exp(b*x) - 1
+		t4 := exp(b*x) - 1
 		p := (t1 * t2) / (t3 * t4)
 		return p
 	}

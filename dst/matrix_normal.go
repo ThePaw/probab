@@ -3,7 +3,6 @@ package dst
 import (
 	"fmt"
 	mx "github.com/skelterjohn/go.matrix"
-	"math"
 )
 
 func checkMatrixNormal(M, Omega, Sigma *mx.DenseMatrix) {
@@ -31,9 +30,9 @@ func MatrixNormalPDF(M, Omega, Sigma *mx.DenseMatrix) func(A *mx.DenseMatrix) fl
 	pf := float64(M.Rows())
 	mf := float64(M.Cols())
 
-	norm := math.Pow(2*math.Pi, -0.5*mf*pf)
-	norm *= math.Pow(Omega.Det(), -0.5*mf)
-	norm *= math.Pow(Sigma.Det(), -0.5*pf)
+	norm := pow(2*π, -0.5*mf*pf)
+	norm *= pow(Omega.Det(), -0.5*mf)
+	norm *= pow(Sigma.Det(), -0.5*pf)
 
 	return func(X *mx.DenseMatrix) (p float64) {
 		p = norm
@@ -69,7 +68,7 @@ func MatrixNormalPDF(M, Omega, Sigma *mx.DenseMatrix) func(A *mx.DenseMatrix) fl
 
 		innerTrace := inner.Trace()
 
-		p *= math.Exp(-0.5 * innerTrace)
+		p *= exp(-0.5 * innerTrace)
 
 		return
 	}
@@ -89,7 +88,7 @@ func MatrixNormalLnPDF(M, Omega, Sigma *mx.DenseMatrix) func(A *mx.DenseMatrix) 
 		panic(err)
 	}
 
-	norm := (2 * math.Pi) * (-0.5 * mf * pf)
+	norm := (2 * π) * (-0.5 * mf * pf)
 	norm += Omega.Det() * (-0.5 * mf)
 	norm += Sigma.Det() * (-0.5 * pf)
 

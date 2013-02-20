@@ -13,7 +13,6 @@ package dst
 // X is positive definite
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	m "github.com/skelterjohn/go.matrix"
 )
 

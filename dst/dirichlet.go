@@ -8,10 +8,6 @@ package dst
 // Support: 
 // θi ∈ [0, 1] and Σθi = 1
 
-import (
-	. "code.google.com/p/go-fn/fn"
-)
-
 // DirichletPDF returns the PDF of the Dirichlet distribution. 
 func DirichletPDF(α []float64) func(θ []float64) float64 {
 	return func(θ []float64) float64 {

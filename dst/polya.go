@@ -12,17 +12,12 @@ package dst
 // Support: 
 // k ∈ { 0, 1, 2, 3, … }		number of successes
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 func f_search(p, pr, y, n, incr float64, z *float64) float64 {
 	if *z >= p {
 		/* search to the left */
 	L1:
 		for {
-			*z = PolyaCDFAt(pr, n, int64(math.Floor(y-incr)))
+			*z = PolyaCDFAt(pr, n, int64(floor(y-incr)))
 			if y == 0 || *z < p {
 				break L1
 			}
@@ -33,7 +28,7 @@ func f_search(p, pr, y, n, incr float64, z *float64) float64 {
 	L2:
 		for {
 			y += incr
-			*z = PolyaCDFAt(pr, n, int64(math.Floor(y-incr)))
+			*z = PolyaCDFAt(pr, n, int64(floor(y-incr)))
 			if *z >= p {
 				break L2
 			}
@@ -46,7 +41,7 @@ func f_search(p, pr, y, n, incr float64, z *float64) float64 {
 func PolyaPMF(ρ, r float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		kk := float64(k)
-		return (Γ(kk+r) / (float64(Fact(k)) * Γ(r))) * math.Pow(1-ρ, r) * math.Pow(ρ, float64(k))
+		return (Γ(kk+r) / (float64(fact(k)) * Γ(r))) * pow(1-ρ, r) * pow(ρ, float64(k))
 	}
 }
 
@@ -78,7 +73,7 @@ func PolyaMean(ρ, r float64) float64 {
 // PolyaMode returns the mode of the Pólya distribution. 
 func PolyaMode(ρ, r float64) float64 {
 	if r > 1 {
-		return math.Floor(ρ * (r - 1) / (1 - ρ))
+		return floor(ρ * (r - 1) / (1 - ρ))
 	}
 	return 0
 }
@@ -90,12 +85,12 @@ func PolyaVar(ρ, r float64) float64 {
 
 // PolyaStd returns the standard deviation of the Pólya distribution. 
 func PolyaStd(ρ, r float64) float64 {
-	return math.Sqrt(ρ*r) / (1 - ρ)
+	return sqrt(ρ*r) / (1 - ρ)
 }
 
 // PolyaSkew returns the skewness of the Pólya distribution. 
 func PolyaSkew(ρ, r float64) float64 {
-	return (1 + ρ) / math.Sqrt(ρ*r)
+	return (1 + ρ) / sqrt(ρ*r)
 }
 
 // PolyaExKurt returns the excess kurtosis of the Pólya distribution. 
@@ -105,12 +100,12 @@ func PolyaExKurt(ρ, r float64) float64 {
 
 // PolyaMGF returns the moment-generating function of the Pólya distribution. 
 func PolyaMGF(ρ, r float64, t float64) float64 {
-	return math.Pow((1-ρ)/(1-ρ*math.Exp(t)), r)
+	return pow((1-ρ)/(1-ρ*exp(t)), r)
 }
 
 // PolyaPGF returns the probability-generating function of the Pólya distribution. 
 func PolyaPGF(ρ, r float64, z float64) float64 {
-	return math.Pow((1-ρ)/(1-ρ*z), r)
+	return pow((1-ρ)/(1-ρ*z), r)
 }
 
 // PolyaQtl returns the inverse of the CDF (quantile) of the Pólya distribution.
@@ -120,7 +115,7 @@ func PolyaQtl(ρ, r float64) func(p float64) int64 {
 		fr := float64(r)
 
 		if ρ <= 0 || ρ > 1 || fr <= 0 { // FIXME: fr = 0 is well defined
-			panic("bad params")
+			return int64(NaN)
 		}
 
 		if ρ == 1 {
@@ -135,12 +130,12 @@ func PolyaQtl(ρ, r float64) func(p float64) int64 {
 
 		// temporary hack --- FIXME ---
 		if p+1.01*eps >= 1. {
-			panic("bad p")
+			return int64(NaN)
 		}
 
 		// approximate by Cornish-Fisher expansion
 		z = NormalQtlFor(0, 1, p)
-		y = math.Floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5)
+		y = floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5)
 		z = PolyaCDFAt(ρ, r, int64(y))
 
 		// fuzz to ensure left continuity
@@ -148,20 +143,20 @@ func PolyaQtl(ρ, r float64) func(p float64) int64 {
 
 		// If the C-F value is not too large a simple search is OK
 		if y < 1e5 {
-			return int64(math.Floor(f_search(p, ρ, y, r, 1, &z)))
+			return int64(floor(f_search(p, ρ, y, r, 1, &z)))
 		}
 
 		// Otherwise be a bit cleverer in the search
 		{
-			incr := math.Floor(y / 1000)
+			incr := floor(y / 1000)
 			oldincr := incr
-			for oldincr > 1 && incr > math.Floor(y*1e-15) {
+			for oldincr > 1 && incr > floor(y*1e-15) {
 				//	    y = do_search(y, &z, p, r, ρ, incr)
 				y = f_search(p, ρ, y, r, incr, &z)
 				incr = max(1, incr/100)
 				oldincr = incr
 			}
-			return int64(math.Floor(y))
+			return int64(floor(y))
 		}
 	}
 }

@@ -9,18 +9,16 @@ package dst
 // Support:	x ∈ [0; 1]
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	"fmt"
-	"math"
 )
 
 func bisect(x, p, a, b, xtol, ptol float64) float64 {
 	var x0, x1, px float64
 	cdf := BetaPDF(a, b)
-	for math.Abs(x1-x0) > xtol {
+	for abs(x1-x0) > xtol {
 		px = cdf(x)
 		switch {
-		case math.Abs(px-p) < ptol:
+		case abs(px-p) < ptol:
 			return x
 		case px < p:
 			x0 = x
@@ -45,7 +43,7 @@ func betaContinuedFraction(α, β, x float64) float64 {
 	c = 1.0
 	d = 1.0 - qab*x/qap
 
-	if math.Abs(d) < eps {
+	if abs(d) < eps {
 		d = eps
 	}
 	d = 1.0 / d
@@ -56,28 +54,28 @@ func betaContinuedFraction(α, β, x float64) float64 {
 		m2 = 2 * m
 		aa = m * (β - m) * x / ((qam + m2) * (α + m2))
 		d = 1.0 + aa*d
-		if math.Abs(d) < eps {
+		if abs(d) < eps {
 			d = eps
 		}
 		c = 1.0 + aa/c
-		if math.Abs(c) < eps {
+		if abs(c) < eps {
 			c = eps
 		}
 		d = 1.0 / d
 		res *= d * c
 		aa = -(α + m) * (qab + m) * x / ((α + m2) * (qap + m2))
 		d = 1.0 + aa*d
-		if math.Abs(d) < eps {
+		if abs(d) < eps {
 			d = eps
 		}
 		c = 1.0 + aa/c
-		if math.Abs(c) < eps {
+		if abs(c) < eps {
 			c = eps
 		}
 		d = 1.0 / d
 		del = d * c
 		res *= del
-		if math.Abs(del-1.0) < acc {
+		if abs(del-1.0) < acc {
 			return res
 		}
 	}
@@ -128,7 +126,7 @@ func BetaCDF(α, β float64) func(x float64) float64 {
 	}
 	return func(x float64) float64 {
 		var y, res float64
-		y = math.Exp(LnΓ(α+β) - LnΓ(α) - LnΓ(β) + α*math.Log(x) + β*math.Log(1.0-x))
+		y = exp(LnΓ(α+β) - LnΓ(α) - LnΓ(β) + α*log(x) + β*log(1.0-x))
 		switch {
 		case x == 0:
 			res = 0.0
@@ -159,27 +157,26 @@ func BetaQtl(α, β float64) func(p float64) float64 {
 		var b float64 = 1
 		var precision float64 = 1e-9
 		if p < 0.0 {
-			panic(fmt.Sprintf("p < 0"))
+			return NaN
 		}
 		if p > 1.0 {
-			panic(fmt.Sprintf("p > 1.0"))
+			return NaN
 		}
 		if α < 0.0 {
-			panic(fmt.Sprintf("α < 0.0"))
+			return NaN
 		}
 		if β < 0.0 {
-			panic(fmt.Sprintf("β < 0.0"))
+			return NaN
 		}
 
 		for (b - a) > precision {
 			x = (a + b) / 2
-			if BetaIncReg(α, β, x) > p {
+			if iBr(α, β, x) > p {
 				b = x
 			} else {
 				a = x
 			}
 		}
-
 		return x
 	}
 }
@@ -227,9 +224,9 @@ func BetaMedian(α, β float64) (med float64) {
 	case α == β: // symmetric case
 		med = 0.5
 	case α == 1 && β > 0:
-		med = 1.0 - math.Pow(0.5, 1/β)
+		med = 1.0 - pow(0.5, 1/β)
 	case β == 1 && α > 0:
-		med = math.Pow(0.5, 1/α)
+		med = pow(0.5, 1/α)
 	case α == 3 && β == 2:
 		med = 0.6142724318676105
 	case α == 2 && β == 3:
@@ -245,7 +242,7 @@ func BetaMedian(α, β float64) (med float64) {
 // BetaMedianApprox returns the approximate median of the Beta distribution. 
 func BetaMedianApprox(α, β float64) float64 {
 	if α <= 1 || β <= 1 {
-		panic("α<=1 || β<=1")
+		return NaN
 	}
 	return (α - 1/3) / (α + β - 2/3)
 }
@@ -253,7 +250,7 @@ func BetaMedianApprox(α, β float64) float64 {
 // BetaMode returns the mode of the Beta distribution. 
 func BetaMode(α, β float64) float64 {
 	if α <= 1 || β <= 1 {
-		panic("α<=1 || β<=1")
+		return NaN
 	}
 	return (α - 1) / (α + β - 2) // if α < 1 and β < 1, this is the anti-mode
 }
@@ -266,7 +263,7 @@ func BetaVar(α, β float64) float64 {
 // BetaStd returns the standard deviation of the Beta distribution. 
 func BetaStd(α, β float64) float64 {
 	v := (α * β) / ((α + β) * (α + β) * (α + β + 1))
-	return math.Sqrt(v)
+	return sqrt(v)
 }
 
 // BetaSkew returns the skewness of the Beta distribution. 
@@ -275,8 +272,8 @@ func BetaSkew(α, β float64) (s float64) {
 	if α == β { // symmetric case
 		s = 0.0
 	} else {
-		num := 2 * (β - α) * math.Sqrt(α+β+1)
-		den := (α + β + 2) * math.Sqrt(α*β)
+		num := 2 * (β - α) * sqrt(α+β+1)
+		den := (α + β + 2) * sqrt(α*β)
 		s = num / den
 	}
 	return
@@ -294,7 +291,7 @@ func BetaExKurt(α, β float64) float64 {
 func BetaReparamMeanStd(μ, σ float64) (α, β float64) {
 	// http://linkage.rockefeller.edu/pawe3d/help/Beta-distribution.html
 	if σ*σ >= μ*(1-μ) {
-		panic("σ too big, α, β out of range")
+		return NaN, NaN
 	}
 	α = (μ*μ - μ*μ*μ - μ*σ*σ) / (σ * σ)
 	β = (μ - 2*μ*μ + μ*μ*μ - σ*σ + μ*σ*σ) / (σ * σ)
@@ -306,7 +303,7 @@ func BetaReparamMeanStd(μ, σ float64) (α, β float64) {
 // To be implemented
 /* func BetaReparamModStd(μ, σ float64) (α, β float64) {
 	if σ*σ >= μ*(1-μ) {
-		panic("σ too big, α, β out of range")
+			return NaN
 	}
 	α = 
 	β = 

@@ -8,7 +8,6 @@ package dst
 // Support: x ∈ [0; ∞).
 
 import (
-	"math"
 	"math/rand"
 )
 
@@ -18,7 +17,7 @@ func ExponentialPDF(λ float64) func(x float64) float64 {
 		if x < 0 {
 			return 0
 		}
-		return λ * math.Exp(-λ*x)
+		return λ * exp(-λ*x)
 	}
 }
 
@@ -44,7 +43,7 @@ func ExponentialCDF(λ float64) func(x float64) float64 {
 		if x < 0 {
 			return 0
 		}
-		return 1 - math.Exp(-λ*x)
+		return 1 - exp(-λ*x)
 	}
 }
 
@@ -58,7 +57,7 @@ func ExponentialCDFAt(λ, x float64) float64 {
 func ExponentialQtl(λ float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
 	return func(p float64) float64 {
-		return -math.Log(1-p) / λ
+		return -log(1-p) / λ
 	}
 }
 
@@ -81,7 +80,7 @@ func ExponentialMean(λ float64) float64 {
 
 // Exponential returns the median of the Exponential distribution. 
 func ExponentialMedian(λ float64) (med float64) {
-	return (1 / λ) * math.Log(2)
+	return (1 / λ) * log(2)
 }
 
 // ExponentialMode returns the mode of the Exponential distribution. 

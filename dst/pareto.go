@@ -12,11 +12,6 @@ package dst
 // k x >= θ 
 // x ∈ (0, ∞)
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 // ParetoChkParams checks parameters of the Pareto Type I distribution. 
 func ParetoChkParams(θ, α float64) bool {
 	ok := true
@@ -41,8 +36,8 @@ func ParetoPDF(θ, α float64) func(x float64) float64 {
 		if x < θ {
 			return 0
 		}
-		t1 := α * math.Pow(θ, α)
-		t2 := math.Pow(x, α+1)
+		t1 := α * pow(θ, α)
+		t2 := pow(x, α+1)
 		return t1 / t2
 	}
 }
@@ -59,7 +54,7 @@ func ParetoCDF(θ, α float64) func(x float64) float64 {
 		if x < θ {
 			return 0
 		}
-		return 1 - math.Pow(θ/x, α)
+		return 1 - pow(θ/x, α)
 	}
 }
 
@@ -72,7 +67,7 @@ func ParetoCDFAt(θ, α, x float64) float64 {
 // ParetoQtl returns the inverse of the CDF (quantile) of the Pareto Type I distribution. 
 func ParetoQtl(θ, α float64) func(p float64) float64 {
 	return func(p float64) float64 {
-		return math.Pow(θ*(1-p), (-1 / α))
+		return pow(θ*(1-p), (-1 / α))
 	}
 }
 
@@ -108,7 +103,7 @@ func ParetoMode(θ, α float64) float64 {
 
 // ParetoMedian returns the median of the Pareto Type I distribution. 
 func ParetoMedian(θ, α float64) float64 {
-	return θ * math.Pow(2, 1/α)
+	return θ * pow(2, 1/α)
 }
 
 // ParetoVar returns the variance of the Pareto Type I distribution. 
@@ -124,21 +119,21 @@ func ParetoStd(θ, α float64) float64 {
 	if α <= 2 {
 		return posInf
 	}
-	return θ / (α - 1) * math.Sqrt(α/(α-2))
+	return θ / (α - 1) * sqrt(α/(α-2))
 }
 
 // ParetoSkew returns the skewness of the Pareto Type I distribution. 
 func ParetoSkew(θ, α float64) float64 {
 	if α <= 3 {
-		panic("skewness not defined for α <= 3")
+		return NaN
 	}
-	return 2 * (1 + α) / (α - 3) * math.Sqrt((α-2)/α)
+	return 2 * (1 + α) / (α - 3) * sqrt((α-2)/α)
 }
 
 // ParetoExKurt returns the excess kurtosis of the Pareto Type I distribution. 
 func ParetoExKurt(θ, α float64) float64 {
 	if α <= 4 {
-		panic("skewness not defined for α <= 4")
+		return NaN
 	}
 	return 6 * (α*α*α + α*α - 6*α - 2) / (α * (α - 3) * (α - 4))
 }
@@ -146,9 +141,9 @@ func ParetoExKurt(θ, α float64) float64 {
 // ParetoMGF returns the moment-generating function of the Pareto Type I distribution. 
 func ParetoMGF(θ, α, t float64) float64 {
 	if t >= 0 {
-		panic("MGF not defined for t >= 0")
+		return NaN
 	}
-	return α * math.Pow((-θ*t), α) * IΓ(-α, -θ*t)
+	return α * pow((-θ*t), α) * iΓ(-α, -θ*t)
 }
 
 /*

@@ -16,8 +16,6 @@ package dst
 // Zipf-Mandelbrot distribution
 
 import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
 	"math/rand"
 )
 
@@ -33,7 +31,7 @@ func ZipfMandelbrotChkParams(n int64, q, s float64) bool {
 // ZipfMandelbrotPMF returns the PMF of the Zipf-Mandelbrot distribution. 
 func ZipfMandelbrotPMF(n int64, q, s float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := 1 / (math.Pow((float64(k)+q), s) * H2(n, q, s))
+		p := 1 / (pow((float64(k)+q), s) * hNumG(n, q, s))
 		return p
 	}
 }
@@ -47,7 +45,7 @@ func ZipfMandelbrotPMFAt(n int64, q, s float64, k int64) float64 {
 // ZipfMandelbrotCDF returns the CDF of the Zipf-Mandelbrot distribution. 
 func ZipfMandelbrotCDF(n int64, q, s float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := H2(k, q, s) / H2(n, q, s)
+		p := hNumG(k, q, s) / hNumG(n, q, s)
 		return p
 	}
 }
@@ -91,5 +89,5 @@ func ZipfMandelbrot(n int64, q, s float64) func() int64 {
 
 // ZipfMandelbrotMean returns the mean of the Zipf-Mandelbrot distribution. 
 func ZipfMandelbrotMean(n int64, q, s float64) float64 {
-	return H2(n, q, s-1)/H2(n, q, s) - q
+	return hNumG(n, q, s-1)/hNumG(n, q, s) - q
 }

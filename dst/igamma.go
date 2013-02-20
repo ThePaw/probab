@@ -17,11 +17,6 @@ package dst
 // β > 0:		scale
 // Support:	x ∈ (0, ∞)
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 // InvGammaPDF returns the PDF of the InvGamma distribution. 
 func InvGammaPDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
@@ -31,7 +26,7 @@ func InvGammaPDF(α, β float64) func(x float64) float64 {
 		// with u = β/x.
 
 		if isInf(α, 0) || isInf(β, 0) || α <= 0 || β <= 0 {
-			return math.NaN()
+			return NaN
 		}
 
 		if isInf(x, 0) || x <= 0 {
@@ -47,7 +42,7 @@ func InvGammaPDF(α, β float64) func(x float64) float64 {
 func InvGammaLnPDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if isInf(α, 0) || isInf(β, 0) || α <= 0 || β <= 0 {
-			return math.NaN()
+			return NaN
 		}
 
 		if isInf(x, 0) || x <= 0 {
@@ -69,13 +64,13 @@ func InvGammaPDFAt(α, β, x float64) float64 {
 func InvGammaCDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if isInf(α, 0) || isInf(β, 0) || α <= 0 || β <= 0 {
-			return math.NaN()
+			return NaN
 		}
 
 		if x <= 0 {
 			return 0
 		}
-		return IΓ(α, β/x) / Γ(α)
+		return iΓ(α, β/x) / Γ(α)
 	}
 }
 
@@ -89,10 +84,10 @@ func InvGammaCDFAt(α, β, x float64) float64 {
 func InvGammaQtl(α, β float64) func(p float64) float64 {
 	return func(p float64) float64 {
 		if isInf(α, 0) || isInf(β, 0) || α <= 0 || β <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		if p < 0 || p > 1 {
-			return math.NaN()
+			return NaN
 		}
 		if p == 0 {
 			return 0
@@ -141,7 +136,7 @@ func InvGammaStd(α, β float64) float64 {
 	if α <= 2 {
 		return NaN
 	}
-	return β / math.Sqrt((α-1)*(α-1)*(α-2))
+	return β / sqrt((α-1)*(α-1)*(α-2))
 }
 
 // InvGammaSkew returns the skewness of the InvGamma distribution. 
@@ -149,7 +144,7 @@ func InvGammaSkew(α, β float64) (s float64) {
 	if α <= 3 {
 		return NaN
 	}
-	return 4 * math.Sqrt(α-2) / (α - 3)
+	return 4 * sqrt(α-2) / (α - 3)
 }
 
 // InvGammaExKurt returns the excess kurtosis of the InvGamma distribution. 
@@ -167,14 +162,14 @@ func InvGammaExKurt(α, β float64) float64 {
 // InvGammaPDF returns the PDF of the InvGamma distribution. 
 func InvGammaPDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		return math.Exp(α*math.Log(β) - LnΓ(α) - (α+1)*math.Log(x) - β/x)
+		return exp(α*log(β) - LnΓ(α) - (α+1)*log(x) - β/x)
 	}
 }
 
 // InvGammaLnPDF returns the natural logarithm of the PDF of the InvGamma distribution. 
 func InvGammaLnPDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		return α*math.Log(β) - LnΓ(α) - (α+1)*math.Log(x) - β*1.0/x
+		return α*log(β) - LnΓ(α) - (α+1)*log(x) - β*1.0/x
 	}
 }
 
@@ -183,7 +178,7 @@ func InvGammaCDF(α, β float64) func(x float64) float64 {
 	return func(x float64) float64 {
 
 		if isInf(α, 0) || isInf(β, 0) || α <= 0 || β <= 0 {
-			return math.NaN()
+			return NaN
 		}
 
 		if x <= 0 {

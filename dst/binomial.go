@@ -9,11 +9,6 @@ package dst
 // Support: 
 // k ∈ {0, ... , n}
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 // BinomialPMF returns the PMF of the Binomial distribution. 
 func BinomialPMF(n int64, p float64) func(k int64) float64 {
 	return func(k int64) (x float64) {
@@ -64,11 +59,11 @@ func BinomialQtl(n int64, ρ float64) func(p float64) int64 {
 		var q, mu, sigma, gamma, z float64
 		var y int64
 
-		if float64(n) != math.Floor(float64(n)+0.5) {
-			panic("bad n")
+		if float64(n) != floor(float64(n)+0.5) {
+			return int64(NaN)
 		}
 		if ρ < 0 || ρ > 1 || n < 0 {
-			panic("bad params")
+			return int64(NaN)
 		}
 
 		if ρ == 0 || n == 0 {
@@ -90,7 +85,7 @@ func BinomialQtl(n int64, ρ float64) func(p float64) int64 {
 
 		// y = apρox.value (Cornish-Fisher expansion)
 		z = NormalQtlFor(0, 1, p)
-		y = int64(math.Floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5))
+		y = int64(floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5))
 
 		if y > n { // way off  
 			y = n
@@ -105,9 +100,9 @@ func BinomialQtl(n int64, ρ float64) func(p float64) int64 {
 		}
 		// Otherwise be a bit cleverer in the search 
 		{
-			incr := int64(math.Floor(float64(n) / 1000))
+			incr := int64(floor(float64(n) / 1000))
 			oldincr := incr
-			for oldincr > 1 && incr > int64(math.Floor(float64(y)*1e-15)) {
+			for oldincr > 1 && incr > int64(floor(float64(y)*1e-15)) {
 				y = searchBinomial(p, ρ, y, n, incr, &z)
 				incr = imax(1, incr/100)
 				oldincr = incr
@@ -144,17 +139,17 @@ func BinomialMean(n int64, p float64) float64 {
 
 // BinomialMedian returns the median of the Binomial distribution. 
 func BinomialMedian(n int64, p float64) float64 {
-	return math.Floor(float64(n) * p)
+	return floor(float64(n) * p)
 }
 
 // BinomialMode returns the mode of the Binomial distribution. 
 func BinomialMode(n int64, p float64) float64 {
 	ε := 1e-3 // some small number
 	switch {
-	case (float64(n+1)*p)-math.Floor(float64(n+1)*p) > ε: // (n+1)*p is non-integer
-		return math.Floor(float64(n+1) * p)
+	case (float64(n+1)*p)-floor(float64(n+1)*p) > ε: // (n+1)*p is non-integer
+		return floor(float64(n+1) * p)
 	case (float64(n+1) * p) <= ε: // (n+1)*p == 0
-		return math.Floor(float64(n+1) * p)
+		return floor(float64(n+1) * p)
 	case (float64(n+1)*p)-float64(n+1) <= ε: // (n+1)*p == (n+1)
 		return float64(n)
 	}
@@ -168,12 +163,12 @@ func BinomialVar(n int64, p float64) float64 {
 
 // BinomialStd returns the standard deviation of the Binomial distribution. 
 func BinomialStd(n int64, p float64) float64 {
-	return math.Sqrt(float64(n) * p * (1 - p))
+	return sqrt(float64(n) * p * (1 - p))
 }
 
 // BinomialSkew returns the skewness of the Binomial distribution. 
 func BinomialSkew(n int64, p float64) float64 {
-	return 1 - 2*p/math.Sqrt(float64(n)*p*(1-p))
+	return 1 - 2*p/sqrt(float64(n)*p*(1-p))
 }
 
 // BinomialExKurt returns the excess kurtosis of the Binomial distribution. 
@@ -183,12 +178,12 @@ func BinomialExKurt(n int64, p float64) float64 {
 
 // BinomialMGF returns the moment-generating function of the Binomial distribution. 
 func BinomialMGF(n int64, p, t float64) float64 {
-	return math.Pow((1 - p + p*math.Exp(t)), float64(n))
+	return pow((1 - p + p*exp(t)), float64(n))
 }
 
 // BinomialPGF returns the probability-generating function of the Binomial distribution. 
 func BinomialPGF(n int64, p, z float64) float64 {
-	return math.Pow((1 - p + p*z), float64(n))
+	return pow((1 - p + p*z), float64(n))
 }
 
 func searchBinomial(p, pr float64, y, n, incr int64, z *float64) int64 {

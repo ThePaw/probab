@@ -14,7 +14,6 @@ package dst
 // inspired by R:PtProcess
 
 import (
-	"math"
 	"math/rand"
 )
 
@@ -39,7 +38,7 @@ func ParetoTapChkSupport(x float64) bool {
 // ParetoTapPDF returns the PDF of the Tapered Pareto distribution. 
 func ParetoTapPDF(θ, α, taper float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		return (α/x + 1/taper) * math.Pow((θ/x), α) * math.Exp((θ-x)/taper)
+		return (α/x + 1/taper) * pow((θ/x), α) * exp((θ-x)/taper)
 	}
 }
 
@@ -52,7 +51,7 @@ func ParetoTapPDFAt(θ, α, taper, x float64) float64 {
 // ParetoTapCDF returns the CDF of the Tapered Pareto distribution. 
 func ParetoTapCDF(θ, α, taper float64) func(x float64) float64 {
 	return func(x float64) float64 {
-		return 1 - math.Pow(θ/x, α)*math.Exp((θ-x)/taper)
+		return 1 - pow(θ/x, α)*exp((θ-x)/taper)
 	}
 }
 
@@ -72,7 +71,7 @@ func ParetoTapQtl(θ, α, taper float64) func(p float64) float64 {
 		for {
 			delta := (ParetoTapCDFAt(θ, α, taper, x) - p) / ParetoTapPDFAt(θ, α, taper, x)
 			x -= delta
-			if math.Abs(delta) < tol {
+			if abs(delta) < tol {
 				break
 			}
 		}

@@ -1,8 +1,6 @@
 package dst
 
-import (
-	"math"
-)
+import ()
 
 func ChoicePMF(θ []float64) func(i int64) float64 {
 	return func(i int64) float64 {
@@ -49,7 +47,7 @@ func LogChoice(lws []float64) func() int64 {
 	ws := make([]float64, len(lws))
 	var sum float64
 	for i, lw := range lws {
-		ws[i] = math.Exp(lw - max)
+		ws[i] = exp(lw - max)
 		sum += ws[i]
 	}
 	norm := 1 / sum

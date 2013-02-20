@@ -13,7 +13,6 @@ package dst
 // x ∈ R
 
 import (
-	"math"
 	"math/rand"
 )
 
@@ -24,7 +23,7 @@ func CauchyPDF(δ, γ float64) func(x float64) float64 {
 			return x + δ + γ
 		}
 		if γ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		y := (x - δ) / γ
 		return 1 / (π * γ * (1 + y*y))
@@ -38,7 +37,7 @@ func CauchyLnPDF(δ, γ float64) func(x float64) float64 {
 			return x + δ + γ
 		}
 		if γ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		y := (x - δ) / γ
 		return -log(π * γ * (1 + y*y))
@@ -58,12 +57,12 @@ func CauchyCDF(δ, γ float64) func(x float64) float64 {
 			return x + δ + γ
 		}
 		if γ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 
 		x = (x - δ) / γ
 		if isNaN(x) {
-			return math.NaN()
+			return NaN
 		}
 		if isInf(x, -1) {
 			return 0
@@ -93,12 +92,12 @@ func CauchyLnCDF(δ, γ float64) func(x float64) float64 {
 			return x + δ + γ
 		}
 		if γ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 
 		x = (x - δ) / γ
 		if isNaN(x) {
-			return math.NaN()
+			return NaN
 		}
 		if isInf(x, -1) {
 			return negInf
@@ -134,7 +133,7 @@ func CauchyQtl(δ, γ float64) func(p float64) float64 {
 			return p + δ + γ
 		}
 		if γ < 0 || isInf(γ, 0) {
-			return math.NaN()
+			return NaN
 		}
 		if γ == 0 {
 			return δ

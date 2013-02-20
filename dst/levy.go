@@ -11,10 +11,6 @@ package dst
 // Support: 
 // x ∈ [δ, ∞)
 
-import (
-	"math"
-)
-
 // LevyPDF returns the PDF of the Lévy distribution. 
 func LevyPDF(δ, γ float64) func(x float64) float64 {
 	return func(x float64) float64 {
@@ -22,7 +18,7 @@ func LevyPDF(δ, γ float64) func(x float64) float64 {
 			return x + δ + γ
 		}
 		if γ <= 0 || δ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		return exp(log(γ/(2*π))/2 - 3*log(x-δ)/2 - γ/(2*(x-δ)))
 	}
@@ -35,7 +31,7 @@ func LevyLnPDF(δ, γ float64) func(x float64) float64 {
 			return x + δ + γ
 		}
 		if γ <= 0 || δ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		return log(γ/(2*π))/2 - 3*log(x-δ)/2 - γ/(2*(x-δ))
 	}
@@ -55,7 +51,7 @@ func LevyCDF(δ, γ float64) func(x float64) float64 {
 			return x + δ + γ
 		}
 		if γ <= 0 || δ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		return 2 * (1 - ZCDFAt(1/sqrt((x-δ)/γ)))
 	}
@@ -74,7 +70,7 @@ func LevyQtl(δ, γ float64) func(p float64) float64 {
 			return p + δ + γ
 		}
 		if γ <= 0 || δ <= 0 {
-			return math.NaN()
+			return NaN
 		}
 		if p == 1 {
 			return posInf
@@ -111,12 +107,12 @@ func LevyMode(δ, γ float64) float64 {
 	if δ == 0 {
 		return γ / 3
 	}
-	return math.NaN()
+	return NaN
 }
 
 // LevyMedian returns the median of the Lévy distribution. 
 func LevyMedian(δ, γ float64) float64 {
-	e := 1 / (math.Erfc(0.5))
+	e := 1 / (erfc(0.5))
 	return γ * e * e / 2
 }
 

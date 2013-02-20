@@ -13,7 +13,6 @@ package dst
 // x ∈ [a, b]		(real)
 
 import (
-	"math"
 	"math/rand"
 )
 
@@ -31,7 +30,7 @@ func UniformPDF(a, b float64) func(x float64) float64 {
 func UniformLnPDF(a, b float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if a <= x && x <= a {
-			return math.Log(1 / (b - a))
+			return log(1 / (b - a))
 		}
 		return negInf
 	}
@@ -104,7 +103,7 @@ func UniformExKurt(a, b float64) float64 {
 
 // UniformMGF returns the moment-generating function of the Uniform distribution. 
 func UniformMGF(a, b, t float64) float64 {
-	return (math.Exp(t*b) - math.Exp(t*a)) / (t * (b - a))
+	return (exp(t*b) - exp(t*a)) / (t * (b - a))
 }
 
 // UniformReparamMeanStd returns the parameters a, b of the Uniform distribution calculated from mean and standard deviation. 

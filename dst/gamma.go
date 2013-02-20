@@ -11,11 +11,6 @@ package dst
 // Support: 
 // x ∈ (0, ∞)
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 // GammaPDF returns the value of CDF of the Gamma distribution, at x. 
 func GammaPDF(α float64, θ float64) func(x float64) float64 {
 	//  Computes the density of the gamma distribution,
@@ -230,7 +225,7 @@ func GammaQtl(α, θ float64) func(p float64) float64 {
 				ynew = yold / 10
 				h = yold - ynew
 			}
-			if math.Abs(h) < eps {
+			if abs(h) < eps {
 				break L
 			}
 			yold = ynew
@@ -313,12 +308,12 @@ func GammaVar(α, θ float64) float64 {
 
 // GammaStd returns the standard deviation of the Gamma distribution. 
 func GammaStd(α, θ float64) float64 {
-	return math.Sqrt(α) * θ
+	return sqrt(α) * θ
 }
 
 // GammaSkew returns the skewness of the Gamma distribution. 
 func GammaSkew(α, θ float64) float64 {
-	return 2 / math.Sqrt(α)
+	return 2 / sqrt(α)
 }
 
 // GammaRateToScale returns the parameter θ (scale) of the Gamma distribution calculated from β = rate.
@@ -335,7 +330,7 @@ func GammaRateToScale(β float64) (θ float64) {
 // This function computes the shape and rate parameters of the gamma distribution from a desired mode and standard deviation.
 // After http://doingbayesiandataanalysis.blogspot.com/2012/01/parameterizing-gamma-distribution-by.html
 func GammaReparamModeStd(mode, sd float64) (α, θ float64) {
-	β := (mode + math.Sqrt(mode*mode+4*sd*sd)) / (2 * sd * sd)
+	β := (mode + sqrt(mode*mode+4*sd*sd)) / (2 * sd * sd)
 	α = 1 + mode*β
 	θ = 1 / β
 	return
@@ -365,7 +360,7 @@ func GammaReparamMeanStd(mean, sd float64) (α, θ float64) {
 func GammaCDF(k float64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if k < 0 || θ < 0 {
-			panic(fmt.Sprintf("k < 0 || θ < 0"))
+			return NaN
 		}
 		if x < 0 {
 			return 0
@@ -379,7 +374,7 @@ func GammaCDF(k float64, θ float64) func(x float64) float64 {
 func GammaCDFint(k int64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if k < 0 || θ < 0 {
-			panic(fmt.Sprintf("k < 0 || θ < 0"))
+			return NaN
 		}
 		if x < 0 {
 			return 0
@@ -392,7 +387,7 @@ func GammaCDFint(k int64, θ float64) func(x float64) float64 {
 func GammaCDF(k float64, θ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		if k < 0 || θ < 0 {
-			panic(fmt.Sprintf("k < 0 || θ < 0"))
+			return NaN
 		}
 		if x < 0 {
 			return 0

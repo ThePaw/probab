@@ -12,11 +12,6 @@ package dst
 // Support: 
 // k ∈ { 0, 1, 2, 3, … }		number of successes
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 func do_search(p, pr float64, y, n, incr int64, z *float64) int64 {
 	if *z >= p {
 		// search to the left
@@ -45,7 +40,7 @@ func do_search(p, pr float64, y, n, incr int64, z *float64) int64 {
 // NegBinomialPMF returns the PMF of the Negative binomial distribution. 
 func NegBinomialPMF(ρ float64, r int64) func(k int64) float64 {
 	return func(k int64) float64 {
-		return BinomCoeff(k+r-1, k) * math.Pow(1-ρ, float64(r)) * math.Pow(ρ, float64(k))
+		return BinomCoeff(k+r-1, k) * pow(1-ρ, float64(r)) * pow(ρ, float64(k))
 	}
 }
 
@@ -53,7 +48,7 @@ func NegBinomialPMF(ρ float64, r int64) func(k int64) float64 {
 func NegBinomialLnPMF(ρ float64, r int64) func(i int64) float64 {
 	return func(k int64) float64 {
 		rr := float64(r)
-		return LnChoose(k+r-1, r-1) + log(ρ)*rr + log(1-ρ)*float64(k)
+		return logChoose(k+r-1, r-1) + log(ρ)*rr + log(1-ρ)*float64(k)
 	}
 }
 
@@ -84,7 +79,7 @@ func NegBinomialQtl(ρ float64, r int64) func(p float64) int64 {
 		var y int64
 		fr := float64(r)
 		if ρ <= 0 || ρ > 1 || fr <= 0 { // FIXME: fr = 0 is well defined
-			panic("bad params")
+			return int64(NaN)
 		}
 
 		if ρ == 1 {
@@ -99,13 +94,13 @@ func NegBinomialQtl(ρ float64, r int64) func(p float64) int64 {
 
 		// temporary hack --- FIXME ---
 		if p+1.01*eps64 >= 1 {
-			panic("bad p")
+			return int64(NaN)
 		}
 
 		// y := approx.value (Cornish-Fisher expansion)
 
 		z = NormalQtlFor(0, 1, p)
-		y = int64(math.Floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5))
+		y = int64(floor(mu + sigma*(z+gamma*(z*z-1)/6) + 0.5))
 		z = NegBinomialCDFAt(ρ, r, y)
 
 		// fuzz to ensure left continuity
@@ -117,9 +112,9 @@ func NegBinomialQtl(ρ float64, r int64) func(p float64) int64 {
 		}
 		// Otherwise be a bit cleverer in the search
 		{
-			incr := int64(math.Floor(float64(y) / 1000))
+			incr := int64(floor(float64(y) / 1000))
 			oldincr := incr
-			for oldincr > 1 && incr > int64(math.Floor(float64(y)*1e-15)) {
+			for oldincr > 1 && incr > int64(floor(float64(y)*1e-15)) {
 				//	    y = do_search(y, &z, p, r, ρ, incr)
 				y = do_search(p, ρ, y, r, incr, &z)
 				incr = imax(1, incr/100)
@@ -162,7 +157,7 @@ func NegBinomialMean(ρ float64, r int64) float64 {
 // NegBinomialMode returns the mode of the Negative binomial distribution. 
 func NegBinomialMode(ρ float64, r int64) float64 {
 	if r > 1 {
-		return math.Floor(ρ * float64(r-1) / (1 - ρ))
+		return floor(ρ * float64(r-1) / (1 - ρ))
 	}
 	return 0
 }
@@ -174,12 +169,12 @@ func NegBinomialVar(ρ float64, r int64) float64 {
 
 // NegBinomialStd returns the standard deviation of the Negative binomial distribution. 
 func NegBinomialStd(ρ float64, r int64) float64 {
-	return math.Sqrt(ρ*float64(r)) / (1 - ρ)
+	return sqrt(ρ*float64(r)) / (1 - ρ)
 }
 
 // NegBinomialSkew returns the skewness of the Negative binomial distribution. 
 func NegBinomialSkew(ρ float64, r int64) float64 {
-	return (1 + ρ) / math.Sqrt(ρ*float64(r))
+	return (1 + ρ) / sqrt(ρ*float64(r))
 }
 
 // NegBinomialExKurt returns the excess kurtosis of the Negative binomial distribution. 
@@ -190,10 +185,10 @@ func NegBinomialExKurt(ρ float64, r int64) float64 {
 
 // NegBinomialMGF returns the moment-generating function of the Negative binomial distribution. 
 func NegBinomialMGF(ρ float64, r int64, t float64) float64 {
-	return math.Pow((1-ρ)/(1-ρ*math.Exp(t)), float64(r))
+	return pow((1-ρ)/(1-ρ*exp(t)), float64(r))
 }
 
 // NegBinomialPGF returns the probability-generating function of the Negative binomial distribution. 
 func NegBinomialPGF(ρ float64, r int64, z float64) float64 {
-	return math.Pow((1-ρ)/(1-ρ*z), float64(r))
+	return pow((1-ρ)/(1-ρ*z), float64(r))
 }

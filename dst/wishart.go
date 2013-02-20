@@ -13,7 +13,6 @@ package dst
 // X 	pxp positive definite, real
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	m "github.com/skelterjohn/go.matrix"
 )
 

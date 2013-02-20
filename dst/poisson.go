@@ -14,11 +14,6 @@ package dst
 // k ∈ {0, ... , n}
 // x ∈ (0, ∞)
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 /*
 func PoissonLnPMF(λ float64) (foo func(i int64) float64) {
 	pmf := PoissonPMF(λ)
@@ -41,7 +36,7 @@ func PoissonPMF(λ float64) func(k int64) float64 {
 
 func PoissonPMF(λ float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := math.Exp(-λ) * pow(λ, float64(k)) / Γ(float64(k)+1)
+		p := exp(-λ) * pow(λ, float64(k)) / Γ(float64(k)+1)
 		return p
 	}
 }
@@ -51,7 +46,7 @@ func PoissonPMF(λ float64) func(k int64) float64 {
 func PoissonPMF(λ float64) func(k int64) float64 {
 	pmf := PoissonLnPMF(λ)
 	return func(k int64) float64 {
-		p := math.Exp(pmf(k))
+		p := exp(pmf(k))
 		return p
 	}
 }
@@ -89,7 +84,7 @@ func PoissonCDF(λ float64) func(k int64) float64 {
 // PoissonCDFAn returns the CDF of the Poisson distribution. Analytic solution, less precision.
 func PoissonCDFAn(λ float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := math.Exp(math.Log(IΓint(k+1, λ)) - (LnFact(k)))
+		p := exp(log(iΓint(k+1, λ)) - (logFact(k)))
 		return p
 	}
 }
@@ -104,7 +99,7 @@ func PoissonCDFAt(λ float64, k int64) float64 {
 func LnPoissonCDFAn(λ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		k1 := (float64)(k + 1)
-		return log(IΓ(k1, λ)) - LnFact(k)
+		return log(iΓ(k1, λ)) - logFact(k)
 	}
 }
 
@@ -123,7 +118,7 @@ func PoissonNext(λ float64) int64 {
 		k -= 1
 
 	} else { // use Normal approximation
-		k = int64(iround(NormalNext(λ, math.Sqrt(λ))))
+		k = int64(iround(NormalNext(λ, sqrt(λ))))
 	}
 	return k
 }
@@ -142,12 +137,12 @@ func PoissonMean(λ float64, k int64) float64 {
 
 // PoissonMode returns the mode of the Poisson distribution. 
 func PoissonMode(λ float64, k int64) float64 {
-	return math.Ceil(λ) - 1
+	return ceil(λ) - 1
 }
 
 // PoissonMedian returns the median of the Poisson distribution. Approximation. 
 func PoissonMedian(λ float64, k int64) float64 {
-	return math.Floor(λ + 1/3 - 0.02*λ)
+	return floor(λ + 1/3 - 0.02*λ)
 }
 
 // PoissonVar returns the variance of the Poisson distribution. 
@@ -157,7 +152,7 @@ func PoissonVar(λ float64, k int64) float64 {
 
 // PoissonSkew returns the skewness of the Poisson distribution. 
 func PoissonSkew(λ float64, k int64) float64 {
-	return math.Pow(λ, -0.5)
+	return pow(λ, -0.5)
 }
 
 // PoissonExKurt returns the excess kurtosis of the Poisson distribution. 

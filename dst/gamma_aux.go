@@ -4,11 +4,6 @@ package dst
 
 // Gamma distribution, helper functions. 
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 // Scalefactor:= (2^32)^8 = 2^256 = 1.157921e+77
 const scalefactor = 1.157920892373162e+77
 
@@ -374,7 +369,7 @@ func dpnorm(x, lp float64) float64 {
 		d := ZPDFAt(x)
 		return d / exp(lp)
 	}
-	return math.NaN() // should not happen
+	return NaN // should not happen
 }
 
 // Asymptotic expansion to calculate the probability that Poisson variate
@@ -411,7 +406,6 @@ func ppois_asymp(lambda, x float64, log_p bool) float64 {
 	)
 
 	lower_tail := true
-
 	dfm = lambda - x
 
 	// If lambda is large, the distribution is highly concentrated
@@ -444,6 +438,7 @@ func ppois_asymp(lambda, x float64, log_p bool) float64 {
 		elfb += elfb_term * coefs_b[i]
 		elfb_term /= x
 	}
+
 	if !lower_tail { // should never happen
 		elfb = -elfb
 	}
@@ -460,7 +455,7 @@ func ppois_asymp(lambda, x float64, log_p bool) float64 {
 
 		return np + f*nd
 	}
-	return math.NaN() // should not happen
+	return NaN // should not happen
 }
 
 func dpois_wrap(x_plus_1, lambda float64) float64 {

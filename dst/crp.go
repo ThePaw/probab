@@ -1,9 +1,5 @@
 package dst
 
-import (
-	. "code.google.com/p/go-fn/fn"
-)
-
 func CRPPMF(α float64) func(x []int64) float64 {
 	return func(x []int64) float64 {
 		n := int64(len(x))

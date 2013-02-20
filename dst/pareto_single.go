@@ -14,7 +14,6 @@ package dst
 // inspired by R:actuar
 
 import (
-	"math"
 	"math/rand"
 )
 
@@ -41,7 +40,7 @@ func ParetoSingPDF(α, μ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		p := 0.0
 		if x >= μ {
-			p = math.Exp(math.Log(α) + α*math.Log(μ) - (α+1.0)*math.Log(x))
+			p = exp(log(α) + α*log(μ) - (α+1.0)*log(x))
 		}
 		return p
 	}
@@ -58,7 +57,7 @@ func ParetoSingCDF(α, μ float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		p := 0.0
 		if x > μ {
-			p = (0.5 - (math.Pow(μ/x, α)) + 0.5)
+			p = (0.5 - (pow(μ/x, α)) + 0.5)
 		}
 		return p
 	}
@@ -73,7 +72,7 @@ func ParetoSingCDFAt(α, μ, x float64) float64 {
 // ParetoSingQtl returns the inverse of the CDF (quantile) of the Single-parameter  Pareto distribution. 
 func ParetoSingQtl(α, μ float64) func(p float64) float64 {
 	return func(p float64) float64 {
-		return μ / math.Pow((0.5-(p)+0.5), 1.0/α)
+		return μ / pow((0.5-(p)+0.5), 1.0/α)
 	}
 }
 
@@ -99,10 +98,10 @@ func ParetoSing(α, μ float64) func() float64 {
 func ParetoSingMoment(α, μ float64, order int) float64 {
 	o := float64(order)
 	if o >= α {
-		return math.Inf(+1)
+		return posInf
 	}
 
-	return α * math.Pow(μ, o) / (α - o)
+	return α * pow(μ, o) / (α - o)
 }
 
 // ParetoSingMean returns the mean of the Single-parameter  Pareto distribution. 

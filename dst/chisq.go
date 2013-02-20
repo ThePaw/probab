@@ -8,11 +8,6 @@ package dst
 // Support: 
 // x ∈ [0, +∞]
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 // ChiSquarePDF returns the PDF of the ChiSquare distribution. 
 func ChiSquarePDF(n int64) func(x float64) float64 {
 	k := float64(n) / 2
@@ -89,7 +84,7 @@ func ChiSquareMedian(n int64) float64 {
 
 // ChiSquareMode returns the mode of the ChiSquare distribution. 
 func ChiSquareMode(n int64) float64 {
-	return math.Max(float64(n-2), 0)
+	return max(float64(n-2), 0)
 }
 
 // ChiSquareVar returns the variance of the ChiSquare distribution. 
@@ -99,12 +94,12 @@ func ChiSquareVar(n int64) float64 {
 
 // ChiSquareStd returns the standard deviation of the ChiSquare distribution. 
 func ChiSquareStd(n int64) float64 {
-	return math.Sqrt(float64(2 * n))
+	return sqrt(float64(2 * n))
 }
 
 // ChiSquareSkew returns the skewness of the ChiSquare distribution. 
 func ChiSquareSkew(n int64) float64 {
-	return math.Sqrt(float64(8 / n))
+	return sqrt(float64(8 / n))
 }
 
 // ChiSquareExKurt returns the excess kurtosis of the ChiSquare distribution. 

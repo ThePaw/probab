@@ -8,9 +8,6 @@ package dst
 func BetaμσPDF(μ, σ float64) func(x float64) float64 {
 	α := μ * (μ*(1-μ)/(σ*σ) - 1)
 	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
-	if σ*σ >= μ*(1-μ) {
-		panic("σ too big, α, β out of range")
-	}
 	return BetaPDF(α, β)
 }
 
@@ -18,9 +15,6 @@ func BetaμσPDF(μ, σ float64) func(x float64) float64 {
 func BetaμσLnPDF(μ, σ float64) func(x float64) float64 {
 	α := μ * (μ*(1-μ)/(σ*σ) - 1)
 	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
-	if σ*σ >= μ*(1-μ) {
-		panic("σ too big, α, β out of range")
-	}
 	return BetaLnPDF(α, β)
 }
 
@@ -28,9 +22,6 @@ func BetaμσLnPDF(μ, σ float64) func(x float64) float64 {
 func BetaμσNext(μ, σ float64) float64 {
 	α := μ * (μ*(1-μ)/(σ*σ) - 1)
 	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
-	if σ*σ >= μ*(1-μ) {
-		panic("σ too big, α, β out of range")
-	}
 	return BetaNext(α, β)
 }
 
@@ -38,9 +29,6 @@ func BetaμσNext(μ, σ float64) float64 {
 func Betaμσ(μ, σ float64) func() float64 {
 	α := μ * (μ*(1-μ)/(σ*σ) - 1)
 	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
-	if σ*σ >= μ*(1-μ) {
-		panic("σ too big, α, β out of range")
-	}
 	return func() float64 { return BetaNext(α, β) }
 }
 
@@ -54,9 +42,6 @@ func BetaμσPDFAt(μ, σ, x float64) float64 {
 func BetaμσCDF(μ, σ float64) func(x float64) float64 {
 	α := μ * (μ*(1-μ)/(σ*σ) - 1)
 	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
-	if σ*σ >= μ*(1-μ) {
-		panic("σ too big, α, β out of range")
-	}
 	return BetaCDF(α, β)
 }
 
@@ -71,9 +56,6 @@ func BetaμσQtl(μ, σ float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
 	α := μ * (μ*(1-μ)/(σ*σ) - 1)
 	β := (1 - μ) * (μ*(1-μ)/(σ*σ) - 1)
-	if σ*σ >= μ*(1-μ) {
-		panic("σ too big, α, β out of range")
-	}
 	return BetaQtl(α, β)
 }
 

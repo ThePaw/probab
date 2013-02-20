@@ -13,11 +13,7 @@ package dst
 // x >= θ
 // inspired by R:actuar
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-	"math/rand"
-)
+import "math/rand"
 
 // ParetoIIChkParams checks parameters of the ParetoII distribution. 
 func ParetoIIChkParams(θ, α float64) bool {
@@ -49,10 +45,10 @@ func ParetoIIPDF(θ, α float64) func(x float64) float64 {
 		} else if x == 0 {
 			p = α / θ
 		} else {
-			tmp := math.Log(x) - math.Log(θ)
-			logu := -math.Log1p(math.Exp(tmp))
-			log1mu := -math.Log1p(math.Exp(-tmp))
-			p = math.Exp(math.Log(α) + α*logu + log1mu - math.Log(x))
+			tmp := log(x) - log(θ)
+			logu := -log1p(exp(tmp))
+			log1mu := -log1p(exp(-tmp))
+			p = exp(log(α) + α*logu + log1mu - log(x))
 		}
 		return p
 	}
@@ -70,8 +66,8 @@ func ParetoIICDF(θ, α float64) func(x float64) float64 {
 		if x < 0 {
 			return 0
 		}
-		u := math.Exp(-math.Log1p(math.Exp(math.Log(x) - math.Log(θ))))
-		return 1 - math.Pow(u, α)
+		u := exp(-log1p(exp(log(x) - log(θ))))
+		return 1 - pow(u, α)
 	}
 }
 
@@ -85,9 +81,9 @@ func ParetoIICDFAt(θ, α, q, x float64) float64 {
 func ParetoIIQtl(θ, α float64) func(p float64) float64 {
 	return func(p float64) float64 {
 		if p < 0 || p > 1 {
-			panic("probability out of range 0..1")
+			return NaN
 		}
-		return θ * (math.Pow((0.5-(p)+0.5), -1.0/α) - 1.0)
+		return θ * (pow((0.5-(p)+0.5), -1.0/α) - 1.0)
 	}
 }
 
@@ -113,9 +109,9 @@ func ParetoII(θ, α float64) func() float64 {
 func ParetoIIMoment(θ, α float64, order int) float64 {
 	o := float64(order)
 	if α <= o {
-		panic("not defined")
+		return NaN
 	}
-	return math.Pow(θ, o) * Γ(1.0+o) * Γ(α-o) / Γ(α)
+	return pow(θ, o) * Γ(1.0+o) * Γ(α-o) / Γ(α)
 }
 
 // ParetoIIMean returns the mean of the Pareto Type II distribution. 

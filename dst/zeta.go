@@ -12,16 +12,14 @@ package dst
 // k > 0		(integer)
 
 import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
 	"math/rand"
 )
 
 // ZetaPMF returns the PMF of the Zeta distribution. 
 func ZetaPMF(s float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		t1 := 1 / math.Pow(float64(k), s)
-		t2 := RiemannZeta(s)
+		t1 := 1 / pow(float64(k), s)
+		t2 := ζ(s)
 		p := t1 / t2
 		return p
 	}
@@ -36,8 +34,8 @@ func ZetaPMFAt(s float64, k int64) float64 {
 // ZetaCDF returns the CDF of the Zeta distribution. 
 func ZetaCDF(s float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		t1 := H(k, s)
-		t2 := RiemannZeta(s)
+		t1 := hNum(k, s)
+		t2 := ζ(s)
 		p := t1 / t2
 		return p
 	}
@@ -54,12 +52,12 @@ func ZetaNext(s float64) (k int64) {
 	// Devroye 1986: 550. Called "Zipf distribution" there.
 	// Devroye, L. 1986: Non-Uniform Random Variate Generation. Springer-Verlag, New York. ISBN 0-387-96305-7.
 	var x float64
-	b := math.Pow(2.0, s-1.0)
+	b := pow(2.0, s-1.0)
 	for {
 		u := rand.Float64()
 		v := rand.Float64()
-		x = math.Floor(math.Pow(u, -1/(s-1)))
-		t := math.Pow(1+1.0/x, s-1)
+		x = floor(pow(u, -1/(s-1)))
+		t := pow(1+1.0/x, s-1)
 		delta := v * x * (t - 1.0) / (b - 1.0)
 		if delta <= (t / b) {
 			break
@@ -77,10 +75,10 @@ func Zeta(s float64) func() int64 {
 // ZetaMean returns the mean of the Zeta distribution. 
 func ZetaMean(s float64) float64 {
 	if s <= 2 {
-		panic("not defined")
+		return NaN
 	}
-	t1 := RiemannZeta(s - 1)
-	t2 := RiemannZeta(s)
+	t1 := ζ(s - 1)
+	t2 := ζ(s)
 	return t1 / t2
 }
 
@@ -92,11 +90,11 @@ func ZetaMode() float64 {
 // ZetaVar returns the variance of the Zeta distribution. 
 func ZetaVar(s float64) float64 {
 	if s <= 3 {
-		panic("variance not defined for s <= 3")
+		return NaN
 	}
-	t1 := RiemannZeta(s)
-	t2 := RiemannZeta(s - 2)
-	t3 := RiemannZeta((s - 1) * (s - 1))
-	t4 := RiemannZeta(s * s)
+	t1 := ζ(s)
+	t2 := ζ(s - 2)
+	t3 := ζ((s - 1) * (s - 1))
+	t4 := ζ(s * s)
 	return (t1*t2 - t3) / t4
 }

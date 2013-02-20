@@ -9,8 +9,6 @@ package dst
 // Support: 
 // k ∈ {0, ... , n}
 
-import "math"
-
 // GeometricPMF returns the PMF of the Geometric distribution. 
 func GeometricPMF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 { return ρ * pow(1-ρ, float64(k)) }
@@ -31,7 +29,7 @@ func GeometricPMFAt(ρ float64, k int64) float64 {
 func GeometricCDF(ρ float64) func(k int64) float64 {
 	return func(k int64) float64 {
 		if k < 0 {
-			panic("k < 0")
+			return NaN
 		}
 		return 1 - pow(1-ρ, float64(k+1))
 	}
@@ -65,7 +63,7 @@ func GeometricMean(ρ float64) float64 {
 /*  to be implemented
 // GeometricMedian returns the median of the Geometric distribution. 
 func GeometricMedian(ρ float64) float64 {
-	return math.Floor(float64(n)*p)
+	return floor(float64(n)*p)
 }
 */
 
@@ -81,12 +79,12 @@ func GeometricVar(ρ float64) float64 {
 
 // GeometricStd returns the standard deviation of the Geometric distribution. 
 func GeometricStd(ρ float64) float64 {
-	return math.Sqrt(1-ρ) / ρ
+	return sqrt(1-ρ) / ρ
 }
 
 // GeometricSkew returns the skewness of the Geometric distribution. 
 func GeometricSkew(ρ float64) float64 {
-	return (2 - ρ) / math.Sqrt(1-ρ)
+	return (2 - ρ) / sqrt(1-ρ)
 }
 
 // GeometricExKurt returns the excess kurtosis of the Geometric distribution. 
@@ -96,5 +94,5 @@ func GeometricExKurt(ρ float64) float64 {
 
 // GeometricMGF returns the moment-generating function of the Geometric distribution. 
 func GeometricMGF(ρ, t float64) float64 {
-	return ρ / (1 - (1-ρ)*math.Exp(t))
+	return ρ / (1 - (1-ρ)*exp(t))
 }

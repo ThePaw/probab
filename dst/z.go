@@ -11,7 +11,6 @@ package dst
 // x ∈ R
 
 import (
-	"math"
 
 //	"math/rand"
 )
@@ -47,11 +46,11 @@ func ZQtl() func(p float64) float64 {
 		dp = p - 0.5
 		switch {
 		case p == 1.0:
-			return math.MaxFloat64
+			return posInf
 		case p == 0.0:
-			return -math.MaxFloat64
+			return negInf
 		}
-		if math.Abs(dp) <= 0.425 {
+		if abs(dp) <= 0.425 {
 			x = small(dp)
 			return x
 		}
@@ -60,7 +59,7 @@ func ZQtl() func(p float64) float64 {
 		} else {
 			pp = 1.0 - p
 		}
-		r = math.Sqrt(-math.Log(pp))
+		r = sqrt(-log(pp))
 		if r <= 5.0 {
 			x = intermediate(r)
 		} else {

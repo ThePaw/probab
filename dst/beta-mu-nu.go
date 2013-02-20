@@ -7,9 +7,6 @@ package dst
 
 // BetaμνPDF returns the PDF of the Beta distribution reparametrized using mean and sample size. 
 func BetaμνPDF(μ, ν float64) func(x float64) float64 {
-	if ν <= 0 {
-		panic("ν must be greater than zero")
-	}
 	α := μ * ν
 	β := (1 - μ) * ν
 	return BetaPDF(α, β)
@@ -19,9 +16,6 @@ func BetaμνPDF(μ, ν float64) func(x float64) float64 {
 func BetaμνLnPDF(μ, ν float64) func(x float64) float64 {
 	α := μ * ν
 	β := (1 - μ) * ν
-	if ν <= 0 {
-		panic("ν must be greater than zero")
-	}
 	return BetaLnPDF(α, β)
 }
 
@@ -30,7 +24,7 @@ func BetaμνNext(μ, ν float64) float64 {
 	α := μ * ν
 	β := (1 - μ) * ν
 	if ν <= 0 {
-		panic("ν must be greater than zero")
+		return NaN
 	}
 	return BetaNext(α, β)
 }
@@ -39,9 +33,6 @@ func BetaμνNext(μ, ν float64) float64 {
 func Betaμν(μ, ν float64) func() float64 {
 	α := μ * ν
 	β := (1 - μ) * ν
-	if ν <= 0 {
-		panic("ν must be greater than zero")
-	}
 	return func() float64 { return BetaNext(α, β) }
 }
 
@@ -55,9 +46,6 @@ func BetaμνPDFAt(μ, ν, x float64) float64 {
 func BetaμνCDF(μ, ν float64) func(x float64) float64 {
 	α := μ * ν
 	β := (1 - μ) * ν
-	if ν <= 0 {
-		panic("ν must be greater than zero")
-	}
 	return BetaCDF(α, β)
 }
 
@@ -72,9 +60,6 @@ func BetaμνQtl(μ, ν float64) func(p float64) float64 {
 	// p: probability for which the quantile is evaluated
 	α := μ * ν
 	β := (1 - μ) * ν
-	if ν <= 0 {
-		panic("ν must be greater than zero")
-	}
 	return BetaQtl(α, β)
 }
 

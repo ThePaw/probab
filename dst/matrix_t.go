@@ -1,10 +1,8 @@
 package dst
 
 import (
-	. "code.google.com/p/go-fn/fn"
 	"fmt"
 	mx "github.com/skelterjohn/go.matrix"
-	"math"
 )
 
 func checkMatrixT(M, Omega, Sigma *mx.DenseMatrix, n int) {
@@ -38,10 +36,10 @@ func MatrixTPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix) 
 
 	var norm float64 = 1
 
-	norm *= GammaPRatio(p, 0.5*(nf+mf+pf-1), 0.5*(nf+pf-1))
-	norm *= math.Pow(math.Pi, -0.5*mf*pf)
-	norm *= math.Pow(Omega.Det(), -0.5*mf)
-	norm *= math.Pow(Sigma.Det(), -0.5*pf)
+	norm *= Γpr(p, 0.5*(nf+mf+pf-1), 0.5*(nf+pf-1))
+	norm *= pow(π, -0.5*mf*pf)
+	norm *= pow(Omega.Det(), -0.5*mf)
+	norm *= pow(Sigma.Det(), -0.5*pf)
 
 	SigmaInv, err := Sigma.Inverse()
 	if err != nil {
@@ -64,7 +62,7 @@ func MatrixTPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix) 
 		inner, _ = inner.TimesDense(SigmaInv)
 		inner, _ = inner.TimesDense(diff.Transpose())
 
-		l *= math.Pow(inner.Det(), -0.5*(nf+mf+pf-1))
+		l *= pow(inner.Det(), -0.5*(nf+mf+pf-1))
 
 		return
 	}
@@ -81,10 +79,10 @@ func MatrixTLnPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix
 
 	var norm float64 = 0
 
-	norm += LnGammaPRatio(p, 0.5*(nf+mf+pf-1), 0.5*(nf+pf-1))
-	norm += math.Pow(math.Pi, -0.5*mf*pf)
-	norm += math.Pow(Omega.Det(), -0.5*mf)
-	norm += math.Pow(Sigma.Det(), -0.5*pf)
+	norm += logΓpr(p, 0.5*(nf+mf+pf-1), 0.5*(nf+pf-1))
+	norm += pow(π, -0.5*mf*pf)
+	norm += pow(Omega.Det(), -0.5*mf)
+	norm += pow(Sigma.Det(), -0.5*pf)
 
 	SigmaInv, err := Sigma.Inverse()
 	if err != nil {
@@ -107,7 +105,7 @@ func MatrixTLnPDF(M, Omega, Sigma *mx.DenseMatrix, n int) func(T *mx.DenseMatrix
 		inner, _ = inner.TimesDense(SigmaInv)
 		inner, _ = inner.TimesDense(diff.Transpose())
 
-		ll += math.Log(inner.Det()) * -0.5 * (nf + mf + pf - 1)
+		ll += log(inner.Det()) * -0.5 * (nf + mf + pf - 1)
 
 		return
 	}

@@ -11,11 +11,6 @@ package dst
 // Support: 
 // x ∈ (-∞, +∞) (real)
 
-import (
-	. "code.google.com/p/go-fn/fn"
-	"math"
-)
-
 // StudentsTPDF returns the PDF of the Student's t distribution. 
 func StudentsTPDF(ν float64) func(x float64) float64 {
 	normalization := Γ((ν+1)/2) / (sqrt(ν*π) * Γ(ν/2))
@@ -37,7 +32,7 @@ func StudentsTCDF(ν float64) func(x float64) float64 {
 	return func(x float64) float64 {
 		var p float64
 		if ν <= 0 {
-			panic("ν <= 0")
+			return NaN
 		}
 
 		nx := 1 + (x/ν)*x
@@ -46,8 +41,8 @@ func StudentsTCDF(ν float64) func(x float64) float64 {
 			   pbeta(z, a, b) ~ z^a(1-z)^b / aB(a,b) ~ z^a / aB(a,b),
 			   with z = 1/nx,  a = ν/2,  b= 1/2 :
 			*/
-			p = -0.5*ν*(2*math.Log(math.Abs(x))-math.Log(ν)) - LnB(0.5*ν, 0.5) - math.Log(0.5*ν)
-			p = math.Exp(p)
+			p = -0.5*ν*(2*log(abs(x))-log(ν)) - logB(0.5*ν, 0.5) - log(0.5*ν)
+			p = exp(p)
 		} else {
 			if ν > x*x {
 				α := 0.5
@@ -90,7 +85,7 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 		pok := false
 
 		if ν <= 0 || p < 0 || p > 1 {
-			panic("bad params")
+			return NaN
 		}
 
 		/*
@@ -106,8 +101,8 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 
 				// Invert pt(.) :
 				// 1. finding an upper and lower bound
-				if(p > 1 - math.SmallestNonzeroFloat64) return MLPOSINF;
-				pp = fmin2(1 - math.SmallestNonzeroFloat64, p// (1 + Eps));
+				if(p > 1 - min64) return MLPOSINF;
+				pp = fmin2(1 - min64, p// (1 + Eps));
 				for(ux = 1.; ux < DBLMAX && pt(ux, ν, TRUE, FALSE) < pp; ux//= 2);
 				pp = p// (1 - Eps);
 				for(lx =-1.; lx > -DBLMAX && pt(lx, ν, TRUE, FALSE) > pp; lx//= 2);
@@ -118,7 +113,7 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 				do {
 				    nx = 0.5// (lx + ux);
 				    if (pt(nx, ν, TRUE, FALSE) > p) ux = nx; else lx = nx;
-				} while ((ux - lx) / math.Abs(nx) > accu && ++iter < 1000);
+				} while ((ux - lx) / abs(nx) > accu && ++iter < 1000);
 
 				if(iter >= 1000) MLERROR(MEPRECISION, "qt");
 
@@ -138,25 +133,25 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 				p = 2 * (0.5 - p + 0.5)
 			}
 
-			if math.Abs(ν-2) < eps { // df ~= 2
-				if p > math.SmallestNonzeroFloat64 {
-					if 3*p < math.SmallestNonzeroFloat64 { // p ~= 0
-						q = 1 / math.Sqrt(p)
+			if abs(ν-2) < eps { // df ~= 2
+				if p > min64 {
+					if 3*p < min64 { // p ~= 0
+						q = 1 / sqrt(p)
 					} else if p > 0.9 { // p ~= 1
-						q = (1 - p) * math.Sqrt(2/(p*(2-p)))
+						q = (1 - p) * sqrt(2/(p*(2-p)))
 					} else { // eps/3 <= p <= 0.9
-						q = math.Sqrt(2/(p*(2-p)) - 2)
+						q = sqrt(2/(p*(2-p)) - 2)
 					}
-				} else { // p << 1, q = 1/math.Sqrt(p) = ...
-					panic("q = +Inf")
+				} else { // p << 1, q = 1/sqrt(p) = ...
+					return posInf
 
 				}
 			} else if ν < 1+eps { // df ~= 1  (df < 1 excluded above): Cauchy
 				if p > 0 {
-					q = 1 / math.Tan(p*π/2) // == - math.Tan((p+1) * π/2) -- suffers for p ~= 0
+					q = 1 / tan(p*π/2) // == - tan((p+1) * π/2) -- suffers for p ~= 0
 
 				} else { // p = 0, but maybe = 2*exp(p) !
-					panic("q = +Inf")
+					return posInf
 				}
 			} else { //-- usual case;  including, e.g.,  df = 1.1
 				x := 0.0
@@ -164,10 +159,10 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 				a := 1 / (ν - 0.5)
 				b := 48 / (a * a)
 				c := ((20700*a/b-98)*a-16)*a + 96.36
-				d := ((94.5/(b+c)-3)/b + 1) * math.Sqrt(a*π/2) * ν
+				d := ((94.5/(b+c)-3)/b + 1) * sqrt(a*π/2) * ν
 
-				y = math.Pow(d*p, 2/ν)
-				if y >= math.SmallestNonzeroFloat64 {
+				y = pow(d*p, 2/ν)
+				if y >= min64 {
 					pok = true
 				}
 				if (ν < 2.1 && p > 0.5) || y > 0.05+a { // p > p0(df)
@@ -181,15 +176,15 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 					c = (((0.05*d*x-5)*x-7)*x-2)*x + b + c
 					y = (((((0.4*y+6.3)*y+36)*y+94.5)/c-y-3)/b + 1) * x
 					y = expm1(a * y * y)
-					q = math.Sqrt(ν * y)
+					q = sqrt(ν * y)
 				} else { // re-use 'y' from above
 
-					if !pok && x < -0.5*log(math.SmallestNonzeroFloat64) { // 0.5* log(math.SmallestNonzeroFloat64)
+					if !pok && x < -0.5*log(min64) { // 0.5* log(min64)
 						// y above might have underflown
-						q = math.Sqrt(ν) * exp(-x)
+						q = sqrt(ν) * exp(-x)
 					} else {
 						y = ((1/(((ν+6)/(ν*y)-0.089*d-0.822)*(ν+2)*3)+0.5/(ν+4))*y-1)*(ν+1)/(ν+2) + 1/y
-						q = math.Sqrt(ν * y)
+						q = sqrt(ν * y)
 					}
 				}
 
@@ -202,7 +197,7 @@ func StudentsTQtl(ν float64) func(p float64) float64 {
 						break
 					}
 					x = (1 - pt(q) - p/2) / y
-					if math.Abs(x) > 1e-14*math.Abs(q) {
+					if abs(x) > 1e-14*abs(q) {
 						// Newton (=Taylor 1 term):
 						//  q += x 
 						// Taylor 2-term : 
@@ -239,7 +234,7 @@ func StudentsT(ν float64) func() float64 {
 // StudentsTMean returns the mean of the StudentsT Type I distribution. 
 func StudentsTMean(ν float64) float64 {
 	if ν <= 1 {
-		panic("mean not defined for ν <= 1")
+		return NaN
 	}
 	return 0
 }
@@ -257,7 +252,7 @@ func StudentsTMedian(ν float64) float64 {
 // StudentsTVar returns the variance of the StudentsT Type I distribution. 
 func StudentsTVar(ν float64) float64 {
 	if ν >= 1 {
-		panic("variance not defined for ν <= 1")
+		return NaN
 	}
 	if ν > 2 {
 		return ν / (ν - 2)
@@ -268,10 +263,10 @@ func StudentsTVar(ν float64) float64 {
 // StudentsTStd returns the standard deviation of the StudentsT Type I distribution. 
 func StudentsTStd(ν float64) float64 {
 	if ν >= 1 {
-		panic("standard deviation not defined for ν <= 1")
+		return NaN
 	}
 	if ν > 2 {
-		return math.Sqrt(ν / (ν - 2))
+		return sqrt(ν / (ν - 2))
 	}
 	return posInf
 }
@@ -279,7 +274,7 @@ func StudentsTStd(ν float64) float64 {
 // StudentsTSkew returns the skewness of the StudentsT Type I distribution. 
 func StudentsTSkew(ν float64) float64 {
 	if ν <= 3 {
-		panic("skewness not defined for ν <= 3")
+		return NaN
 	}
 	return 0
 }
@@ -287,7 +282,7 @@ func StudentsTSkew(ν float64) float64 {
 // StudentsTExKurt returns the excess kurtosis of the StudentsT Type I distribution. 
 func StudentsTExKurt(ν float64) float64 {
 	if ν <= 2 {
-		panic("skewness not defined for ν <= 2")
+		return NaN
 	}
 	if ν <= 4 {
 		return posInf
