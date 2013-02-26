@@ -119,6 +119,39 @@ func PoissonLambdaQtlGPri(sumK, n int64, r, v float64) func(p float64) float64 {
 	return GammaQtl(r1, 1/v1)
 }
 
+// PoissonLambdaNextFPri returns random number drawn from the posterior, flat prior.
+func PoissonLambdaNextFPri(sumK, n int64) float64 {
+	if sumK < 0 || n <= 0 {
+		panic("bad data")
+	}
+	r1 := float64(sumK) + 1.0
+	v1 := float64(n)
+	return GammaNext(r1, 1/v1)
+}
+
+// PoissonLambdaNextJPri returns random number drawn from the posterior, Jeffreys' prior.
+func PoissonLambdaNextJPri(sumK, n int64) float64 {
+	if sumK < 0 || n <= 0 {
+		panic("bad data")
+	}
+	r1 := float64(sumK) + 0.5
+	v1 := float64(n)
+	return GammaNext(r1, 1/v1)
+}
+
+// PoissonLambdaNextGPri returns random number drawn from the posterior, Gamma prior.
+func PoissonLambdaNextGPri(sumK, n int64, r, v float64) float64 {
+	if sumK < 0 || n <= 0 {
+		panic("bad data")
+	}
+	if r < 0 || v < 0 {
+		panic("Shape parameter r and rate parameter v must be greater than or equal to zero")
+	}
+	r1 := r + float64(sumK)
+	v1 := v + float64(n)
+	return GammaNext(r1, 1/v1)
+}
+
 // Likelihood of Poisson λ.
 // Bolstad 2007 (2e): Chapter 10, p. 184.
 func PoissonLambdaLike(sumK, n int64, λ float64) float64 {

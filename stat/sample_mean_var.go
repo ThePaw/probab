@@ -2,16 +2,13 @@
 
 package stat
 
-import (
-	"math"
-)
-
+/*
 // Sample mean and unbiased (Bessel correction) variance estimates
-func SampleMeanVar(x []float64) (μ float64, σ float64) {
+func SampleMeanVar(x []float64) (μ float64, σ2 float64) {
 	var n int
 	var m, m2, delta float64
 		μ = 0.0	// sample mean
-		σ = 0.0	// sample variance unbiased
+		σ2 = 0.0	// sample variance unbiased
 		m = 0.0
 		m2 = 0.0
 
@@ -22,7 +19,30 @@ func SampleMeanVar(x []float64) (μ float64, σ float64) {
         		m += delta/float64(n)
         		m2 += delta*(x[j] - m)
 		}
-		σ = math.Sqrt(m2/float64(n - 1))
+		σ2 = m2/float64(n - 1)
+		μ /= float64(len(x))
+	return
+}
+*/
+
+// Sample mean and unbiased (Bessel correction) variance estimates
+func SampleMeanVar(x []float64) (μ, σ2 float64) {
+	var n int
+	var m, m2  float64
+		μ = 0.0	// sample mean
+		σ2 = 0.0	// sample variance unbiased
+		m = 0.0
+		m2 = 0.0
+
+		for _, val := range x {
+        			n += 1
+			μ += val
+			delta := val - m
+        			m += delta/float64(n)
+        			m2 += delta*(val - m)
+		}
+
+		σ2 = m2/float64(n - 1)
 		μ /= float64(len(x))
 	return
 }
