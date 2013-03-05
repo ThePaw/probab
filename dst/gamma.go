@@ -203,43 +203,6 @@ func GammaLnCDFAt(α, θ, x float64) float64 {
 	return cdf(x)
 }
 
-// GammaQtl returns the inverse of the CDF (quantile) of the Gamma distribution. 
-func GammaQtl(α, θ float64) func(p float64) float64 {
-	return func(p float64) float64 {
-		var eps, ynew, h float64
-		if p == 0 {
-			return 0
-		}
-		if p == 1 {
-			return posInf
-		}
-
-		eps = 1e-10
-		y := α * θ
-		yold := y
-	L:
-		for i := 0; i < 100; i++ {
-			h = (GammaCDFAt(α, θ, yold) - p) / GammaPDFAt(α, θ, yold)
-			ynew = yold - h
-			if ynew <= eps {
-				ynew = yold / 10
-				h = yold - ynew
-			}
-			if abs(h) < eps {
-				break L
-			}
-			yold = ynew
-		}
-		return ynew
-	}
-}
-
-// GammaQtlFor returns the inverse of the CDF (quantile) of the Gamma distribution, for given probability.
-func GammaQtlFor(α, θ, p float64) float64 {
-	cdf := GammaQtl(α, θ)
-	return cdf(p)
-}
-
 // GammaNext returns random number drawn from the Gamma distribution. 
 func GammaNext(α float64, θ float64) float64 {
 	//if α is a small integer, this way is faster on my laptop
@@ -407,4 +370,35 @@ func GammaLnPDF(α float64, θ float64) func(x float64) float64 {
 		return expPart(x) + (α-1)*log(θ*x) - LnΓ(α)
 	}
 }
+// GammaQtl returns the inverse of the CDF (quantile) of the Gamma distribution. 
+func GammaQtl(α, θ float64) func(p float64) float64 {
+	return func(p float64) float64 {
+		var eps, ynew, h float64
+		if p == 0 {
+			return 0
+		}
+		if p == 1 {
+			return posInf
+		}
+
+		eps = 1e-10
+		y := α * θ
+		yold := y
+	L:
+		for i := 0; i < 100; i++ {
+			h = (GammaCDFAt(α, θ, yold) - p) / GammaPDFAt(α, θ, yold)
+			ynew = yold - h
+			if ynew <= eps {
+				ynew = yold / 10
+				h = yold - ynew
+			}
+			if abs(h) < eps {
+				break L
+			}
+			yold = ynew
+		}
+		return ynew
+	}
+}
+
 */

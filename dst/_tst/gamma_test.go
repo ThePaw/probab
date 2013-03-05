@@ -100,14 +100,6 @@ func TestGamma(t *testing.T) {
 			fmt.Println(p[i], prob, qtl[i])
 		}
 	}
-	fmt.Println("test of Gamma Qtl #2")
-	for i = 0; i < int64(len(p)); i++ {
-		prob = GammaQtl2For(α, λ, p[i])
-		if !check(prob, qtl[i]) {
-			t.Error()
-			fmt.Println(p[i], prob, qtl[i])
-		}
-	}
 
 	// ---------------
 	α = 2.2

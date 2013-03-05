@@ -11,10 +11,8 @@ package dst
 // Support: 
 // x ∈ (0, ∞)
 
-import "fmt"
-
-// GammaQtl2 returns the inverse of the CDF (quantile) of the Gamma distribution. 
-func GammaQtl2(alpha, scale float64) func(p float64) float64 {
+// GammaQtl returns the inverse of the CDF (quantile) of the Gamma distribution. 
+func GammaQtl(alpha, scale float64) func(p float64) float64 {
 	/*	This function is based on the Applied Statistics
 	 *	Algorithm AS 91 ("ppchi2") and via pgamma(.) AS 239.
 	 *
@@ -163,7 +161,6 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 		 */
 		x = 0.5 * scale * ch
 
-		x0 := x
 		if max_it_Newton != 0 {
 			/* always use log scale */
 			//	if (!log_p) {
@@ -217,12 +214,11 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 				t = x - t
 
 				//	    p_ = pgamma (t, alpha, scale, lower_tail, log_p)
-				GammaLnCDFAt(alpha, scale, x)
+				p_ = GammaLnCDFAt(alpha, scale, x)
 				if abs(p_-p) > abs(p1) || (i > 1 && abs(p_-p) == abs(p1)) { // <- against flip-flop
 					// no improvement
 					break
 				} // else : 
-				/*
 					//ifdef Harmful_notably_if_max_it_Newton_is_1
 						    // control step length: this could have started at the initial approximation 
 
@@ -232,17 +228,15 @@ func GammaQtl2(alpha, scale float64) func(p float64) float64 {
 					t = 0.9*x
 					}
 					//endif
-				*/
 				x = t
 			}
 		}
-		fmt.Println("Newton: ", x0, x)
 		return x
 	}
 }
 
-// GammaQtl2For returns the inverse of the CDF (quantile) of the Gamma distribution, for given probability.
-func GammaQtl2For(k, θ, p float64) float64 {
-	cdf := GammaQtl2(k, θ)
+// GammaQtlFor returns the inverse of the CDF (quantile) of the Gamma distribution, for given probability.
+func GammaQtlFor(k, θ, p float64) float64 {
+	cdf := GammaQtl(k, θ)
 	return cdf(p)
 }
