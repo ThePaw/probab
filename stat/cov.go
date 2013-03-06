@@ -1,10 +1,10 @@
 // Covariance matrix 
 
 package stat
+
 import (
 	. "github.com/skelterjohn/go.matrix"
 )
-
 
 // Covariance matrix between columns of data matrix, two-pass algorithm
 // http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Covariance

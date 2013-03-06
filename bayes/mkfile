@@ -1,8 +1,0 @@
-< $GOROOT/src/9bootstrap.mk
-
-TARG=gostat.googlecode.com/hg/stat/bayes
-
-< GOFILES
-
-< $GOROOT/src/mk.pkg
-

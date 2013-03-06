@@ -8,13 +8,12 @@ import . "code.google.com/p/probab/dst"
 func BinomPConfInt(n, k int64, alpha float64) (float64, float64) {
 
 	/*
-	Alpha	100(1-alpha) is the confidence 
-	n	Sample size	
-	k	Observed number of successes (p=n/k)
-	lCL	Lower confidence limit
-	uCL	Upper confidence limit
+		Alpha	100(1-alpha) is the confidence 
+		n	Sample size	
+		k	Observed number of successes (p=n/k)
+		lCL	Lower confidence limit
+		uCL	Upper confidence limit
 	*/
-
 
 	var lCL, uCL float64
 	if k <= 0 {
@@ -30,4 +29,3 @@ func BinomPConfInt(n, k int64, alpha float64) (float64, float64) {
 	}
 	return lCL, uCL
 }
-

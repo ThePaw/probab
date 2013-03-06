@@ -5,8 +5,8 @@
 package bayes
 
 import (
-	"fmt"
 	. "code.google.com/p/probab/dst"
+	"fmt"
 )
 
 // Posterior PDF, Dirichlet prior

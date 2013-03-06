@@ -3,9 +3,9 @@
 package bayes
 
 import (
+	"code.google.com/p/probab/dst"
 	"fmt"
 	mx "github.com/skelterjohn/go.matrix"
-	"code.google.com/p/probab/dst"
 )
 
 type KnownVarianceLRPosterior struct {
@@ -49,7 +49,7 @@ func NewKnownVarianceLRPosterior(M, Sigma, Phi *mx.DenseMatrix) (this *KnownVari
 }
 
 func (this *KnownVarianceLRPosterior) Insert(x, y *mx.DenseMatrix) {
-	xxt,  _:= x.TimesDense(x.Transpose())
+	xxt, _ := x.TimesDense(x.Transpose())
 	this.XXt.Add(xxt)
 	yxt, _ := y.TimesDense(x.Transpose())
 	this.YXt.Add(yxt)

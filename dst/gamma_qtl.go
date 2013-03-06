@@ -219,15 +219,15 @@ func GammaQtl(alpha, scale float64) func(p float64) float64 {
 					// no improvement
 					break
 				} // else : 
-					//ifdef Harmful_notably_if_max_it_Newton_is_1
-						    // control step length: this could have started at the initial approximation 
+				//ifdef Harmful_notably_if_max_it_Newton_is_1
+				// control step length: this could have started at the initial approximation 
 
-						    if t > 1.1*x {
-					t = 1.1*x
-						    }else if t < 0.9*x {
-					t = 0.9*x
-					}
-					//endif
+				if t > 1.1*x {
+					t = 1.1 * x
+				} else if t < 0.9*x {
+					t = 0.9 * x
+				}
+				//endif
 				x = t
 			}
 		}

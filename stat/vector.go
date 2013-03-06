@@ -29,4 +29,3 @@ func (v Vector) Swap(i int, j int) {
 func (v Vector) Len() int {
 	return v.L
 }
-

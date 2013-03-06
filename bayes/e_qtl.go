@@ -20,11 +20,10 @@ func eQtl(x []float64, α float64) float64 {
 	}
 	if i == n {
 		v = x[i]
-	} else {	// linear interpolation
+	} else { // linear interpolation
 		dp := α*float64(n) - p
-		dx := (x[i+1]-x[i]) * dp
+		dx := (x[i+1] - x[i]) * dp
 		v = x[i] + dx
 	}
 	return v
 }
-

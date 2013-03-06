@@ -18,16 +18,13 @@ func eCDF(x []float64, y float64) float64 {
 	}
 	//return (2*float64(i)+1)/(2*float64(n))	// linear interpolation
 
-
 	if i == n {
 		v = 1
-	} else {	// linear interpolation
+	} else { // linear interpolation
 		dx := y - x[i]
-		dp := dx/(x[i+1]-x[i])
-		v = (float64(i)+ dp)/float64(n)
+		dp := dx / (x[i+1] - x[i])
+		v = (float64(i) + dp) / float64(n)
 	}
 	return v
 
 }
-
-

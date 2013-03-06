@@ -7,7 +7,7 @@ package bayes
 
 import (
 	. "code.google.com/p/probab/dst"
-//	. "code.google.com/p/go-fn/fn"
+	//	. "code.google.com/p/go-fn/fn"
 	"math"
 )
 
@@ -21,6 +21,7 @@ func PoissonLambdaPDFFPri(sumK, n int64) func(p float64) float64 {
 	v1 := float64(n)
 	return GammaPDF(r1, 1/v1)
 }
+
 // Poisson λ, posterior PDF, Jeffreys' prior.
 func PoissonLambdaPDFJPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
@@ -57,6 +58,7 @@ func PoissonLambdaCDFFPri(sumK, n int64) func(p float64) float64 {
 	v1 := float64(n)
 	return GammaCDF(r1, 1/v1)
 }
+
 // Poisson λ, posterior CDF, Jeffreys' prior.
 func PoissonLambdaCDFJPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
@@ -93,6 +95,7 @@ func PoissonLambdaQtlFPri(sumK, n int64) func(p float64) float64 {
 	v1 := float64(n)
 	return GammaQtl(r1, 1/v1)
 }
+
 // Poisson λ, posterior quantile function, Jeffreys' prior.
 func PoissonLambdaQtlJPri(sumK, n int64) func(p float64) float64 {
 	// CAUTION !!! v= 1/scale !!!
@@ -155,7 +158,7 @@ func PoissonLambdaNextGPri(sumK, n int64, r, v float64) float64 {
 // Likelihood of Poisson λ.
 // Bolstad 2007 (2e): Chapter 10, p. 184.
 func PoissonLambdaLike(sumK, n int64, λ float64) float64 {
-	return λ*float64(sumK)* math.Exp(float64(-n)*λ)
+	return λ * float64(sumK) * math.Exp(float64(-n)*λ)
 
 }
 
@@ -215,8 +218,8 @@ func PoissonLambdaCrIGPri(sumK, n int64, r, v, α float64) (lo, hi float64) {
 	*/
 	// return value: lo is lower boundary, hi upper
 	qf := PoissonLambdaQtlGPri(sumK, n, r, v)
-	lo = qf(α/2)
-	hi = qf(1-α/2)
+	lo = qf(α / 2)
+	hi = qf(1 - α/2)
 	return
 }
 
@@ -255,5 +258,3 @@ func PoissonLambdaTwoSidedTst(sumK, n int64, r, v, α, λ0 float64) bool {
 	}
 	return reject
 }
-
-
