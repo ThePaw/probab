@@ -1,8 +1,10 @@
+// Copyright 2012 - 2013 The Probab Authors. All rights reserved. See the LICENSE file.
+
+package bayes
+
 // Bayesian inference about the parameter vector p of multinomial distribution.
 // Conjugate prior is Dirichlet(|α|), conjugate posterior is Dirichlet(|α+x|).
 // http://en.wikipedia.org/wiki/Dirichletdistribution#Conjugatetomultinomial
-
-package bayes
 
 import (
 	. "code.google.com/p/probab/dst"
