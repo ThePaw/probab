@@ -144,4 +144,3 @@ func FactCTableIndep(y [][]float64, k float64, m int) (bf, nse float64) {
 	nse /= sqrt(float64(m))
 	return
 }
-

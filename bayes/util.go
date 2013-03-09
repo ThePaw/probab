@@ -33,3 +33,33 @@ func cols2vec(y [][]float64) []float64 {
 	}
 	return v
 }
+
+// linInt is a linear interpolation function.
+func linInt(x, y []float64, xVal float64) float64 {
+	// x vector must be nondecreasing
+
+	if xVal < x[0] || xVal > x[len(x)-1] {
+		return nan
+	}
+
+	// find out which segment we are in
+	n := 0
+	for i, _ := range x {
+		if xVal > x[i] {
+			n = i
+		} else {
+			break
+		}
+	}
+	if n > len(y) {
+		return nan
+	}
+
+	// interpolate
+	x0, y0 := x[n], y[n]
+	x1, y1 := x[n+1], y[n+1]
+	a := x1 - x0
+	b := y1 - y0
+	yVal := b*(xVal-x0)/a + y0
+	return yVal
+}

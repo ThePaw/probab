@@ -5,16 +5,6 @@ package bayes
 // Logarithm of the integral of the Bayes factor for testing homogeneity of a set of proportions.
 // Ref.: Albert (2009)
 
-import (
-	fn "code.google.com/p/go-fn/fn"
-	"math"
-)
-
-var lnB func(float64, float64) float64 = fn.LnB
-var exp func(float64) float64 = math.Exp
-var sqrt func(float64) float64 = math.Sqrt
-var log func(float64) float64 = math.Log
-
 func logF(k, eta float64, y, n []float64) []float64 {
 	v := make([]float64, len(y))
 	for i, _ := range v {
