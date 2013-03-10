@@ -2,12 +2,9 @@
 
 package bayes
 
-// compute Bayes factor against independence
-// using Albert and Gupta independence priors
-// y - matrix of counts
-// k - Dirichlet precision hyperparameter
-// m - number of simulations
-// Ref.: Albert (2009)
+// Bayes factor against independence for a two-way contingency table assuming 
+// a "close to independence" alternative model.
+// Ref.: Albert (2009): 200 [bfindep()]
 
 import (
 	"code.google.com/p/probab/dst"
@@ -50,14 +47,14 @@ func ldirichlet(a [][]float64) []float64 {
 // FactCTableIndep returns a Bayes factor against independence for a two-way contingency table assuming a 
 // "close to independence" alternative model.
 func FactCTableIndep(y [][]float64, k float64, m int) (bf, nse float64) {
-	// Arguments
-	// y matrix of counts
-	// k Dirichlet precision hyperparameter
-	// m number of simulations
+	// Arguments:
+	// y - matrix of counts
+	// k - Dirichlet precision hyperparameter
+	// m - number of simulations
 	//
-	// Return values
-	// bf value of the Bayes factor against hypothesis of independence
-	// nse estimate of the simulation standard error of the computed Bayes factor
+	// Returns:
+	// bf - value of the Bayes factor against hypothesis of independence
+	// nse - estimate of the simulation standard error of the computed Bayes factor
 
 	yc := colSums(y)
 	yr := rowSums(y)
