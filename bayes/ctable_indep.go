@@ -1,4 +1,4 @@
-// Copyright 2012 - 2013 The Probab Authors. All rights reserved. See the LyRowsCENSE file.
+// Copyright 2012 - 2013 The Probab Authors. All rights reserved. See the LICENSE file.
 
 package bayes
 
