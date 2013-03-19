@@ -2,48 +2,92 @@
 
 package bayes
 
-// 
-/*
-"discint" <-
-function(dist,prob)
-//
-// DISC_INT Computes a highest probability interval for a discrete distribution.  
-//	LIST=DISCINT(DIST,PROB) gives a list, where LIST.set is the set of values and
-// 	LIST.prob is the exact probability context EPROB, where DIST=[VALUE,PROBABILITY]
-//	is the matrix which contains the discrete distribution and PROB
-//	is the probability content desired.
-//------------------------
-// Written by Jim Albert
-// albert@bgnet.bgsu.edu
-// November 2004
-//------------------------
-{	
-x=dist[,1]; p=dist[,2]; n=length(x)
+// Highest probability interval for a discrete probability distribution.
+// Ref.: Albert (2009): 184 [mnormt.onesided()]
 
-sp=sort(p,index.return=TRUE)
-ps=sp$x
-i=sp$ix[seq(n,1,-1)]; ps=p[i]; xs=x[i]
-cp=cumsum(ps)
-ii=1:n
-j=ii[cp>=prob]; j=j[1]
-eprob=cp[j]; set=sort(xs[1:j])
-v=list(prob=eprob,set=set)
-return(v)
-}
-*/
+import (
+	"sort"
+)
 
+// cumSum returns cumulative sums of a slice.
 func cumSum(x []float64) []float64 {
 	v := make([]float64, len(x))
 	for i, _ := range x {
 		if i == 0 {
 			v[i] = x[i]
 		} else {
-			v[i] += v[i-1] + x[i]
+			v[i] = v[i-1] + x[i]
 		}
 	}
 	return v
 }
 
+type IndexSorter struct {
+	Target  []float64
+	Indices []int
+}
+
+func NewSorter(t []float64) IndexSorter {
+	iv := make([]int, len(t))
+	for i := range iv {
+		iv[i] = i
+	}
+	return IndexSorter{Target: t, Indices: iv}
+}
+func (s IndexSorter) Len() int           { return len(s.Target) }
+func (s IndexSorter) Less(i, j int) bool { return s.Target[i] < s.Target[j] }
+func (s IndexSorter) Swap(i, j int) {
+	s.Target[i], s.Target[j] = s.Target[j], s.Target[i]
+	s.Indices[i], s.Indices[j] = s.Indices[j], s.Indices[i]
+}
+
 // DiscHPI computes a highest probability interval for a discrete distribution.  
-//func DiscHPI(x, p []float64, prob float64) probEx, hpi {
-// p must be sorted in ascending order
+func DiscHPI(x, p []float64, probContent float64) (probExact float64, hpiSet []float64) {
+	// Arguments:
+	// x - values where probability is listed
+	// p - probability at x
+	// probContent - target probability content of the HPI
+	// Returns:
+	// probExact - exact probability content of the HPI
+	// hpiSet set of values of x within the highest probability interval
+	s := NewSorter(p)
+	sort.Sort(s)
+	ix := s.Indices
+	ps := s.Target
+
+	// reverse sorted indices
+	iRev := make([]int, len(ix))
+	for i, _ := range ix {
+		iRev[i] = ix[len(ix)-i-1]
+	}
+
+	// reverse sorted probabilities
+	pRev := make([]float64, len(ps))
+	for i, _ := range ps {
+		pRev[i] = ps[len(ps)-i-1]
+	}
+
+	// sort x
+	xRev := make([]float64, len(iRev))
+	for i, _ := range xRev {
+		xRev[i] = x[iRev[i]]
+	}
+
+	cp := cumSum(pRev)
+
+	// find first index where cp>=probContent
+	j := 0
+	for i, _ := range cp {
+		if cp[i] >= probContent {
+			break
+		}
+		j++
+	}
+	probExact = cp[j]
+	hpiSet = make([]float64, j+1)
+	for i := 0; i < j+1; i++ {
+		hpiSet[i] = xRev[i]
+	}
+	sort.Float64s(hpiSet)
+	return probExact, hpiSet
+}
