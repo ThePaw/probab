@@ -5,7 +5,6 @@ package bayes
 // Highest probability interval for a discrete probability distribution.
 // Ref.: Albert (2009): 184 [mnormt.onesided()]
 
-
 import (
 	"sort"
 )
@@ -44,13 +43,13 @@ func (s IndexSorter) Swap(i, j int) {
 
 // DiscHPI computes a highest probability interval for a discrete distribution.  
 func DiscHPI(x, p []float64, probContent float64) (probExact float64, hpiSet []float64) {
-// Arguments:
-// x - values where probability is listed
-// p - probability at x
-// probContent - target probability content of the HPI
-// Returns:
-// probExact - exact probability content of the HPI
-// hpiSet set of values of x within the highest probability interval
+	// Arguments:
+	// x - values where probability is listed
+	// p - probability at x
+	// probContent - target probability content of the HPI
+	// Returns:
+	// probExact - exact probability content of the HPI
+	// hpiSet set of values of x within the highest probability interval
 	s := NewSorter(p)
 	sort.Sort(s)
 	ix := s.Indices

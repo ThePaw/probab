@@ -2,12 +2,12 @@
 
 package bayes
 
+//Bayesian test of one-sided hypothesis about a normal mean
+// Ref.: Albert (2009): 184 [mnormt.onesided()]
+
 import (
 	"code.google.com/p/probab/dst"
 )
-
-//Bayesian test of one-sided hypothesis about a normal mean
-// Ref.: Albert (2009): 184 [mnormt.onesided()]
 
 // NormMeanTestOneSided does a Bayesian test of the hypothesis that a normal mean is less than or equal to a specified value.
 func NormMeanTestOneSided(m0, priMean, priSD, smpMean float64, smpSize int, popSd float64) (bf, priOdds, postOdds, postH float64) {
