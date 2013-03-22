@@ -11,13 +11,15 @@ func HistPrior(p, midpts, prob []float64) []float64 {
 	// prob - vector of probabilities of the intervals
 	// Returns:
 	// vector of values of the probability density
+
+	maxDiff := 1e4
 	if len(midpts) != len(prob) {
 		panic(" len(midpts) != len(prob)")
 	}
 	for i, _ := range midpts {
 		d := midpts[1] - midpts[0]
 		if i > 0 {
-			if abs(midpts[i]-midpts[i-1]-d) > 1e4 {
+			if abs(midpts[i]-midpts[i-1]-d) > maxDiff {
 				panic("midpts not equidistant")
 			}
 		}
