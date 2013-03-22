@@ -41,3 +41,17 @@ var isNaN func(float64) bool = math.IsNaN
 var isInf func(float64, int) bool = math.IsInf
 
 var lnB func(float64, float64) float64 = fn.LnB
+
+func sum(x []float64) float64 {
+	s := 0.0
+	for _, val := range x {
+		s += val
+	}
+	return s
+}
+
+func mean(x []float64) float64 {
+	μ := sum(x)
+	μ /= float64(len(x))
+	return μ
+}

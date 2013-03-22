@@ -1,3 +1,5 @@
+// Copyright 2012 - 2013 The Probab Authors. All rights reserved. See the LICENSE file.
+
 package bayes
 
 // Density function of a histogram distribution.
@@ -16,6 +18,7 @@ func HistPrior(p, midpts, prob []float64) []float64 {
 	if len(midpts) != len(prob) {
 		panic(" len(midpts) != len(prob)")
 	}
+
 	for i, _ := range midpts {
 		d := midpts[1] - midpts[0]
 		if i > 0 {
@@ -25,6 +28,7 @@ func HistPrior(p, midpts, prob []float64) []float64 {
 		}
 
 	}
+
 	lo := make([]float64, len(midpts))
 	val := make([]float64, len(p))
 	binwidth := midpts[1] - midpts[0]
@@ -40,5 +44,4 @@ func HistPrior(p, midpts, prob []float64) []float64 {
 		}
 	}
 	return val
-
 }
