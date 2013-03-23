@@ -143,11 +143,11 @@ func NormPostInfPriorNext(data []float64, a, b, mu0, tau2 float64) (postMu, post
 	}
 
 	s := sum(diff2)
-	postS2 := s / float64(n)
+	postS2 = s / float64(n)
 	prec := float64(n)/postS2 + 1/tau2
 	mu1 := (xbar*float64(n)/postS2 + mu0/tau2) / prec
 	v1 := 1 / prec
-	postMu := dst.NormalNext(mu1, sqrt(v1))
+	postMu = dst.NormalNext(mu1, sqrt(v1))
 
 	a1 := a + float64(n)/2
 
@@ -157,6 +157,6 @@ func NormPostInfPriorNext(data []float64, a, b, mu0, tau2 float64) (postMu, post
 	}
 
 	b1 := b + sum(d2)/2
-	postS2 := rigamma(a1, b1)
+	postS2 = rigamma(a1, b1)
 	return
 }

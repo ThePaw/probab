@@ -1,3 +1,5 @@
+// Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
+
 package bayes
 
 import (
@@ -23,7 +25,7 @@ var iOne int64 = int64(1)
 var negInf float64 = math.Inf(-1)
 var posInf float64 = math.Inf(+1)
 
-// Functions imported from "math".
+// Functions imported from "math"
 var abs func(float64) float64 = math.Abs
 var floor func(float64) float64 = math.Floor
 var ceil func(float64) float64 = math.Ceil
@@ -40,7 +42,9 @@ var erfc func(float64) float64 = math.Erfc
 var isNaN func(float64) bool = math.IsNaN
 var isInf func(float64, int) bool = math.IsInf
 
+// Functions imported from "code.google.com/p/go-fn/fn"
 var lnB func(float64, float64) float64 = fn.LnB
+var lnΓ func(float64) float64 = fn.LnΓ
 
 func sum(x []float64) float64 {
 	s := 0.0
