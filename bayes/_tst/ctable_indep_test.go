@@ -33,7 +33,6 @@ func TestFactCTableIndep(t *testing.T) {
 	fmt.Println(cols2vec(y))
 	fmt.Println("should be 1 5 10 20")
 
-
 	fmt.Println("Testing FactCTableIndep #1")
 	c1, c2 := FactCTableIndep(y, k, m)
 	c3, c4 := 0.6768298, 0.002508772
