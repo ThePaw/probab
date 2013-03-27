@@ -1,5 +1,5 @@
 ## moments
-Geary, R.C. (1936). Moments of the ratio of the mean deviation to the standard deviation for normal
-samples. Biometrika, 28, 295-307.
-Lukasz Komsta, Frederick Novomestky (2013). R Package ‘moments’ http://cran.r-project.org/web/packages/moments/index.html
-D’Agostino, R.B. (1970). Transformation to Normality of the Null Distribution of G1. Biometrika,57, 3: 679-681.
+Anscombe, F.J., Glynn, W.J. (1983) Distribution of kurtosis statistic for normal statistics. Biometrika, 70 (1): 227-234.
+D’Agostino, R.B. (1970). Transformation to Normality of the Null Distribution of G1. Biometrika,57, 3: 679-681.Geary, R.C. (1936). Moments of the ratio of the mean deviation to the standard deviation for normal samples. Biometrika, 28, 295-307.
+Jarque, C. M., Bera, A. K. (1980) Efficient test for normality, homoscedasticity and serial independence of residuals, Economic Letters, 6 (3): 255-259.
+Komsta, L.,  Novomestky, F.  (2013). R Package ‘moments’ http://cran.r-project.org/web/packages/moments/index.html
