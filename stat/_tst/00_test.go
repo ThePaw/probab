@@ -109,5 +109,3 @@ func GetCatData() *DenseMatrix {
 	}
 	return data
 }
-
-
