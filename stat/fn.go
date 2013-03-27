@@ -1,6 +1,6 @@
 // Copyright 2012 The Probab Authors. All rights reserved. See the LICENSE file.
 
-package bayes
+package stat
 
 import (
 	fn "code.google.com/p/go-fn/fn"
@@ -46,6 +46,28 @@ var isInf func(float64, int) bool = math.IsInf
 var lnB func(float64, float64) float64 = fn.LnB
 var lnΓ func(float64) float64 = fn.LnΓ
 
+//  vAbs recalculates the data vector to absolute values.
+func vAbs(x []float64) {
+	for i, val := range x {
+		x[i] = abs(val)
+	}
+}
+
+//  vCent recalculates the data vector to centralized values.
+func vCent(x []float64) {
+	mu := Mean(x)
+	for i, val := range x {
+		x[i] = val - mu
+	}
+}
+
+//  vPow recalculates the data vector to absolute values.
+func vPow(x []float64, power float64) {
+	for i, val := range x {
+		x[i] = pow(val, power)
+	}
+}
+
 //  sum returns the sum of the data vector.
 func sum(x []float64) float64 {
 	s := 0.0
@@ -60,4 +82,13 @@ func mean(x []float64) float64 {
 	μ := sum(x)
 	μ /= float64(len(x))
 	return μ
+}
+
+func diffMean(x []float64) []float64 {
+	d := make([]float64, len(x))
+	mu := Mean(x)
+	for i, val := range x {
+		d[i] = val - mu
+	}
+	return d
 }
