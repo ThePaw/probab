@@ -11,7 +11,7 @@ func Mean(x []float64) float64 {
 	return μ
 }
 
-// skew returns skewness of the data vector.
+// Skew returns skewness of the data vector.
 func Skew(x []float64) float64 {
 	n := float64(len(x))
 	d3 := diffMean(x)
@@ -25,7 +25,7 @@ func Skew(x []float64) float64 {
 	return (sum(d3) / n) / pow((sum(d2)/n), 1.5)
 }
 
-// Kurtosis returns the estimator of Pearson’s measure of kurtosis of the data vector. This is NOT the Excess Kustosis!
+// Kurt returns the estimator of Pearson’s measure of kurtosis of the data vector. This is NOT the Excess Kustosis!
 func Kurt(x []float64) float64 {
 	n := float64(len(x))
 	d4 := diffMean(x)

@@ -1,8 +1,9 @@
 // Copyright 2012 - 2013 The Probab Authors. All rights reserved. See the LICENSE file.
 
-// D’Agostino test for skewness in normally distributed data.
-
 package stat
+
+// D’Agostino test for skewness in normally distributed data.
+// Ref.: D’Agostino (1970). 
 
 import (
 	"code.google.com/p/probab/dst"
@@ -10,7 +11,7 @@ import (
 )
 
 // Agostino performs D’Agostino test for skewness in normally distributed data vector.
-func Agostino(x []float64, alternative int) (s3, z, pval float64) {
+func Agostino(x []float64, alternative int) (skew, z, pVal float64) {
 	// Arguments: 
 	// x - vector of observations
 	// alternative - 0 = "twoSided", 1 = "less", 2 = "greater"
@@ -21,10 +22,9 @@ func Agostino(x []float64, alternative int) (s3, z, pval float64) {
 	// distributed data.
 	//
 	// Returns: 
-	// A list with class htest containing the following components:
-	// s3 - skewness estimator 
+	// skew - skewness estimator 
 	// z - its transformation
-	// pval - the p-value for the test.
+	// pVal - the p-value for the test.
 
 	const (
 		twoSided = iota
@@ -45,26 +45,26 @@ func Agostino(x []float64, alternative int) (s3, z, pval float64) {
 		d2[i] = val * val
 	}
 
-	//s3 <- (sum((x-mean(x))^3)/n)/(sum((x-mean(x))^2)/n)^(3/2)
+	//skew <- (sum((x-mean(x))^3)/n)/(sum((x-mean(x))^2)/n)^(3/2)
 
-	s3 = (sum(d3) / n) / pow((sum(d2)/n), 1.5)
-	y := s3 * sqrt((n+1)*(n+3)/(6*(n-2)))
+	skew = (sum(d3) / n) / pow((sum(d2)/n), 1.5)
+	y := skew * sqrt((n+1)*(n+3)/(6*(n-2)))
 	b2 := 3 * (n*n + 27*n - 70) * (n + 1) * (n + 3) / ((n - 2) * (n + 5) * (n + 7) * (n + 9))
 	w := sqrt(-1 + sqrt(2*(b2-1)))
 	d := 1 / sqrt(log10(w))
 	a := sqrt(2 / (w*w - 1))
 	z = d * log10(y/a+sqrt((y/a)*(y/a)+1))
-	pval = 1 - dst.NormalCDFAt(0, 1, z)
+	pVal = 1 - dst.NormalCDFAt(0, 1, z)
 
 	switch alternative {
 	case twoSided:
-		pval = 2 * pval
-		if pval > 1 {
-			pval = 2 - pval
+		pVal = 2 * pVal
+		if pVal > 1 {
+			pVal = 2 - pVal
 		}
 	case less: // do nothing
 	case greater:
-		pval = 1 - pval
+		pVal = 1 - pVal
 	}
-	return s3, z, pval
+	return skew, z, pVal
 }
