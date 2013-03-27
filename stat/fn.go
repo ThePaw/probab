@@ -31,6 +31,7 @@ var floor func(float64) float64 = math.Floor
 var ceil func(float64) float64 = math.Ceil
 var log func(float64) float64 = math.Log
 var log1p func(float64) float64 = math.Log1p
+var log10 func(float64) float64 = math.Log10
 var exp func(float64) float64 = math.Exp
 var sqrt func(float64) float64 = math.Sqrt
 var pow func(float64, float64) float64 = math.Pow
@@ -84,6 +85,7 @@ func mean(x []float64) float64 {
 	return μ
 }
 
+// diffMean returns the vector of centralized values.
 func diffMean(x []float64) []float64 {
 	d := make([]float64, len(x))
 	mu := Mean(x)

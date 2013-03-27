@@ -1,6 +1,6 @@
 // Copyright 2012 - 2013 The Probab Authors. All rights reserved. See the LICENSE file.
 
-// Variance vector for data matrix.
+// Moments for the data vector.
 
 package stat
 
