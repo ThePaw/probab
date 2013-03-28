@@ -33,10 +33,12 @@ func betaprior1(k, x, p float64) float64 {
 
 //  BetaFromQtls finds the shape parameters of a beta density that matches knowledge of two quantiles of the distribution.
 func BetaFromQtls(p1, x1, p2, x2 float64) (alpha, beta float64) {
+	// Arguments:
 	// p1	first probability
 	// x1	its quantile
 	// p2	second probability
 	// x2	its quantile
+	// Returns:
 	// alpha, beta	params of the corresponding Beta distribution.
 
 	m := make([]float64, 100)

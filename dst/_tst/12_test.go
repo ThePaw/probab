@@ -32,6 +32,7 @@ func TestParetoII_PDF(t *testing.T) {
 		fmt.Println(x, y)
 	}
 }
+
 // test against known values: CDF
 func TestParetoII_CDF(t *testing.T) {
 	fmt.Println("test of Pareto-II distribution: CDF")
@@ -98,7 +99,6 @@ func TestParetoIISkew(t *testing.T) {
 	}
 }
 
-
 func TestNextParetoII(t *testing.T) {
 	fmt.Println("test of Pareto-II distribution: Random number")
 	const nIter = 1e7
@@ -106,14 +106,13 @@ func TestNextParetoII(t *testing.T) {
 	θ := 1.0567
 	α := 2.1865
 	x := 0.0
-	for i :=0; i< nIter; i++{
+	for i := 0; i < nIter; i++ {
 		x += NextParetoII(θ, α)
 	}
-	x /= nIter	// mean
+	x /= nIter // mean
 	y := 0.8906026
-	if math.Abs(x/y -1) > eps {
+	if math.Abs(x/y-1) > eps {
 		t.Error()
 		fmt.Println(x, y)
 	}
 }
-

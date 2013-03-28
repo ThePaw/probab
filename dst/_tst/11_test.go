@@ -3,9 +3,10 @@ package dst
 
 import (
 	"fmt"
-//	"math/rand"
+	//	"math/rand"
 	"testing"
 )
+
 // test of Zeta distribution
 
 func TestNextZeta(t *testing.T) {
@@ -13,7 +14,7 @@ func TestNextZeta(t *testing.T) {
 	const nIter = 1e7
 	x := 0.0
 	y := ZetaMean(2.152)
-	for i :=0; i< nIter; i++{
+	for i := 0; i < nIter; i++ {
 		x += float64(NextZeta(2.152))
 	}
 	x /= nIter
@@ -22,5 +23,3 @@ func TestNextZeta(t *testing.T) {
 		fmt.Println(x, y)
 	}
 }
-
-
