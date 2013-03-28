@@ -1,9 +1,10 @@
 package dst
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
+
 /*
 // test against known values
 func TestPolyaPMFCDF(t *testing.T) {
@@ -44,19 +45,19 @@ cdf:=[]float64{0.0493685733526945114136, 0.074806392192840576172, 0.107663574861
 */
 func TestPolyaQtl(t *testing.T) {
 	var (
-	ρ, n float64
-	i int64
+		ρ, n float64
+		i    int64
 	)
-	ρ=0.5
-	n=20
-p:=[]float64{0.1, 0.3, 0.5, 0.7, 0.9}
-qtl:=[]int64{12, 16, 19, 23, 28}
+	ρ = 0.5
+	n = 20
+	p := []float64{0.1, 0.3, 0.5, 0.7, 0.9}
+	qtl := []int64{12, 16, 19, 23, 28}
 	fmt.Println("test of Polya Qtl")
 	for i = 0; i < int64(len(p)); i++ {
-		q :=PolyaQtlFor(ρ, n, p[i])
-			if  q != qtl[i] {
-				t.Error()
-				fmt.Println(p[i], q, qtl[i])
-			}
+		q := PolyaQtlFor(ρ, n, p[i])
+		if q != qtl[i] {
+			t.Error()
+			fmt.Println(p[i], q, qtl[i])
+		}
 	}
 }

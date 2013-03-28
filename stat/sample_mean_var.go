@@ -1,32 +1,18 @@
-// Sample mean and variance (unbiased estimator)
+// Copyright 2012 - 2013 The Probab Authors. All rights reserved. See the LICENSE file.
 
 package stat
 
-/*
-// Sample mean and unbiased (Bessel correction) variance estimates
-func SampleMeanVar(x []float64) (μ float64, σ2 float64) {
-	var n int
-	var m, m2, delta float64
-		μ = 0.0	// sample mean
-		σ2 = 0.0	// sample variance unbiased
-		m = 0.0
-		m2 = 0.0
+// Sample mean and variance (unbiased estimator)
 
-		for j := 0; j < len(x); j++ {
-        		n += 1
-			μ += x[j]
-			delta = x[j] - m
-        		m += delta/float64(n)
-        		m2 += delta*(x[j] - m)
-		}
-		σ2 = m2/float64(n - 1)
-		μ /= float64(len(x))
-	return
-}
-*/
-
-// Sample mean and unbiased (Bessel correction) variance estimates
+// Sample mean and unbiased (Bessel correction) variance estimates for a data vector.
 func SampleMeanVar(x []float64) (μ, σ2 float64) {
+	// Arguments: 
+	// x - vector of observations
+	//
+	// Returns: 
+	// μ - mean estimator 
+	// σ2 - variance estimator 
+
 	var n int
 	var m, m2 float64
 	μ = 0.0  // sample mean

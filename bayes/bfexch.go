@@ -13,9 +13,18 @@ func logF(k, eta float64, y, n []float64) []float64 {
 	return v
 }
 
-// BFExch returns the logarithm of the integral of the Bayes factor for testing homogeneity 
+// BFExch returns the logarithm of the integral of the Bayes factor for testing homogeneity.
 // of a set of proportions.
 func BFExch(theta float64, y, n []float64, k float64) float64 {
+	// Arguments:
+	// theta - value of the logit of the prior mean hyperparameter
+	// y - counts
+	// n - sample sizes
+	// k - prior precision hyperparameter
+	//
+	// Returns:
+	// value of the logarithm of the integral.
+
 	eta := exp(theta) / (1 + exp(theta))
 	sum := 0.0
 	sumY := 0.0

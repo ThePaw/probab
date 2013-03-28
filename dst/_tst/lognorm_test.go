@@ -3,7 +3,7 @@ package dst
 
 import (
 	"fmt"
-//	"math/rand"
+	//	"math/rand"
 	"testing"
 )
 
@@ -28,7 +28,7 @@ func TestLogNormal(t *testing.T) {
 	}
 
 	fmt.Println("test of LogNormal distribution: Qtl")
-	qtl:= LogNormalQtl(4.2, 1.33)
+	qtl := LogNormalQtl(4.2, 1.33)
 	x = qtl(0.01225937)
 	y = 3.350001
 	if !check(x, y) {

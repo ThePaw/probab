@@ -13,8 +13,8 @@ func logB(y, n, k, eta float64) float64 {
 func BetaBinExch(theta1, theta2 float64, y, n []float64) float64 {
 	// Arguments:
 	// theta1,  theta2 -  parameter values of logit eta and log k
-	// data:
-	//  y - counts
+	// Data:
+	// y - counts
 	// n - sample sizes
 	// Returns:
 	// value of the log posterior
@@ -33,8 +33,8 @@ func BetaBinExch(theta1, theta2 float64, y, n []float64) float64 {
 func BetaBinExch0(theta1, theta2 float64, y, n []float64) float64 {
 	// Arguments:
 	// theta1,  theta2 -  parameter values of logit eta and log k
-	// data:
-	//  y - counts
+	// Data:
+	// y - counts
 	// n - sample sizes
 	// Returns:
 	// value of the log posterior

@@ -3,7 +3,7 @@ package dst
 
 import (
 	"fmt"
-//	"math/rand"
+	//	"math/rand"
 	"testing"
 )
 
@@ -11,7 +11,7 @@ import (
 func TestZipfMandelbrot_PDF(t *testing.T) {
 	fmt.Println("test of Zipf-Mandelbrot distribution: PDF")
 	fn := ZipfMandelbrotPMF(100, 3, 2)
-//	fn := ZipfMandelbrotPMF(N, b, s)
+	//	fn := ZipfMandelbrotPMF(N, b, s)
 
 	x := fn(5)
 	y := 0.05699202
@@ -62,7 +62,7 @@ func TestNextZipfMandelbrot(t *testing.T) {
 	fmt.Println("test of Zipf-Mandelbrot distribution: Random number")
 	const nIter = 1e7
 	x := 0.0
-	for i :=0; i< nIter; i++{
+	for i := 0; i < nIter; i++ {
 		x += float64(NextZipfMandelbrot(100, 3, 2))
 	}
 	x /= nIter
@@ -82,4 +82,3 @@ func TestZipfMandelbrotMean(t *testing.T) {
 		fmt.Println(x, y)
 	}
 }
-
