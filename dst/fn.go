@@ -49,14 +49,14 @@ var B func(float64, float64) float64 = fn.B
 var logB func(float64, float64) float64 = fn.LnB
 var iBr func(float64, float64, float64) float64 = fn.BetaIncReg
 var BinomCoeff func(int64, int64) float64 = fn.BinomCoeff
-var logBinomCoeff func(int64, int64) float64 = fn.LnBinomCoeff
+var logBinomCoeff func(float64, float64) float64 = fn.LnBinomCoeff
 var Γpr func(int, float64, float64) float64 = fn.GammaPRatio
 var logΓpr func(int, float64, float64) float64 = fn.LnGammaPRatio
 var logChoose func(int64, int64) float64 = fn.LnChoose
 var ζ func(float64) float64 = fn.RiemannZeta
 var iΓint func(int64, float64) float64 = fn.IΓint
-var fact func(int64) int64 = fn.Fact
-var logFact func(int64) float64 = fn.LnFact
+var fact func(int64) float64 = fn.Fact
+var logFact func(float64) float64 = fn.LnFact
 var hNum func(int64, float64) float64 = fn.H
 var hNumG func(int64, float64, float64) float64 = fn.H2
 

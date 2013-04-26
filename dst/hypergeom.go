@@ -18,8 +18,12 @@ func HypergeometricPMF(nN, m, n int64) func(k int64) float64 {
 		if nN < 1 || m < 0 || m > nN || n < 1 || n > nN {
 			return NaN
 		}
+		fN := float64(nN)
+		fm := float64(m)
+		fn := float64(n)
+		fk := float64(k)
 		// p := BinomCoeff(m, k) * BinomCoeff(nN-m, n-k)  / BinomCoeff(nN, n) 
-		return exp(logBinomCoeff(m, k) + logBinomCoeff(nN-m, n-k) - logBinomCoeff(nN, n))
+		return exp(logBinomCoeff(fm, fk) + logBinomCoeff(fN-fm, fn-fk) - logBinomCoeff(fN, fn))
 	}
 }
 
@@ -29,7 +33,12 @@ func HypergeometricLnPMF(nN, m, n int64) func(k int64) float64 {
 		if nN < 1 || m < 0 || m > nN || n < 1 || n > nN {
 			return NaN
 		}
-		return logBinomCoeff(m, k) + logBinomCoeff(nN-m, n-k) - logBinomCoeff(nN, n)
+		fN := float64(nN)
+		fm := float64(m)
+		fn := float64(n)
+		fk := float64(k)
+		// p := BinomCoeff(m, k) * BinomCoeff(nN-m, n-k)  / BinomCoeff(nN, n) 
+		return logBinomCoeff(fm, fk) + logBinomCoeff(fN-fm, fn-fk) - logBinomCoeff(fN, fn)
 	}
 }
 
