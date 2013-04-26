@@ -84,7 +84,7 @@ func PoissonCDF(λ float64) func(k int64) float64 {
 // PoissonCDFAn returns the CDF of the Poisson distribution. Analytic solution, less precision.
 func PoissonCDFAn(λ float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		p := exp(log(iΓint(k+1, λ)) - (logFact(k)))
+		p := exp(log(iΓint(k+1, λ)) - (logFact(float64(k))))
 		return p
 	}
 }
@@ -98,8 +98,8 @@ func PoissonCDFAt(λ float64, k int64) float64 {
 // LnPoissonCDFAn returns the natural logarithm of the CDF of the Poisson distribution. Analytic solution, less precision.
 func LnPoissonCDFAn(λ float64) func(k int64) float64 {
 	return func(k int64) float64 {
-		k1 := (float64)(k + 1)
-		return log(iΓ(k1, λ)) - logFact(k)
+		k1 := float64(k + 1)
+		return log(iΓ(k1, λ)) - logFact(float64(k))
 	}
 }
 

@@ -167,12 +167,11 @@ func BinomPiPostMean(α, β float64, n, k int64) float64 {
 	return ((postα) / (postα + postβ))
 }
 
-/*
 // BinomPiPostMedian returns Posterior median of the Binomial proportion.
 func BinomPiPostMedian(α, β float64, n, k int64) float64 {
 	// TO BE IMPLEMENTED
+	return 0 // just to make compiler happy
 }
-*/
 
 // BinomPiPostVar returns Posterior variance of the Binomial proportion.
 // Bolstad 2007 (2e): 151, eq. 8.5
@@ -202,7 +201,7 @@ func BinomPiPMS(α, β float64, n, k, whichpi int64) float64 {
 		pihat = BinomPiPostMean(α, β, n, k)
 	case median:
 		pihat = BinomPiPostMedian(α, β, n, k)
-	case MODUS:
+	case modus:
 		pihat = BinomPiPostModus(α, β, n, k)
 	}
 	return postvar + (postmean-pihat)*(postmean-pihat)
@@ -237,7 +236,7 @@ func BinomPiCrIBPriNApprox(α, β, alpha float64, n, k int64) (low, upp float64)
 	// Returns:
 	// low, upp - lower and upper boundary of the credible interval
 
-	var postmean, postvar, postα, postβ, z, low, upp float64
+	var postmean, postvar, postα, postβ, z float64
 
 	postα = α + float64(k)
 	postβ = β + float64(n-k)
