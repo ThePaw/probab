@@ -103,8 +103,8 @@ func LnPoissonCDFAn(λ float64) func(k int64) float64 {
 	}
 }
 
-// PoissonNext returns random number drawn from the Poisson distribution. 
-func PoissonNext(λ float64) int64 {
+// PoissonNext2 returns random number drawn from the Poisson distribution (old version). 
+func PoissonNext2(λ float64) int64 {
 	var k int64
 	if λ < 100 { // Knuth algorithm for small λ
 		// Donald E. Knuth (1969). Seminumerical Algorithms. The Art of Computer Programming, Volume 2. Addison Wesley.

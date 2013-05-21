@@ -7,6 +7,7 @@ import (
 
 const π = float64(math.Pi)
 const Ln2 = math.Ln2
+const M_1_SQRT_2PI = 0.398942280401432677939946059934  // 1/sqrt(2pi)
 const M_LN_SQRT_2PI = 0.918938533204672741780329736406 // log(sqrt(2*pi))
 const min64 = math.SmallestNonzeroFloat64              //   DBL_MIN
 const eps64 = 1.1102230246251565e-16                   // DBL_EPSILON   
@@ -68,6 +69,20 @@ func imin(x, y int64) int64 {
 }
 
 func imax(x, y int64) int64 {
+	if x < y {
+		return y
+	}
+	return x
+}
+
+func imin2(x, y int) int {
+	if x > y {
+		return y
+	}
+	return x
+}
+
+func imax2(x, y int) int {
 	if x < y {
 		return y
 	}
@@ -186,4 +201,12 @@ func Shuffle(x []interface{}) {
 
 func iround(x float64) float64 {
 	return math.Floor(x + 0.5) // ?correct -- round to integer
+}
+
+// fsign performs transfer of sign from y to x. The result is |x| * signum(y).
+func fsign(x, y float64) float64 {
+	if y >= 0 {
+		return abs(x)
+	}
+	return -abs(x)
 }
