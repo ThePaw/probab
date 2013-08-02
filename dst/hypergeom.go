@@ -158,3 +158,71 @@ func HypergeometricMGF(n int64, p, t float64) float64 {
 	return 
 }
 */
+
+func HypergeometricQtl(nN, m, n int64) func(p float64) float64 {
+	return func(p float64) float64 {
+		var xstart, xend, xr, xb, sum, term float64
+		var smallN bool
+		nr := float64(m)
+		nb := float64(nN - m)
+		nn := float64(n)
+		tot := float64(nN)
+
+		if isNaN(p) || isNaN(nr) || isNaN(nb) || isNaN(nn) {
+			return p + nr + nb + nn
+		}
+		if isInf(p, 1) || isInf(nr, 1) || isInf(nb, 1) || isInf(nn, 1) {
+			return NaN
+		}
+		if nr < 0 || nb < 0 || nn < 0 || nn > tot {
+			return NaN
+		}
+
+		xstart = fmax2(0, nn-nb)
+		xend = fmin2(nn, nr)
+
+		xr = xstart
+		xb = nn - xr 
+
+		smallN = (tot < 1000)
+		term = logBinomCoeff(nr, xr) + logBinomCoeff(nb, xb) - logBinomCoeff(tot, nn)
+		if smallN {
+			term = exp(term)
+		}
+		nr -= xr
+		nb -= xb
+
+		p *= 1 - 1000*eps64
+		if smallN {
+			sum = term
+		} else {
+			sum = exp(term)
+		}
+
+		for sum < p && xr < xend {
+			xr++
+			nb++
+			if smallN {
+				term *= (nr / xr) * (xb / nb)
+			} else {
+				term += log((nr / xr) * (xb / nb))
+			}
+
+			if smallN {
+				sum += term
+			} else {
+				sum += exp(term)
+
+			}
+			xb--
+			nr--
+		}
+		return xr
+	}
+}
+
+// HypergeometricQtlFor returns the inverse of the CDF (quantile) of the Hypergeometric distribution, for given probability.
+func HypergeometricQtlFor(nN, m, n int64, p float64) float64 {
+	cdf := HypergeometricQtl(nN, m, n)
+	return cdf(p)
+}

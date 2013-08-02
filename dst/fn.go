@@ -210,3 +210,23 @@ func fsign(x, y float64) float64 {
 	}
 	return -abs(x)
 }
+
+func fmax2(x, y float64) float64 {
+	if isNaN(x) || isNaN(y) {
+		return x + y
+	}
+	if x < y {
+		return y
+	}
+	return x
+}
+
+func fmin2(x, y float64) float64 {
+	if isNaN(x) || isNaN(y) {
+		return x + y
+	}
+	if x < y {
+		return x
+	}
+	return y
+}
